@@ -1,0 +1,252 @@
+@import "tailwindcss";
+@import "@fontsource/playfair-display/400.css";
+@import "@fontsource/playfair-display/600.css";
+@import "@fontsource/playfair-display/700.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
+@theme {
+  /* Direction éditoriale claire inspirée de la référence : blanc, gris, encre et terre cuite. */
+  --color-creme: #faf9f6;
+  --color-papier: #ffffff;
+  --color-marine: #171514;
+  --color-encre: #171514;
+  --color-encre-douce: #626870;
+  --color-or: #b3471f;
+  --color-or-pale: #f3d8bd;
+  --color-alerte: #8c2f18;
+  --color-succes: #2f6b52;
+
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-width: 320px;
+    background-color: var(--color-creme);
+    color: var(--color-encre);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: var(--color-marine);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-or);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  ::selection {
+    background-color: var(--color-or-pale);
+    color: var(--color-marine);
+  }
+}
+
+@layer components {
+  .conteneur-site {
+    width: min(100% - 2.5rem, 78rem);
+    margin-inline: auto;
+  }
+
+  .titre-fluide {
+    font-size: clamp(2.75rem, 7vw, 5.75rem);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+  }
+
+  .titre-section {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+  }
+
+  .etiquette {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .etiquette::before {
+    content: "";
+    display: block;
+    width: 1.75rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.65;
+  }
+
+  .surface-claire {
+    background-color: #f4f2ed;
+    border-top: 1px solid rgb(23 21 20 / 0.1);
+    border-bottom: 1px solid rgb(23 21 20 / 0.1);
+  }
+
+  .lien-editorial {
+    font-weight: 600;
+    color: var(--color-marine);
+    text-decoration: underline;
+    text-decoration-color: var(--color-or);
+    text-underline-offset: 0.35em;
+    text-decoration-thickness: 1px;
+    transition: text-decoration-color 160ms ease;
+  }
+
+  .lien-editorial:hover {
+    text-decoration-color: var(--color-or);
+  }
+}
+
+@keyframes badge-pulse {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.badge-pulse {
+  animation: badge-pulse 600ms ease-out;
+}
+
+.reveal {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 650ms ease,
+    transform 650ms ease;
+}
+
+.reveal:not(.reveal--visible) {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+@keyframes transition-fondu-entree {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes transition-fondu-sortie {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+::view-transition-old(root) {
+  animation: transition-fondu-sortie 140ms ease both;
+}
+
+::view-transition-new(root) {
+  animation: transition-fondu-entree 200ms ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .badge-pulse {
+    animation: none;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* Impression de la proforma : seul le document est rendu. */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  body {
+    background: #fff !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  .proforma-document,
+  .proforma-document * {
+    visibility: visible !important;
+  }
+
+  .proforma-document {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border: 0 !important;
+  }
+
+  .proforma-actions {
+    display: none !important;
+  }
+
+  .proforma-document tr {
+    break-inside: avoid;
+  }
+}
