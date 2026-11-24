@@ -44,6 +44,13 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* Rail éditorial gris inspiré de la référence, visible seulement sur grand écran. */
+  @media (min-width: 1024px) {
+    body {
+      padding-left: 3rem;
+    }
+  }
+
   h1,
   h2,
   h3,

@@ -41,6 +41,16 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <HeadContent />
       </head>
       <body>
+        <div
+          aria-hidden="true"
+          className="fixed inset-y-0 left-0 z-50 hidden w-12 flex-col items-center justify-between bg-[#6d7278] py-6 text-white lg:flex"
+        >
+          <span className="text-[0.55rem] font-semibold tracking-[0.32em] [writing-mode:vertical-rl] rotate-180">
+            DAAYAKE FOOD
+          </span>
+          <span className="h-20 w-px bg-white/45" />
+          <span className="text-[0.5rem] font-semibold tracking-[0.18em]">KIN · BZV</span>
+        </div>
         <CartProvider>
           <a
             href="#contenu"

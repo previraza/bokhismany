@@ -37,7 +37,7 @@ test('les métadonnées portent le nom complet et une image de partage', async (
 test('les visuels officiels sont chargés sur les pages publiques', async ({ page }) => {
   await aller(page, '/')
 
-  const logo = page.locator('header img[src*="bokhismany-logo"]').first()
+  const logo = page.locator('header img[src*="banniere.png"]').first()
   await expect(logo).toBeVisible()
   expect(
     await logo.evaluate(

@@ -4,7 +4,7 @@ import { ProductCard } from '@/components/ProductCard'
 import { Reveal } from '@/components/Reveal'
 import { SectionTitre } from '@/components/SectionTitre'
 import { CATEGORIES, LIBELLES_CATEGORIES, visuelCategorie } from '@/lib/categories'
-import { CLASSE_BOUTON_OR } from '@/lib/classes'
+import { CLASSE_BOUTON_OR, CLASSE_BOUTON_PRIMAIRE } from '@/lib/classes'
 import { EMAIL_CONTACT, POINTS_DE_VENTE } from '@/lib/entreprise'
 import { formaterPrix } from '@/lib/format'
 import { metaPage } from '@/lib/seo'
@@ -49,33 +49,67 @@ function Accueil() {
 
   return (
     <main>
-      <section className="bg-papier">
-        <div className="h-16 overflow-hidden border-b border-encre/10 bg-encre sm:h-20 lg:h-24">
+      <section
+        className="lg:grid lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:border-l-[1.75rem] lg:border-[#777a80]"
+        aria-label="Présentation de Bokhismany Trading SARL"
+      >
+        <div className="relative min-h-[32rem] overflow-hidden bg-[#aab0b6] lg:min-h-[47rem]">
           <img
             src="/images/marque/banniere.png"
             alt="Bannière Bokhismany Trading SARL"
-            className="h-full w-full object-contain"
+            className="absolute inset-x-0 top-0 h-20 w-full object-cover object-center opacity-95 sm:h-24"
           />
+          <div
+            className="absolute inset-0 bg-[linear-gradient(135deg,rgba(24,54,57,0.62)_0%,rgba(179,71,31,0.28)_48%,rgba(23,21,20,0.72)_100%)]"
+            aria-hidden="true"
+          />
+          <img
+            src="/images/couverture-produits.svg"
+            alt="Illustration de sacs de riz et de farine, bidons d’huile et produits du quotidien"
+            className="absolute inset-x-[7%] top-[19%] w-[86%] border border-white/30 object-cover shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)]"
+          />
+          <div className="absolute inset-x-0 bottom-14 p-7 text-creme sm:p-11 lg:p-14">
+            <p className="etiquette text-or-pale">Kinshasa · Brazzaville</p>
+            <p className="mt-5 max-w-lg font-display text-3xl leading-[1.05] sm:text-4xl lg:text-[2.6rem]">
+              Des produits de première nécessité, du quotidien aux revendeurs.
+            </p>
+            <p className="mt-5 text-[0.65rem] font-semibold tracking-[0.24em] text-or-pale uppercase">
+              Daayake Food · {String(produits.length).padStart(2, '0')} sélections
+            </p>
+          </div>
+          <div className="absolute inset-x-0 bottom-0 flex h-14 items-center gap-3 bg-[linear-gradient(90deg,#711c12_0%,#b3471f_55%,#f4b79b_100%)] px-7 text-[0.62rem] font-semibold tracking-[0.18em] text-creme uppercase sm:px-11 lg:px-14">
+            <span>3 points de vente</span>
+            <span className="h-1 w-1 rounded-full bg-creme/70" aria-hidden="true" />
+            <span>Réservation 24 h</span>
+            <span className="h-1 w-1 rounded-full bg-creme/70" aria-hidden="true" />
+            <span className="hidden sm:inline">Aucun paiement en ligne</span>
+          </div>
         </div>
-        <div className="conteneur-site grid gap-14 py-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16 lg:py-20">
-          <div>
-            <p className="etiquette text-or">Commerce général · Daayake Food</p>
-            <h1 className="titre-fluide mt-7 text-marine">
+
+        <div className="flex flex-col bg-papier">
+          <div className="flex h-24 shrink-0 items-end bg-[linear-gradient(90deg,#6e170c_0%,#b3471f_45%,#f4e7e7_100%)] px-6 pb-4 sm:px-10 lg:px-14">
+            <p className="text-[0.62rem] font-semibold tracking-[0.24em] text-creme uppercase">
+              Commerce général · Daayake Food
+            </p>
+          </div>
+          <div className="flex-1 px-6 py-14 sm:px-10 lg:px-14 lg:py-20">
+            <h1 className="font-display text-[clamp(2.75rem,5.2vw,4.75rem)] leading-[0.94] tracking-[-0.045em] text-marine">
               Bokhismany <span className="italic text-or">Trading</span> SARL
             </h1>
-            <p className="mt-7 max-w-xl text-base leading-relaxed text-encre-douce sm:text-lg">
-              Des produits alimentaires de première nécessité, entre Kinshasa et Brazzaville, vendus
-              en gros et au détail.
+            <p className="mt-7 max-w-lg text-base leading-relaxed text-encre-douce">
+              Commerce général, distribution de produits alimentaires de première nécessité, vente en
+              gros et au détail, acheminement et dédouanement de marchandises entre Brazzaville et la
+              RDC.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
-              <Lien to="/produits" viewTransition className={CLASSE_BOUTON_OR}>
+              <Lien to="/produits" viewTransition className={CLASSE_BOUTON_PRIMAIRE}>
                 Voir nos produits <span aria-hidden="true">→</span>
               </Lien>
               <Lien to="/panier" viewTransition className="lien-editorial text-sm">
                 Réserver un panier
               </Lien>
             </div>
-            <dl className="mt-12 grid max-w-xl grid-cols-3 border-t border-encre/15 pt-6 text-xs sm:text-sm">
+            <dl className="mt-12 grid grid-cols-3 border-t border-encre/15 pt-6 text-xs sm:text-sm">
               {[
                 ['Vente', 'Gros & détail'],
                 ['Réservation', 'Valable 24 h'],
@@ -89,29 +123,23 @@ function Accueil() {
             </dl>
           </div>
 
-          <figure className="relative mx-auto w-full max-w-xl lg:ml-auto">
+          <div className="relative overflow-hidden bg-[#1a1716] px-6 py-12 text-creme sm:px-10 lg:px-14">
             <div
-              className="absolute -top-4 -right-4 h-28 w-28 bg-or-pale/70"
+              className="absolute -top-16 -right-10 h-56 w-56 rounded-full bg-[radial-gradient(circle,#b3471f_0%,#d9762f_45%,transparent_72%)] opacity-90 blur-xl"
               aria-hidden="true"
             />
-            <div className="relative border border-encre/10 bg-creme p-3 shadow-[0_24px_60px_-40px_rgba(23,21,20,0.5)] sm:p-4">
-              <img
-                src="/images/couverture-produits.svg"
-                alt="Illustration de sacs de riz et de farine, bidons d’huile et produits du quotidien"
-                className="aspect-[4/3] w-full object-cover"
-              />
-              <figcaption className="flex items-center justify-between gap-4 pt-4 text-[0.62rem] font-semibold tracking-[0.24em] text-or uppercase">
-                <span>Sélection du jour</span>
-                <span>01 / {String(produits.length).padStart(2, '0')}</span>
-              </figcaption>
-            </div>
-            <div className="absolute -bottom-6 -left-4 hidden border border-encre/10 bg-papier px-5 py-4 shadow-sm sm:block">
-              <p className="text-[0.6rem] font-semibold tracking-[0.24em] text-or uppercase">
-                Daayake Food
-              </p>
-              <p className="mt-1 text-sm font-semibold text-marine">Épicerie du quotidien</p>
-            </div>
-          </figure>
+            <p className="relative etiquette text-or-pale">Daayake Food</p>
+            <p className="relative mt-5 max-w-lg font-display text-2xl leading-snug sm:text-3xl">
+              Réservez en ligne, retirez et payez en boutique.
+            </p>
+            <Lien
+              to="/panier"
+              viewTransition
+              className="relative mt-7 inline-flex items-center gap-2 border-b border-or-pale pb-1 text-sm font-semibold text-or-pale transition-colors hover:text-creme"
+            >
+              Composer mon panier <span aria-hidden="true">→</span>
+            </Lien>
+          </div>
         </div>
       </section>
 

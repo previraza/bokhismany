@@ -9,7 +9,7 @@ interface Props {
 export function Logo({ className = '', compact = false, surFondSombre = false }: Props) {
   const visuel = surFondSombre
     ? '/images/marque/bokhismany-logo.png'
-    : '/images/marque/bokhismany-logo-transparent.png'
+    : '/images/marque/banniere.png'
 
   return (
     <Lien
@@ -20,7 +20,15 @@ export function Logo({ className = '', compact = false, surFondSombre = false }:
       <img
         src={visuel}
         alt=""
-        className={compact ? 'h-11 w-auto object-contain' : 'h-12 w-auto object-contain sm:h-14'}
+        className={
+          surFondSombre
+            ? compact
+              ? 'h-11 w-auto object-contain'
+              : 'h-12 w-auto object-contain sm:h-14'
+            : compact
+              ? 'h-7 w-auto max-w-full object-contain'
+              : 'h-8 w-auto max-w-[52vw] object-contain sm:h-10 sm:max-w-[20rem]'
+        }
       />
     </Lien>
   )
