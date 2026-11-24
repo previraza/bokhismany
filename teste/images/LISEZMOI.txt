@@ -1,0 +1,1 @@
+Dossier des photos de la maquette. Déposer ici : hero.jpg (fond du hero), boutique.jpg (photo de la boutique). Si un fichier est absent, un dégradé s'affiche à la place.

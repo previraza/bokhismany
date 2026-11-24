@@ -4,25 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bokhismany | Maquette de référence</title>
-  <meta name="description" content="Maquette de référence du site Bokhismany : catalogue, réservation et design.">
+  <meta name="description" content="Maquette de référence du site Bokhismany : catalogue, réservation en boutique, design.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ============ Tokens : à reprendre tels quels dans l'application ============ */
+    /* ================= Tokens : à reprendre tels quels ================= */
     :root {
-      --bg: #f3f0ea;
+      --bg: #f3f3f1;
       --surface: #ffffff;
-      --ink: #14110f;
-      --ink-soft: #5b534b;
-      --line: rgba(20, 17, 15, 0.08);
-      --orange: #ff8a3d;
-      --orange-2: #ffb27a;
-      --teal: #1d3b3f;
-      --radius-lg: 28px;
-      --radius-md: 20px;
+      --ink: #101010;
+      --muted: #8c8c8c;
+      --soft: #f1f1ef;
+      --line: #e4e4e0;
+      --orange-1: #ff9a5a;
+      --orange-2: #ff6a30;
+      --orange-3: #ffb27a;
+      --red-1: #e9542c;
+      --radius-xl: 28px;
+      --radius-lg: 22px;
       --radius-pill: 999px;
-      --shadow: 0 10px 30px rgba(20, 17, 15, 0.06);
       --ease: cubic-bezier(.2, .7, .2, 1);
     }
 
@@ -32,542 +33,638 @@
       font-family: "Inter", system-ui, -apple-system, sans-serif;
       background: var(--bg);
       color: var(--ink);
-      line-height: 1.55;
+      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
     a { color: inherit; text-decoration: none; }
-    img { max-width: 100%; display: block; }
-    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    img { display: block; max-width: 100%; }
+    button { font: inherit; }
+    .page { max-width: 1180px; margin: 0 auto; padding: 16px; }
 
-    /* ============ Navigation en pilule ============ */
-    .nav-wrap { position: sticky; top: 14px; z-index: 50; padding: 0 16px; margin-top: 14px; }
-    .nav {
-      max-width: 1000px; margin: 0 auto;
-      background: rgba(20, 17, 15, 0.82);
-      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    /* ================= HERO ================= */
+    .hero {
+      position: relative; overflow: hidden; isolation: isolate;
+      border-radius: var(--radius-xl);
+      min-height: clamp(560px, 60vw, 700px);
+      background: linear-gradient(180deg, #2b3d3e 0%, #161b1c 100%);
       color: #fff;
-      border-radius: var(--radius-pill);
-      padding: 10px 10px 10px 22px;
-      display: flex; align-items: center; justify-content: space-between; gap: 16px;
-      box-shadow: 0 12px 40px rgba(0,0,0,.25);
     }
-    .logo { font-weight: 800; letter-spacing: .18em; font-size: .95rem; }
-    .logo span { color: var(--orange); }
-    .nav-links { display: flex; gap: 26px; font-size: .9rem; opacity: .85; }
-    .nav-links a { transition: opacity .2s var(--ease), color .2s var(--ease); }
-    .nav-links a:hover { opacity: 1; color: var(--orange-2); }
-    .nav-cta { display: flex; align-items: center; gap: 10px; }
-    .btn-white {
-      background: #fff; color: var(--ink); font-weight: 600; font-size: .88rem;
-      padding: 10px 18px; border-radius: var(--radius-pill);
-      transition: transform .2s var(--ease), background .2s var(--ease);
-    }
-    .btn-white:hover { transform: translateY(-1px); background: var(--orange-2); }
-    .burger {
-      display: none; background: none; border: 0; color: #fff; cursor: pointer;
-      width: 42px; height: 42px; border-radius: 50%; font-size: 1.2rem;
-      background: rgba(255,255,255,.1);
-    }
-    .nav-mobile {
-      display: none; max-width: 1000px; margin: 8px auto 0;
-      background: var(--ink); color: #fff; border-radius: var(--radius-lg);
-      padding: 18px 22px; flex-direction: column; gap: 14px;
-    }
-    .nav-mobile.open { display: flex; }
-    .nav-mobile a { font-size: 1rem; padding: 6px 0; }
-
-    /* ============ Hero flou orangé ============ */
-    .hero-card {
-      position: relative; overflow: hidden;
-      margin: 22px auto 0; max-width: 1140px;
-      border-radius: 36px;
+    .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+    .hero-glow {
+      position: absolute; inset: -10%; z-index: -1; pointer-events: none;
       background:
-        radial-gradient(60% 70% at 78% 30%, #ff9a4d 0%, transparent 70%),
-        radial-gradient(50% 60% at 20% 20%, #2e5b5f 0%, transparent 70%),
-        radial-gradient(45% 55% at 55% 90%, #ffb27a 0%, transparent 70%),
-        linear-gradient(160deg, #0f1f22 0%, #1d3b3f 45%, #3a2418 100%);
-      color: #fff;
-      padding: 56px clamp(24px, 5vw, 64px) 56px;
-      min-height: 560px;
-      display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: center;
+        radial-gradient(34% 48% at 66% 44%, #ffd2a8 0%, transparent 70%),
+        radial-gradient(30% 40% at 74% 58%, #ff7a2f 0%, transparent 72%),
+        radial-gradient(26% 36% at 56% 30%, #ffa86a 0%, transparent 70%),
+        radial-gradient(44% 50% at 12% 8%, #4a6a6b 0%, transparent 72%);
+      filter: blur(38px);
+      animation: drift 14s ease-in-out infinite alternate;
     }
-    .hero-card::after { /* grain doux pour l'effet verre */
-      content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .12;
-      background-image: radial-gradient(rgba(255,255,255,.6) 1px, transparent 1px);
-      background-size: 4px 4px;
+    @keyframes drift { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(-2%,2%,0) scale(1.05); } }
+    .hero::after {
+      content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+      background: linear-gradient(180deg, rgba(0,0,0,.25) 0%, transparent 30%, rgba(0,0,0,.55) 100%);
     }
-    .eyebrow {
-      display: inline-block; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
-      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.18);
-      padding: 6px 12px; border-radius: var(--radius-pill); margin-bottom: 22px;
+
+    .nav {
+      margin: 14px; height: 50px; border-radius: var(--radius-pill);
+      background: rgba(18, 18, 18, .62);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+      padding: 0 6px 0 22px;
+      font-size: 12px;
     }
-    .hero h1 {
-      font-size: clamp(2.3rem, 5.4vw, 4rem); line-height: 1.02; letter-spacing: -.03em; font-weight: 700;
-      max-width: 14ch;
-    }
-    .hero h1 em { font-style: normal; color: var(--orange-2); }
-    .hero p.lead { margin-top: 18px; max-width: 46ch; opacity: .85; font-size: 1.02rem; }
-    .hero-actions { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-    .pill-cta {
-      display: inline-flex; align-items: center; gap: 0;
-      background: #fff; color: var(--ink); border-radius: var(--radius-pill); padding: 6px;
-      font-weight: 600; font-size: .92rem;
-    }
-    .pill-cta .price { padding: 10px 16px; color: var(--ink-soft); font-weight: 500; }
-    .pill-cta .go {
-      background: var(--ink); color: #fff; padding: 12px 20px; border-radius: var(--radius-pill);
+    .nav-links { display: flex; gap: 18px; opacity: .8; }
+    .nav-links a:hover { opacity: 1; }
+    .logo { font-weight: 700; letter-spacing: .24em; font-size: 14px; text-align: center; }
+    .nav-right { display: flex; justify-content: flex-end; align-items: center; gap: 18px; }
+    .nav-right .login { opacity: .8; }
+    .btn-white {
+      background: #fff; color: var(--ink); font-weight: 600; font-size: 12px;
+      padding: 11px 18px; border-radius: var(--radius-pill); letter-spacing: .02em;
       transition: transform .2s var(--ease);
     }
-    .pill-cta:hover .go { transform: translateX(3px); }
-    .ghost {
-      border: 1px solid rgba(255,255,255,.35); color: #fff; padding: 14px 22px; border-radius: var(--radius-pill);
-      font-weight: 600; font-size: .92rem; transition: background .2s var(--ease);
+    .btn-white:hover { transform: translateY(-1px); }
+    .burger {
+      display: none; width: 40px; height: 40px; border-radius: 50%; border: 0; cursor: pointer;
+      background: rgba(255,255,255,.12); color: #fff; font-size: 16px;
     }
-    .ghost:hover { background: rgba(255,255,255,.1); }
-    .hero-foot { margin-top: 40px; font-size: .84rem; opacity: .75; }
-    .hero-foot strong { color: #fff; font-weight: 700; }
+    .nav-mobile {
+      display: none; margin: 0 14px; padding: 18px 20px; border-radius: 22px;
+      background: rgba(18,18,18,.92); color: #fff; flex-direction: column; gap: 14px; font-size: 14px;
+      position: relative; z-index: 3;
+    }
+    .nav-mobile.open { display: flex; }
 
-    /* Carte "assistant" flottante (repère visuel : la carte de réservation) */
+    .hero-content { position: relative; padding: clamp(36px, 6vw, 80px) clamp(22px, 4vw, 56px) 0; max-width: 660px; }
+    .tag {
+      display: inline-block; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase;
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+      padding: 7px 13px; border-radius: var(--radius-pill);
+    }
+    .hero h1 {
+      margin-top: 22px; font-weight: 500;
+      font-size: clamp(2.3rem, 4.9vw, 4.1rem); line-height: 1.02; letter-spacing: -.035em;
+    }
+    .hero h1 span { display: block; opacity: .95; }
+    .hero .sub { margin-top: 16px; font-size: 14px; opacity: .72; max-width: 44ch; }
+    .cta-row { margin-top: 26px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .pill-dark {
+      display: inline-flex; align-items: center; gap: 4px; padding: 5px;
+      background: rgba(12,12,12,.7); border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius-pill); backdrop-filter: blur(8px);
+    }
+    .pill-dark .price { font-size: 13px; padding: 0 14px; opacity: .85; }
+    .pill-dark .go {
+      background: #fff; color: var(--ink); font-weight: 600; font-size: 13px;
+      padding: 11px 18px; border-radius: var(--radius-pill); transition: transform .2s var(--ease);
+    }
+    .pill-dark:hover .go { transform: translateX(3px); }
+
+    .proof { position: absolute; left: 26px; bottom: 24px; font-size: 11px; opacity: .85; z-index: 2; }
+    .avatars { display: flex; }
+    .avatars span {
+      width: 30px; height: 30px; border-radius: 50%; border: 2px solid #20302f; margin-right: -8px;
+      display: grid; place-items: center; font-size: 11px; font-weight: 700; color: var(--ink);
+      background: linear-gradient(135deg, #ffd0a3, #ff8a4c);
+    }
+    .avatars span:nth-child(2) { background: linear-gradient(135deg, #fff0e2, #ffb27a); }
+    .avatars span:nth-child(3) { background: linear-gradient(135deg, #ffe4c6, #ff9a5a); }
+    .proof p { margin-top: 10px; }
+    .proof b { font-weight: 600; }
+
+    /* Carte panier, équivalent de la carte assistant */
     .float-card {
+      position: absolute; right: 22px; bottom: 22px; z-index: 2;
+      width: clamp(250px, 26vw, 300px);
       background: rgba(255,255,255,.96); color: var(--ink);
-      border-radius: var(--radius-lg); padding: 22px; max-width: 360px; justify-self: end; width: 100%;
-      box-shadow: 0 30px 60px rgba(0,0,0,.35);
-      animation: floaty 6s var(--ease) infinite;
+      border-radius: 22px; padding: 16px; box-shadow: 0 24px 50px rgba(0,0,0,.25);
     }
-    @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-    .float-head { display: flex; justify-content: space-between; align-items: center; font-size: .8rem; color: var(--ink-soft); }
-    .avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--orange), var(--orange-2)); }
-    .float-title { font-size: 1.35rem; font-weight: 700; margin: 16px 0 6px; letter-spacing: -.02em; }
-    .float-sub { font-size: .88rem; color: var(--ink-soft); }
-    .code-box {
-      margin-top: 16px; background: var(--ink); color: #fff; border-radius: var(--radius-md); padding: 16px 18px;
-      display: flex; justify-content: space-between; align-items: center;
+    .float-head { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #555; }
+    .float-head .who { display: flex; align-items: center; gap: 8px; }
+    .mini-avatar { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, var(--orange-1), var(--orange-2)); }
+    .new-btn { border: 1px solid var(--line); border-radius: var(--radius-pill); padding: 4px 9px; font-size: 10px; background: #fff; }
+    .spark { color: var(--orange-2); font-size: 18px; margin-top: 14px; }
+    .float-card h3 { font-size: 16px; font-weight: 600; line-height: 1.25; margin-top: 4px; letter-spacing: -.01em; }
+    .float-card .lead { font-size: 11.5px; color: #777; margin-top: 6px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .chips span { font-size: 10.5px; padding: 6px 10px; border-radius: var(--radius-pill); background: var(--soft); }
+    .field {
+      margin-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      border: 1px solid var(--line); border-radius: 14px; padding: 6px 6px 6px 12px;
     }
-    .code-box .code { font-size: 1.4rem; font-weight: 800; letter-spacing: .2em; }
-    .code-box .validity { font-size: .72rem; color: var(--orange-2); text-align: right; }
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-    .chip { font-size: .78rem; padding: 7px 12px; border-radius: var(--radius-pill); background: var(--bg); color: var(--ink); }
-    .float-foot { margin-top: 16px; display: flex; justify-content: space-between; font-size: .8rem; color: var(--ink-soft); }
-    .float-foot b { color: var(--ink); }
+    .field span { font-size: 11px; color: #999; }
+    .field .send { width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; font-size: 12px; }
+    .float-foot { margin-top: 12px; display: flex; justify-content: space-between; font-size: 10.5px; color: #777; }
+    .float-foot b { color: var(--ink); font-weight: 600; }
 
-    /* ============ Sections génériques ============ */
-    section { padding: clamp(64px, 9vw, 110px) 0; }
-    .kicker { font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
-    .title { font-size: clamp(2rem, 4.4vw, 3.2rem); letter-spacing: -.03em; line-height: 1.05; font-weight: 700; margin-top: 12px; }
-    .title .muted { color: #a59c92; font-weight: 500; display: block; }
-    .intro { color: var(--ink-soft); max-width: 46ch; margin-top: 16px; }
-    .split-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; flex-wrap: wrap; margin-bottom: 44px; }
-    .split-head .intro { margin-top: 0; text-align: right; }
+    /* ================= SECTIONS ================= */
+    .section { padding: clamp(60px, 8vw, 96px) 0 0; }
+    .eyebrow { font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .h2 { font-size: clamp(2rem, 3.6vw, 3rem); font-weight: 500; letter-spacing: -.03em; line-height: 1.05; margin-top: 10px; }
+    .h2 span { display: block; color: #9a9a9a; }
+    .p-small { font-size: 13px; color: var(--muted); margin-top: 14px; max-width: 42ch; }
+    .head-right { text-align: right; margin-left: auto; max-width: 480px; }
+    .head-right .p-small { margin-left: auto; }
 
-    /* ============ Bento : confiance et catalogue ============ */
-    .bento { display: grid; grid-template-columns: 1fr 1fr 1fr; grid-auto-rows: minmax(150px, auto); gap: 16px; }
-    .tile { background: var(--surface); border-radius: var(--radius-lg); padding: 26px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
-    .tile.dark { background: var(--ink); color: #fff; }
-    .tile.orange { background: linear-gradient(150deg, var(--orange), var(--orange-2)); color: var(--ink); }
-    .tile.big { grid-row: span 2; grid-column: span 1; background: radial-gradient(70% 60% at 60% 30%, #ff9a4d 0%, transparent 70%), linear-gradient(170deg, #1d3b3f, #0f1f22); color: #fff; display: flex; flex-direction: column; justify-content: flex-end; min-height: 380px; }
-    .tile .num { font-size: 2.6rem; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
-    .tile .label { font-size: .85rem; opacity: .75; margin-top: 8px; }
-    .tile h3 { font-size: 1.15rem; letter-spacing: -.01em; margin-bottom: 6px; }
-    .tile p { font-size: .9rem; opacity: .75; }
-    .badge-float {
-      position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,.14); backdrop-filter: blur(6px);
-      border-radius: var(--radius-pill); padding: 8px 14px; font-size: .78rem; color: #fff;
+    /* Section pourquoi : grille photo + tuiles */
+    .why-wrap { position: relative; margin-top: 40px; }
+    .why-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 6px; width: min(100%, 62%); }
+    .photo {
+      position: relative; overflow: hidden; border-radius: var(--radius-lg);
+      background: radial-gradient(60% 60% at 60% 30%, #ff9a5a 0%, transparent 70%), linear-gradient(170deg, #22343a, #0b0f10);
+      color: #fff;
     }
-    .tile.wide { grid-column: span 2; }
-    .tile.cream { background: #fbfaf7; }
-    .check-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #f4f1ec; border-radius: 14px; padding: 12px 14px; margin-top: 10px; font-size: .88rem; }
-    .check-row .tick { width: 22px; height: 22px; border-radius: 50%; background: var(--ink); color: #fff; font-size: .7rem; display: grid; place-items: center; }
-    .progress { height: 6px; background: rgba(255,255,255,.15); border-radius: 99px; margin-top: 16px; overflow: hidden; }
-    .progress span { display: block; height: 100%; width: 62%; background: linear-gradient(90deg, var(--orange), var(--orange-2)); border-radius: 99px; }
-
-    /* Catalogue : rangée de produits */
-    .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin-top: 16px; }
-    .product { background: var(--surface); border-radius: var(--radius-lg); padding: 22px; box-shadow: var(--shadow); transition: transform .3s var(--ease), box-shadow .3s var(--ease); }
-    .product:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(20,17,15,.1); }
-    .product .thumb {
-      aspect-ratio: 4 / 3; border-radius: 18px; margin-bottom: 16px;
-      background: linear-gradient(135deg, #f5d6b8, #ffb27a);
-      display: grid; place-items: center; color: var(--ink); font-weight: 700; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
+    .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .photo-main { min-height: 470px; }
+    .photo-main .badge-top {
+      position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,.95); color: var(--ink);
+      border-radius: var(--radius-pill); padding: 8px 14px; font-size: 11px; z-index: 2;
     }
-    .product .cat { font-size: .72rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .1em; }
-    .product h4 { font-size: 1.05rem; margin: 6px 0 4px; }
-    .product .fmt { font-size: .84rem; color: var(--ink-soft); }
-    .product .row { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
-    .product .price { font-weight: 800; }
-    .add { width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--ink); color: #fff; cursor: pointer; font-size: 1.1rem; transition: transform .2s var(--ease), background .2s var(--ease); }
-    .add:hover { transform: rotate(90deg); background: var(--orange); }
+    .photo-main .badge-top b { display: block; font-size: 15px; }
+    .glass-card {
+      position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 2;
+      background: rgba(255,255,255,.14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.2); border-radius: 16px; padding: 14px 16px;
+    }
+    .glass-card .k { font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; opacity: .7; display: flex; justify-content: space-between; }
+    .glass-card .v { font-size: 20px; font-weight: 600; margin-top: 6px; display: flex; justify-content: space-between; align-items: center; }
+    .glass-card .pill { font-size: 9.5px; background: #fff; color: var(--ink); padding: 3px 8px; border-radius: 999px; font-weight: 600; letter-spacing: .04em; }
+    .bar { height: 3px; background: rgba(255,255,255,.25); border-radius: 9px; margin-top: 10px; position: relative; }
+    .bar::after { content: ""; position: absolute; left: 0; top: 0; height: 100%; width: 70%; background: #fff; border-radius: 9px; }
+    .bar i { position: absolute; top: -4px; left: 70%; width: 10px; height: 10px; border-radius: 50%; background: #fff; transform: translateX(-50%); }
 
-    /* ============ Timeline (façon programme) ============ */
-    .timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 10px; }
-    .phase { background: var(--surface); border-radius: var(--radius-lg); padding: 26px; box-shadow: var(--shadow); }
-    .phase.active { background: var(--ink); color: #fff; }
-    .phase .step { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; opacity: .6; }
-    .phase h3 { font-size: 1.3rem; margin: 10px 0 8px; letter-spacing: -.02em; }
-    .phase p { font-size: .9rem; opacity: .7; }
-    .phase ul { list-style: none; margin-top: 18px; display: grid; gap: 8px; }
-    .phase li { font-size: .86rem; background: rgba(20,17,15,.05); border-radius: 12px; padding: 10px 12px; display: flex; justify-content: space-between; }
-    .phase.active li { background: rgba(255,255,255,.08); }
+    .cluster { display: grid; grid-template-rows: auto 1fr; gap: 6px; }
+    .tile-orange {
+      width: 56%; aspect-ratio: 1; border-radius: var(--radius-lg); padding: 14px;
+      background: linear-gradient(150deg, var(--orange-1), #ffb27a);
+      color: var(--ink); display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .tile-orange .num { font-size: clamp(2rem, 3.4vw, 2.8rem); font-weight: 500; letter-spacing: -.03em; line-height: 1; }
+    .tile-orange .lbl { font-size: 10.5px; line-height: 1.3; opacity: .85; }
+    .tile-cream {
+      position: relative; border-radius: var(--radius-lg); padding: 18px; min-height: 220px;
+      background: #fbfbfa; border: 1px solid var(--line);
+      display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .tile-cream .icon {
+      position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; border-radius: 50%;
+      background: var(--ink); color: #fff; display: grid; place-items: center; font-size: 14px;
+    }
+    .tile-cream .num { font-size: clamp(2.4rem, 4.4vw, 3.4rem); font-weight: 500; letter-spacing: -.03em; line-height: 1; }
+    .tile-cream .lbl { font-size: 11px; color: var(--muted); margin-top: 6px; }
 
-    /* ============ FAQ ============ */
-    .faq { display: grid; grid-template-columns: .9fr 1.1fr; gap: 40px; align-items: start; }
+    .who-line { margin-top: 16px; margin-left: auto; width: min(100%, 62%); display: flex; justify-content: flex-end; gap: 10px; align-items: center; }
+    .who-line .txt { text-align: right; font-size: 11.5px; }
+    .who-line .txt b { display: block; font-size: 12.5px; font-weight: 600; }
+    .who-line .txt span { color: var(--muted); }
+    .who-line .ava { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--ink), #555); color: #fff; display: grid; place-items: center; font-size: 10px; font-weight: 700; }
+
+    /* Bande orange : catégories */
+    .band {
+      margin-top: 40px; border-radius: var(--radius-xl); padding: clamp(28px, 4vw, 44px);
+      background: linear-gradient(180deg, #ffa36a 0%, #ff7a3c 55%, #f0643a 100%);
+      color: #fff;
+    }
+    .band .eyebrow { color: rgba(255,255,255,.85); }
+    .band h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 500; letter-spacing: -.03em; line-height: 1.08; margin-top: 10px; }
+    .band h2 span { display: block; opacity: .65; }
+    .cats { margin-top: 28px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .cat {
+      background: linear-gradient(140deg, rgba(233,84,44,.95), rgba(255,140,80,.95));
+      border: 1px solid rgba(255,255,255,.18); border-radius: var(--radius-lg); padding: 22px;
+      min-height: 230px; display: flex; flex-direction: column; justify-content: space-between;
+      transition: transform .3s var(--ease);
+    }
+    .cat:hover { transform: translateY(-4px); }
+    .cat h3 { font-size: 20px; font-weight: 600; letter-spacing: -.01em; }
+    .cat p { font-size: 12px; opacity: .88; margin-top: 8px; max-width: 30ch; }
+    .cat .arrow {
+      align-self: flex-end; width: 38px; height: 38px; border-radius: 50%; background: var(--ink); color: #fff;
+      display: grid; place-items: center; font-size: 14px; transition: transform .3s var(--ease);
+    }
+    .cat:hover .arrow { transform: rotate(-45deg); }
+
+    /* Comment réserver : programme */
+    .prog-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; flex-wrap: wrap; }
+    .prog-head .p-small { max-width: 30ch; margin-top: 0; }
+    .steps { margin-top: 36px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .step-tick { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; padding: 0 4px; }
+    .step {
+      background: var(--surface); border-radius: var(--radius-lg); padding: 22px; min-height: 280px;
+      border: 1px solid var(--line); display: flex; flex-direction: column;
+    }
+    .step.active { background: #0f0f0f; color: #fff; border-color: #0f0f0f; }
+    .step .k { font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .step.active .k { color: rgba(255,255,255,.55); }
+    .step h3 { font-size: 17px; font-weight: 600; letter-spacing: -.01em; margin-top: 8px; }
+    .step > p { font-size: 12px; color: var(--muted); margin-top: 6px; max-width: 32ch; }
+    .step.active > p { color: rgba(255,255,255,.6); }
+    .checks { margin-top: auto; display: grid; gap: 8px; padding-top: 18px; }
+    .check {
+      display: flex; align-items: center; gap: 10px; font-size: 12px;
+      background: var(--soft); border-radius: 12px; padding: 10px 12px;
+    }
+    .check i { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid #bbb; flex-shrink: 0; }
+    .check.done i { background: var(--ink); border-color: var(--ink); }
+    .code-mini {
+      margin-top: 14px; background: rgba(255,255,255,.08); border-radius: 14px; padding: 12px;
+    }
+    .code-mini .row { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: rgba(255,255,255,.7); }
+    .code-mini .code { font-size: 20px; font-weight: 700; letter-spacing: .18em; color: #fff; margin-top: 6px; }
+    .pills { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+    .pills span { font-size: 10px; padding: 5px 9px; border-radius: 999px; background: rgba(255,255,255,.12); }
+    .bar-dark { height: 4px; background: rgba(255,255,255,.14); border-radius: 9px; margin-top: 14px; position: relative; }
+    .bar-dark::after { content: ""; position: absolute; left: 0; top: 0; height: 100%; width: 62%; border-radius: 9px; background: linear-gradient(90deg, var(--orange-1), var(--orange-3)); }
+    .bar-dark-label { font-size: 10px; color: rgba(255,255,255,.55); margin-top: 6px; }
+
+    /* FAQ */
+    .faq-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
     .faq-list { border-top: 1px solid var(--line); }
     .faq-item { border-bottom: 1px solid var(--line); }
     .faq-q {
-      width: 100%; background: none; border: 0; text-align: left; cursor: pointer;
-      padding: 22px 0; font: inherit; font-weight: 600; font-size: 1rem; color: var(--ink);
-      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      width: 100%; background: none; border: 0; cursor: pointer; text-align: left;
+      padding: 18px 0; display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      font-size: 14px; font-weight: 500; color: var(--ink);
     }
-    .faq-q .plus { width: 30px; height: 30px; border-radius: 50%; background: var(--surface); display: grid; place-items: center; transition: transform .3s var(--ease), background .3s var(--ease); flex-shrink: 0; box-shadow: var(--shadow); }
-    .faq-item.open .plus { transform: rotate(45deg); background: var(--orange); }
+    .faq-q .plus {
+      width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center;
+      font-size: 14px; flex-shrink: 0; transition: transform .3s var(--ease), background .3s var(--ease), color .3s var(--ease);
+    }
+    .faq-item.open .plus { transform: rotate(45deg); background: var(--ink); color: #fff; border-color: var(--ink); }
     .faq-a { max-height: 0; overflow: hidden; transition: max-height .4s var(--ease); }
-    .faq-a p { padding: 0 0 22px; color: var(--ink-soft); font-size: .94rem; max-width: 60ch; }
+    .faq-a p { padding: 0 40px 18px 0; font-size: 12.5px; color: var(--muted); max-width: 56ch; }
     .ask {
-      margin-top: 28px; background: linear-gradient(150deg, var(--orange), var(--orange-2)); border-radius: var(--radius-lg);
-      padding: 22px; max-width: 320px; color: var(--ink);
+      margin-top: 28px; width: min(100%, 300px); border-radius: var(--radius-lg); padding: 18px;
+      background: linear-gradient(150deg, var(--orange-1), #ffb27a); color: var(--ink);
     }
-    .ask b { font-size: 1rem; }
-    .ask p { font-size: .86rem; margin: 6px 0 14px; opacity: .8; }
-    .ask a { display: inline-block; background: var(--ink); color: #fff; padding: 9px 16px; border-radius: var(--radius-pill); font-size: .84rem; font-weight: 600; }
+    .ask .who { display: flex; align-items: center; gap: 10px; }
+    .ask .who i { width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; font-style: normal; font-size: 11px; font-weight: 700; }
+    .ask b { font-size: 13px; font-weight: 600; }
+    .ask p { font-size: 11.5px; margin: 10px 0 14px; opacity: .85; }
+    .ask a { display: inline-block; background: var(--ink); color: #fff; font-size: 11.5px; padding: 9px 14px; border-radius: var(--radius-pill); font-weight: 600; }
 
-    /* ============ Bloc final sombre ============ */
+    /* Bloc final */
     .closing {
-      background: #0c0a09; color: #fff; border-radius: 36px; margin: 0 16px 16px; padding: clamp(60px, 9vw, 110px) 24px;
-      text-align: center; position: relative; overflow: hidden;
+      position: relative; overflow: hidden; isolation: isolate; margin-top: 60px;
+      border-radius: var(--radius-xl); background: #0b0b0b; color: #fff;
+      padding: clamp(56px, 8vw, 96px) 20px clamp(40px, 6vw, 70px); text-align: center;
     }
     .closing::before {
-      content: "BOKHISMANY"; position: absolute; left: 50%; bottom: -30px; transform: translateX(-50%);
-      font-size: clamp(3.5rem, 16vw, 13rem); font-weight: 800; letter-spacing: -.04em; color: rgba(255,255,255,.04); white-space: nowrap;
+      content: ""; position: absolute; left: 50%; bottom: -120px; transform: translateX(-50%); z-index: -1;
+      width: 80%; height: 280px; border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(255,122,47,.55), transparent 70%); filter: blur(30px);
     }
-    .closing .tag { display: inline-block; font-size: .78rem; border: 1px solid rgba(255,255,255,.2); padding: 6px 12px; border-radius: var(--radius-pill); margin-bottom: 20px; opacity: .85; }
-    .closing h2 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 700; letter-spacing: -.03em; line-height: 1.05; position: relative; }
-    .closing h2 span { color: #a59c92; font-weight: 500; display: block; }
-    .closing .btn-row { margin-top: 30px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
-    .btn-orange { background: var(--orange); color: var(--ink); font-weight: 700; padding: 14px 24px; border-radius: var(--radius-pill); transition: transform .2s var(--ease), background .2s var(--ease); }
-    .btn-orange:hover { transform: translateY(-2px); background: var(--orange-2); }
+    .closing .pill { display: inline-block; font-size: 11px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); padding: 7px 14px; border-radius: var(--radius-pill); }
+    .closing h2 { margin-top: 24px; font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 500; letter-spacing: -.035em; line-height: 1.04; }
+    .closing h2 span { display: block; color: #8d8d8d; }
+    .closing .btns { margin-top: 28px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .btn-orange { background: linear-gradient(135deg, var(--orange-1), var(--orange-2)); color: var(--ink); font-weight: 600; font-size: 13px; padding: 13px 22px; border-radius: var(--radius-pill); }
+    .btn-line { border: 1px solid rgba(255,255,255,.25); color: #fff; font-size: 13px; padding: 13px 22px; border-radius: var(--radius-pill); }
+    .watermark {
+      position: absolute; left: 50%; bottom: -0.2em; transform: translateX(-50%); z-index: -1;
+      font-size: clamp(4rem, 17vw, 14rem); font-weight: 700; letter-spacing: -.04em; white-space: nowrap;
+      color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.12); line-height: .9;
+    }
 
-    footer { padding: 36px 20px 40px; font-size: .84rem; color: var(--ink-soft); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; max-width: 1200px; margin: 0 auto; }
-    footer .logo { color: var(--ink); }
-    footer .logo span { color: var(--orange); }
+    footer {
+      max-width: 1180px; margin: 0 auto; padding: 30px 16px 40px; font-size: 12px; color: var(--muted);
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    footer .logo { color: var(--ink); font-size: 12px; text-align: left; }
 
-    /* ============ Apparition au défilement ============ */
-    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+    /* Apparition au défilement */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
     .reveal.in { opacity: 1; transform: none; }
 
-    /* ============ Responsive ============ */
+    /* ================= RESPONSIVE ================= */
     @media (max-width: 960px) {
-      .hero-card { grid-template-columns: 1fr; min-height: 0; }
-      .float-card { justify-self: start; }
-      .bento { grid-template-columns: 1fr 1fr; }
-      .tile.big { grid-row: auto; grid-column: span 2; min-height: 280px; }
-      .faq { grid-template-columns: 1fr; }
-      .split-head .intro { text-align: left; }
-      .timeline { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 720px) {
-      .nav-links, .nav-cta .btn-white { display: none; }
+      .nav-links { display: none; }
+      .nav { grid-template-columns: 1fr auto; padding-left: 18px; }
+      .nav-right .login { display: none; }
       .burger { display: block; }
-      .hero-card { margin: 14px 12px 0; padding: 40px 22px; border-radius: 28px; }
-      .bento { grid-template-columns: 1fr; }
-      .tile.wide, .tile.big { grid-column: auto; }
-      .pill-cta { width: 100%; justify-content: space-between; }
-      .ghost { width: 100%; text-align: center; }
-      .closing { margin: 0 8px 8px; }
+      .hero { min-height: 0; padding-bottom: 20px; }
+      .proof { position: static; margin: 26px clamp(22px,4vw,56px) 0; }
+      .float-card { position: relative; right: auto; bottom: auto; margin: 26px clamp(22px,4vw,56px) 0; width: auto; max-width: 340px; }
+      .why-grid { width: 100%; }
+      .who-line { width: 100%; }
+      .cats { grid-template-columns: 1fr; }
+      .cat { min-height: 180px; }
+      .steps { grid-template-columns: 1fr; }
+      .step { min-height: 0; }
+      .faq-wrap { grid-template-columns: 1fr; }
+      .head-right { text-align: left; margin-left: 0; }
+      .head-right .p-small { margin-left: 0; }
     }
-
+    @media (max-width: 600px) {
+      .page { padding: 16px; }
+      .nav { margin: 10px; }
+      .hero h1 { font-size: 2.2rem; }
+      .cta-row { width: 100%; }
+      .pill-dark { width: 100%; justify-content: space-between; }
+      .why-grid { grid-template-columns: 1fr; }
+      .photo-main { min-height: 380px; }
+      .cluster { grid-template-rows: auto; }
+      .tile-orange { width: 40%; }
+      .band { border-radius: 22px; }
+      .closing { border-radius: 22px; }
+      .closing h2 { font-size: 2.1rem; }
+      .btn-orange, .btn-line { width: 100%; text-align: center; }
+    }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
       .reveal { opacity: 1; transform: none; }
     }
-    :focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; border-radius: 8px; }
+    :focus-visible { outline: 2px solid var(--orange-2); outline-offset: 3px; border-radius: 8px; }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <div class="nav-wrap">
-    <header class="nav" role="banner">
-      <a class="logo" href="#accueil" aria-label="Bokhismany, accueil">BOKHIS<span>MANY</span></a>
-      <nav aria-label="Principale">
-        <div class="nav-links">
+  <div class="page">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" aria-label="Accueil">
+      <img class="hero-img" src="images/hero.jpg" alt="" onerror="this.remove()">
+      <div class="hero-glow" aria-hidden="true"></div>
+
+      <header>
+        <nav class="nav" aria-label="Principale">
+          <div class="nav-links">
+            <a href="#catalogue">Produits</a>
+            <a href="#comment">Comment réserver</a>
+            <a href="#adresses">Boutiques</a>
+          </div>
+          <a class="logo" href="#accueil">BOKHISMANY</a>
+          <div class="nav-right">
+            <a class="login" href="#adresses">Nos boutiques</a>
+            <a class="btn-white" href="#reserver">RÉSERVER</a>
+            <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu-mobile">&#9776;</button>
+          </div>
+        </nav>
+        <div class="nav-mobile" id="menu-mobile">
           <a href="#catalogue">Produits</a>
           <a href="#comment">Comment réserver</a>
-          <a href="#adresses">Points de vente</a>
+          <a href="#adresses">Boutiques</a>
           <a href="#faq">Questions</a>
+          <a href="#reserver"><strong>Réserver mon panier</strong></a>
         </div>
-      </nav>
-      <div class="nav-cta">
-        <a class="btn-white" href="#reserver">Réserver</a>
-        <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu-mobile">&#9776;</button>
+      </header>
+
+      <div class="hero-content">
+        <span class="tag">Commerce général · Produits alimentaires</span>
+        <h1>Vos produits du quotidien,<span>réservés en deux minutes.</span></h1>
+        <p class="sub">Riz, farine, semoule, sucre et huiles, en gros comme au détail. Composez votre panier, recevez un code valable 24 heures, puis retirez en boutique.</p>
+        <div class="cta-row">
+          <a class="pill-dark" href="#catalogue">
+            <span class="price">À partir de 23 000 Fc</span>
+            <span class="go">Voir le catalogue →</span>
+          </a>
+        </div>
       </div>
-    </header>
-    <div class="nav-mobile" id="menu-mobile">
-      <a href="#catalogue">Produits</a>
-      <a href="#comment">Comment réserver</a>
-      <a href="#adresses">Points de vente</a>
-      <a href="#faq">Questions</a>
-      <a href="#reserver"><strong>Réserver un panier</strong></a>
-    </div>
+
+      <div class="proof">
+        <div class="avatars" aria-hidden="true"><span>K</span><span>B</span><span>D</span></div>
+        <p><b>3 boutiques Daayake Food</b><br>Kinshasa · Brazzaville</p>
+      </div>
+
+      <aside class="float-card" aria-label="Exemple de panier">
+        <div class="float-head">
+          <span class="who"><span class="mini-avatar"></span> Votre panier</span>
+          <span class="new-btn">3 articles</span>
+        </div>
+        <div class="spark" aria-hidden="true">✦</div>
+        <h3>Réservez votre panier pour passer en boutique.</h3>
+        <p class="lead">Un code à 6 caractères, valable 24 heures.</p>
+        <div class="chips">
+          <span>Riz Lion 50 kg</span>
+          <span>Huile Simba 5 L</span>
+          <span>Farine Boulenger</span>
+        </div>
+        <div class="field">
+          <span>Quantité ou produit recherché</span>
+          <div class="send" aria-hidden="true">→</div>
+        </div>
+        <div class="float-foot">
+          <span>Étape suivante</span>
+          <b>Réserver le panier →</b>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ============ POURQUOI ============ -->
+    <section class="section" id="pourquoi">
+      <div class="head-right reveal">
+        <p class="eyebrow">Pourquoi Bokhismany</p>
+        <h2 class="h2">Des prix clairs,<span>des produits disponibles.</span></h2>
+        <p class="p-small">Chaque produit est listé avec son format et son prix indicatif. Le montant définitif est confirmé en boutique, au moment du paiement.</p>
+      </div>
+
+      <div class="why-wrap">
+        <div class="why-grid">
+          <div class="photo photo-main reveal">
+            <img src="images/boutique.jpg" alt="Intérieur de la boutique Daayake Food" onerror="this.remove()">
+            <div class="badge-top"><b>24 h</b>pour retirer en boutique</div>
+            <div class="glass-card">
+              <div class="k"><span>Boutique</span><span>Daayake 1</span></div>
+              <div class="v">Code vérifié <span class="pill">VALIDE</span></div>
+              <div class="bar"><i></i></div>
+            </div>
+          </div>
+
+          <div class="cluster reveal">
+            <div class="tile-orange">
+              <span class="num">3</span>
+              <span class="lbl">boutiques à Kinshasa et Brazzaville</span>
+            </div>
+            <div class="tile-cream">
+              <span class="icon" aria-hidden="true">↗</span>
+              <span class="num">27</span>
+              <span class="lbl">produits référencés au catalogue</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="who-line reveal">
+          <div class="txt">
+            <b>Daayake Food</b>
+            <span>Bokhismany Trading SARL</span>
+          </div>
+          <div class="ava" aria-hidden="true">DF</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BANDE CATÉGORIES ============ -->
+    <section class="band" id="catalogue">
+      <p class="eyebrow reveal">Nos catégories</p>
+      <h2 class="reveal">Les produits de base,<span>au meilleur format.</span></h2>
+
+      <div class="cats">
+        <a class="cat reveal" href="#catalogue">
+          <div>
+            <h3>Riz</h3>
+            <p>Riz blanc et riz long grain, en sacs de 25 kg et de 50 kg.</p>
+          </div>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </a>
+        <a class="cat reveal" href="#catalogue">
+          <div>
+            <h3>Huiles</h3>
+            <p>Huiles végétales et huile de palme, en bidons de 5 L et 25 L.</p>
+          </div>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </a>
+        <a class="cat reveal" href="#catalogue">
+          <div>
+            <h3>Farines et semoules</h3>
+            <p>Farines boulangères, semoules et farine de manioc.</p>
+          </div>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ COMMENT RÉSERVER ============ -->
+    <section class="section" id="comment">
+      <div class="prog-head">
+        <div class="reveal">
+          <p class="eyebrow">Comment réserver</p>
+          <h2 class="h2">Trois étapes,<span>sans paiement en ligne.</span></h2>
+        </div>
+        <p class="p-small reveal">Vous réservez votre panier, puis vous réglez et retirez en boutique. Pas de compte à créer.</p>
+      </div>
+
+      <div class="steps">
+        <div class="reveal">
+          <div class="step-tick"><span>Étape 1</span><span>0 min</span></div>
+          <div class="step">
+            <span class="k">Panier</span>
+            <h3>Composez votre panier</h3>
+            <p>Ajoutez vos produits et ajustez les quantités. Le montant estimé se met à jour aussitôt.</p>
+            <div class="checks">
+              <div class="check done"><i></i>Produits ajoutés</div>
+              <div class="check done"><i></i>Montant estimé</div>
+              <div class="check"><i></i>Nom et téléphone</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="step-tick"><span>Étape 2</span><span>2 min</span></div>
+          <div class="step active">
+            <span class="k">Réservation</span>
+            <h3>Recevez votre code</h3>
+            <p>Un code à 6 caractères, valable 24 heures à partir de la réservation.</p>
+            <div class="code-mini">
+              <div class="row"><span>Votre code</span><span>Valable 24 h</span></div>
+              <div class="code">K7M4QX</div>
+              <div class="pills"><span>6 caractères</span><span>24 h</span><span>Une seule utilisation</span></div>
+            </div>
+            <div class="bar-dark"></div>
+            <div class="bar-dark-label">Étape 2 sur 3</div>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="step-tick"><span>Étape 3</span><span>24 h</span></div>
+          <div class="step">
+            <span class="k">Retrait</span>
+            <h3>Retirez en boutique</h3>
+            <p>Présentez votre code dans l'une de nos trois boutiques. Vous réglez sur place et repartez avec vos produits.</p>
+            <div class="checks">
+              <div class="check"><i></i>Présenter le code</div>
+              <div class="check"><i></i>Régler sur place</div>
+              <div class="check"><i></i>Repartir avec vos produits</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BOUTIQUES ============ -->
+    <section class="section" id="adresses">
+      <div class="head-right reveal">
+        <p class="eyebrow">Nos boutiques</p>
+        <h2 class="h2">Trois adresses,<span>Daayake Food.</span></h2>
+        <p class="p-small">Horaires d'ouverture : TODO, à confirmer par Bokhismany.</p>
+      </div>
+      <div class="steps" style="margin-top:36px;">
+        <article class="step reveal">
+          <span class="k">Kinshasa</span>
+          <h3>Daayake 1</h3>
+          <p>45, avenue Busu Djanoa, commune de Kasavubu</p>
+          <div class="checks"><a class="check" href="tel:+243817293796"><i></i>+243 817 293 796</a></div>
+        </article>
+        <article class="step reveal">
+          <span class="k">Kinshasa</span>
+          <h3>Daayake 2</h3>
+          <p>39, avenue Busu Djanoa, commune de Kasavubu</p>
+          <div class="checks"><a class="check" href="tel:+243818142449"><i></i>+243 818 142 449</a></div>
+        </article>
+        <article class="step reveal">
+          <span class="k">Brazzaville</span>
+          <h3>Daayake 3</h3>
+          <p>45, rue Bangui, Ouenzé (5e arrondissement)</p>
+          <div class="checks"><a class="check" href="tel:+242065793872"><i></i>+242 06 579 3872</a></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="section" id="faq">
+      <div class="faq-wrap">
+        <div class="reveal">
+          <p class="eyebrow">Questions</p>
+          <h2 class="h2">Des réponses,<span>simplement.</span></h2>
+          <p class="p-small">Une question restée sans réponse ? Écrivez-nous ou appelez l'une de nos boutiques.</p>
+          <div class="ask">
+            <div class="who"><i aria-hidden="true">B</i><b>Une question précise ?</b></div>
+            <p>Notre équipe vous répond par email, généralement dans la journée.</p>
+            <a href="mailto:tradingbokhismany@gmail.com">Nous écrire →</a>
+          </div>
+        </div>
+
+        <div class="faq-list reveal" id="faq-list">
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">Comment fonctionne la réservation ?<span class="plus" aria-hidden="true">+</span></button>
+            <div class="faq-a" style="max-height:120px;"><p>Vous composez votre panier, renseignez votre nom et votre téléphone, puis recevez un code à 6 caractères valable 24 heures. Présentez-le en boutique pour régler et retirer vos produits.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">Combien de temps dure une réservation ?<span class="plus" aria-hidden="true">+</span></button>
+            <div class="faq-a"><p>24 heures à partir de la création. Passé ce délai, la réservation expire et les produits ne sont plus réservés.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">Pourquoi le montant est-il estimé ?<span class="plus" aria-hidden="true">+</span></button>
+            <div class="faq-a"><p>Les prix peuvent évoluer. Le montant définitif est confirmé en boutique, au moment du paiement.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">Puis-je payer en ligne ?<span class="plus" aria-hidden="true">+</span></button>
+            <div class="faq-a"><p>Non. Le site sert à réserver. Le paiement se fait uniquement en boutique.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">Vendez-vous en gros ?<span class="plus" aria-hidden="true">+</span></button>
+            <div class="faq-a"><p>Oui, nous vendons en gros comme au détail. Contactez-nous pour les quantités importantes.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BLOC FINAL ============ -->
+    <section class="closing reveal" id="reserver">
+      <span class="pill">Réservation valable 24 h · Retrait en boutique</span>
+      <h2>Votre panier, réservé<span>simplement.</span></h2>
+      <div class="btns">
+        <a class="btn-orange" href="#catalogue">Voir le catalogue</a>
+        <a class="btn-line" href="#adresses">Trouver une boutique</a>
+      </div>
+      <div class="watermark" aria-hidden="true">BOKHISMANY</div>
+    </section>
+
   </div>
 
-  <main>
-    <!-- Hero -->
-    <section id="accueil" style="padding-top:0;">
-      <div class="wrap">
-        <div class="hero-card">
-          <div>
-            <span class="eyebrow">Commerce général · Kinshasa &amp; Brazzaville</span>
-            <h1>Vos produits du quotidien, <em>réservés en deux minutes.</em></h1>
-            <p class="lead">Riz, farine, semoule, sucre et huiles, en gros comme au détail. Composez votre panier, réservez, puis venez payer et retirer en boutique.</p>
-            <div class="hero-actions">
-              <a class="pill-cta" href="#catalogue">
-                <span class="price">À partir de 23 000 Fc</span>
-                <span class="go" aria-hidden="true">→</span>
-              </a>
-              <a class="ghost" href="#comment">Comment réserver</a>
-            </div>
-            <p class="hero-foot"><strong>3 points de vente</strong> · Promotion jusqu'à 5 % · Code de réservation valable 24 h</p>
-          </div>
-
-          <!-- Carte flottante : exemple de réservation -->
-          <aside class="float-card" aria-label="Exemple de réservation">
-            <div class="float-head">
-              <span style="display:flex;align-items:center;gap:8px;"><span class="avatar"></span> Daayake Food</span>
-              <span>Exemple</span>
-            </div>
-            <p class="float-title">Votre réservation est enregistrée.</p>
-            <p class="float-sub">Présentez ce code en boutique avant la date limite.</p>
-            <div class="code-box">
-              <span class="code">K7M4QX</span>
-              <span class="validity">Valable<br>24 h</span>
-            </div>
-            <div class="chips">
-              <span class="chip">Riz Lion 50 kg</span>
-              <span class="chip">Huile Simba 5 L</span>
-              <span class="chip">+2 produits</span>
-            </div>
-            <div class="float-foot">
-              <span>Montant estimé : <b>143 500 Fc</b></span>
-              <span>À confirmer en boutique</span>
-            </div>
-          </aside>
-        </div>
-      </div>
-    </section>
-
-    <!-- Confiance (bento) -->
-    <section style="padding-top:40px;">
-      <div class="wrap">
-        <div class="split-head reveal">
-          <div>
-            <p class="kicker">Pourquoi nous choisir</p>
-            <h2 class="title">Des prix clairs. <span class="muted">Une boutique près de chez vous.</span></h2>
-          </div>
-          <p class="intro">Tous nos produits sont visibles en ligne, avec leur format et leur prix indicatif. Le prix définitif est confirmé en boutique.</p>
-        </div>
-
-        <div class="bento">
-          <div class="tile big reveal">
-            <span class="badge-float">Kinshasa · Brazzaville</span>
-            <h3 style="font-size:1.6rem;letter-spacing:-.02em;max-width:16ch;">Trois boutiques Daayake Food, prêtes à vous recevoir.</h3>
-            <p style="margin-top:8px;">Deux à Kinshasa, une à Brazzaville, pour retirer vos réservations au plus près.</p>
-          </div>
-          <div class="tile orange reveal">
-            <div class="num">−5 %</div>
-            <div class="label" style="opacity:.8;">Promotion en cours sur une sélection de produits</div>
-          </div>
-          <div class="tile cream reveal">
-            <div class="num">24 h</div>
-            <div class="label">Validité de chaque code de réservation</div>
-          </div>
-          <div class="tile wide dark reveal">
-            <h3>Votre panier, figé pour 24 heures.</h3>
-            <p>Passé ce délai, la réservation expire automatiquement et les produits sont libérés.</p>
-            <div class="progress" aria-hidden="true"><span></span></div>
-          </div>
-          <div class="tile reveal">
-            <h3>Catalogue complet</h3>
-            <p>Huiles, riz, semoules, farines, sucre, poisson salé et plus encore.</p>
-            <div class="check-row"><span>Huiles</span><span class="tick">✓</span></div>
-            <div class="check-row"><span>Riz</span><span class="tick">✓</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Catalogue -->
-    <section id="catalogue" style="padding-top:20px;">
-      <div class="wrap">
-        <div class="split-head reveal">
-          <div>
-            <p class="kicker">Nos produits</p>
-            <h2 class="title">Les produits de base, <span class="muted">au meilleur format.</span></h2>
-          </div>
-          <p class="intro">Prix indicatifs en Francs CFA, susceptibles de changer. Les images sont à ajouter depuis l'administration.</p>
-        </div>
-
-        <div class="products">
-          <article class="product reveal">
-            <div class="thumb">Image à venir</div>
-            <p class="cat">Riz</p>
-            <h4>Lion</h4>
-            <p class="fmt">Sac de 50 kg</p>
-            <div class="row"><span class="price">93 500 Fc</span><button class="add" aria-label="Ajouter Lion 50 kg au panier">+</button></div>
-          </article>
-          <article class="product reveal">
-            <div class="thumb">Image à venir</div>
-            <p class="cat">Huiles</p>
-            <h4>Simba</h4>
-            <p class="fmt">Bidon de 25 L</p>
-            <div class="row"><span class="price">102 000 Fc</span><button class="add" aria-label="Ajouter Simba 25 L au panier">+</button></div>
-          </article>
-          <article class="product reveal">
-            <div class="thumb">Image à venir</div>
-            <p class="cat">Semoules</p>
-            <h4>Master Plus</h4>
-            <p class="fmt">Sac de 25 kg</p>
-            <div class="row"><span class="price">47 500 Fc</span><button class="add" aria-label="Ajouter Master Plus au panier">+</button></div>
-          </article>
-          <article class="product reveal">
-            <div class="thumb">Image à venir</div>
-            <p class="cat">Farines</p>
-            <h4>Boulenger</h4>
-            <p class="fmt">Sac de 50 kg</p>
-            <div class="row"><span class="price">86 500 Fc</span><button class="add" aria-label="Ajouter Boulenger 50 kg au panier">+</button></div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Comment réserver -->
-    <section id="comment">
-      <div class="wrap">
-        <div class="split-head reveal">
-          <div>
-            <p class="kicker">Comment réserver</p>
-            <h2 class="title">Trois étapes, <span class="muted">un retrait en boutique.</span></h2>
-          </div>
-          <p class="intro">Pas de compte à créer et pas de paiement en ligne. Vous réservez, puis vous réglez sur place.</p>
-        </div>
-
-        <div class="timeline">
-          <div class="phase reveal">
-            <span class="step">Étape 1</span>
-            <h3>Composez votre panier</h3>
-            <p>Ajoutez vos produits et ajustez les quantités. Le montant estimé se met à jour instantanément.</p>
-            <ul>
-              <li>Produits sélectionnés <b>3</b></li>
-              <li>Total estimé <b>143 500 Fc</b></li>
-            </ul>
-          </div>
-          <div class="phase active reveal">
-            <span class="step">Étape 2</span>
-            <h3>Réservez votre code</h3>
-            <p>Renseignez votre nom et votre téléphone. Vous recevez un code à 6 caractères.</p>
-            <ul>
-              <li>Code <b>K7M4QX</b></li>
-              <li>Validité <b>24 h</b></li>
-            </ul>
-          </div>
-          <div class="phase reveal">
-            <span class="step">Étape 3</span>
-            <h3>Retirez en boutique</h3>
-            <p>Présentez votre code dans l'une de nos trois boutiques. Vous réglez et repartez avec vos produits.</p>
-            <ul>
-              <li>Paiement <b>sur place</b></li>
-              <li>Boutique <b>au choix</b></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Adresses -->
-    <section id="adresses" style="padding-top:20px;">
-      <div class="wrap">
-        <div class="split-head reveal">
-          <div>
-            <p class="kicker">Points de vente</p>
-            <h2 class="title">Trois boutiques, <span class="muted">Daayake Food.</span></h2>
-          </div>
-          <p class="intro">Horaires d'ouverture : TODO, à confirmer par Bokhismany.</p>
-        </div>
-        <div class="products">
-          <article class="product reveal">
-            <p class="cat">Kinshasa</p>
-            <h4>Daayake 1</h4>
-            <p class="fmt">45, avenue Busu Djanoa, commune de Kasavubu</p>
-            <div class="row"><a class="price" href="tel:+243817293796">+243 817 293 796</a></div>
-          </article>
-          <article class="product reveal">
-            <p class="cat">Kinshasa</p>
-            <h4>Daayake 2</h4>
-            <p class="fmt">39, avenue Busu Djanoa, commune de Kasavubu</p>
-            <div class="row"><a class="price" href="tel:+243818142449">+243 818 142 449</a></div>
-          </article>
-          <article class="product reveal">
-            <p class="cat">Brazzaville</p>
-            <h4>Daayake 3</h4>
-            <p class="fmt">45, rue Bangui, Ouenzé (5e arrondissement)</p>
-            <div class="row"><a class="price" href="tel:+242065793872">+242 06 579 3872</a></div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section id="faq">
-      <div class="wrap">
-        <div class="faq">
-          <div class="reveal">
-            <p class="kicker">Questions</p>
-            <h2 class="title">Des réponses <span class="muted">simples.</span></h2>
-            <p class="intro">Une question sans réponse ici ? Écrivez-nous par email ou appelez l'une de nos boutiques.</p>
-            <div class="ask">
-              <b>Une question précise ?</b>
-              <p>Notre équipe vous répond par email ou par téléphone.</p>
-              <a href="mailto:tradingbokhismany@gmail.com">Nous écrire</a>
-            </div>
-          </div>
-          <div class="faq-list reveal" id="faq-list">
-            <div class="faq-item">
-              <button class="faq-q" aria-expanded="false">Comment fonctionne la réservation ?<span class="plus" aria-hidden="true">+</span></button>
-              <div class="faq-a"><p>Vous composez votre panier, renseignez votre nom et votre téléphone, puis recevez un code à 6 caractères valable 24 heures. Présentez-le en boutique pour régler et retirer vos produits.</p></div>
-            </div>
-            <div class="faq-item">
-              <button class="faq-q" aria-expanded="false">Pourquoi le montant est-il estimé ?<span class="plus" aria-hidden="true">+</span></button>
-              <div class="faq-a"><p>Les prix peuvent évoluer. Le montant définitif est confirmé en boutique, au moment du paiement.</p></div>
-            </div>
-            <div class="faq-item">
-              <button class="faq-q" aria-expanded="false">Que se passe-t-il après 24 heures ?<span class="plus" aria-hidden="true">+</span></button>
-              <div class="faq-a"><p>La réservation expire automatiquement. Les produits ne sont plus réservés, mais vous pouvez en faire une nouvelle depuis le catalogue.</p></div>
-            </div>
-            <div class="faq-item">
-              <button class="faq-q" aria-expanded="false">Puis-je payer en ligne ?<span class="plus" aria-hidden="true">+</span></button>
-              <div class="faq-a"><p>Non. Le site sert à réserver. Le paiement se fait uniquement en boutique.</p></div>
-            </div>
-            <div class="faq-item">
-              <button class="faq-q" aria-expanded="false">Vendez-vous en gros ?<span class="plus" aria-hidden="true">+</span></button>
-              <div class="faq-a"><p>Oui, nous vendons en gros comme au détail. Contactez-nous pour les quantités importantes.</p></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Bloc final sombre -->
-    <div class="closing reveal" id="reserver">
-      <span class="tag">Prêt à réserver ?</span>
-      <h2>Votre panier, réservé.<span>Votre code, valable 24 heures.</span></h2>
-      <div class="btn-row">
-        <a class="btn-orange" href="#catalogue">Voir le catalogue</a>
-        <a class="ghost" href="#adresses">Trouver une boutique</a>
-      </div>
-    </div>
-  </main>
-
   <footer>
-    <span class="logo">BOKHIS<span>MANY</span></span>
+    <span class="logo">BOKHISMANY</span>
     <span>Bokhismany Trading SARL · Commerce général · Kinshasa &amp; Brazzaville</span>
     <span>© 2026</span>
   </footer>
