@@ -77,15 +77,15 @@ export function ProductCard({ produit, prioritaire = true }: Props) {
             {produit.name}
           </h3>
           {produit.format ? <p className="mt-1.5 text-sm text-encre-douce">{produit.format}</p> : null}
-          <p className="mt-2 text-lg font-semibold text-marine">{formaterPrix(produit.priceFc)}</p>
         </div>
       </button>
-      <div className="mt-5 border-t border-encre/10 pt-4">
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-encre/10 pt-4">
+        <p className="text-lg font-semibold text-marine">{formaterPrix(produit.priceFc)}</p>
         <Link
           to="/produits/$slug"
           params={{ slug: produit.slug }}
           viewTransition
-          className="lien-editorial inline-flex min-h-11 items-center text-sm"
+          className="lien-editorial inline-flex min-h-11 shrink-0 items-center text-sm"
           aria-label={`Voir la fiche de ${produit.name}`}
         >
           Voir plus →
