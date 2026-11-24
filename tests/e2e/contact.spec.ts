@@ -37,5 +37,5 @@ test('un message valide est enregistré et visible dans l’administration', asy
   const message = page.locator('li').filter({ hasText: nom })
   await expect(message).toBeVisible()
   await message.getByRole('button', { name: 'Marquer comme lu' }).click()
-  await expect(message).toContainText('Lu')
+  await expect(message.getByText('Lu', { exact: true })).toBeVisible()
 })

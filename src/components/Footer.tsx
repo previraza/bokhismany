@@ -45,7 +45,7 @@ export function Footer() {
           <h2 className="etiquette mb-6 text-or-pale">Points de vente</h2>
           <ul className="space-y-3 text-sm text-creme/75">
             {POINTS_DE_VENTE.map((point) => (
-              <li key={point.ville}>
+              <li key={point.nom}>
                 <span className="font-semibold text-creme">{point.ville}</span>
                 <span className="block">{point.adresse}</span>
               </li>
