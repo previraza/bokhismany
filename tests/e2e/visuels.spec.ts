@@ -37,7 +37,7 @@ test('les métadonnées portent le nom complet et une image de partage', async (
 test('les visuels officiels sont chargés sur les pages publiques', async ({ page }) => {
   await aller(page, '/')
 
-  const logo = page.locator('header img[src*="banniere.png"]').first()
+  const logo = page.locator('header img[src*="bokhismany-logo-officiel.png"]').first()
   await expect(logo).toBeVisible()
   expect(
     await logo.evaluate(
@@ -45,14 +45,47 @@ test('les visuels officiels sont chargés sur les pages publiques', async ({ pag
     ),
   ).toBe(true)
 
+  const daayakeEntete = page.locator('header img[src*="daayake-food.png"]')
+  await expect(daayakeEntete).toHaveCount(1)
+  if ((page.viewportSize()?.width ?? 0) >= 768) {
+    await expect(daayakeEntete).toBeVisible()
+    expect(
+      await daayakeEntete.evaluate(
+        (element) => element instanceof HTMLImageElement && element.complete && element.naturalWidth > 0,
+      ),
+    ).toBe(true)
+  }
+
+  await expect(page.locator('header img[src*="banniere.png"]')).toHaveCount(0)
+
   await aller(page, '/a-propos')
-  const daayake = page.locator('img[src*="daayake-food.png"]').first()
+  const daayake = page.locator('main img[src*="daayake-food.png"]').first()
   await expect(daayake).toBeVisible()
   expect(
     await daayake.evaluate(
       (element) => element instanceof HTMLImageElement && element.complete && element.naturalWidth > 0,
     ),
   ).toBe(true)
+})
+
+test('l’accueil utilise des photographies locales sans répéter la bannière', async ({ page }) => {
+  await aller(page, '/')
+
+  for (const nom of ['marche-grains.jpg', 'sacs-grains.jpg']) {
+    const image = page.locator(`main img[src*="${nom}"]`)
+    await expect(image).toBeVisible()
+    await image.scrollIntoViewIfNeeded()
+    await expect
+      .poll(() =>
+        image.evaluate(
+          (element) =>
+            element instanceof HTMLImageElement && element.complete && element.naturalWidth > 0,
+        ),
+      )
+      .toBe(true)
+  }
+
+  await expect(page.locator('main img[src*="banniere.png"]')).toHaveCount(0)
 })
 
 test('une catégorie de l’accueil ouvre le catalogue préfiltré', async ({ page }) => {

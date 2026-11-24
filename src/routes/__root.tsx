@@ -19,7 +19,7 @@ export const Route = createRootRoute({
     ...metaRacine(),
     links: [
       { rel: 'icon', type: 'image/png', href: '/images/marque/favicon.png' },
-      { rel: 'preload', as: 'image', href: '/images/marque/banniere.png' },
+      { rel: 'preload', as: 'image', href: '/images/marque/bokhismany-logo-officiel.png' },
     ],
   }),
   component: RootComponent,

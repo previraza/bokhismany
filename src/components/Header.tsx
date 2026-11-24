@@ -97,7 +97,7 @@ export function Header() {
         }`}
       >
         <div className="conteneur-site flex h-[4.5rem] items-center justify-between gap-4 sm:h-20">
-          <Logo />
+          <Logo avecDaayake />
 
           <nav aria-label="Navigation principale" className="hidden items-center gap-1 lg:flex">
             {LIENS.map((lien) => (
