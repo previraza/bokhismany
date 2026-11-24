@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bokhismany | Maquette de référence</title>
+  <meta name="description" content="Maquette de référence du site Bokhismany : catalogue, réservation et design.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ============ Tokens : à reprendre tels quels dans l'application ============ */
+    :root {
+      --bg: #f3f0ea;
+      --surface: #ffffff;
+      --ink: #14110f;
+      --ink-soft: #5b534b;
+      --line: rgba(20, 17, 15, 0.08);
+      --orange: #ff8a3d;
+      --orange-2: #ffb27a;
+      --teal: #1d3b3f;
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --radius-pill: 999px;
+      --shadow: 0 10px 30px rgba(20, 17, 15, 0.06);
+      --ease: cubic-bezier(.2, .7, .2, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+    /* ============ Navigation en pilule ============ */
+    .nav-wrap { position: sticky; top: 14px; z-index: 50; padding: 0 16px; margin-top: 14px; }
+    .nav {
+      max-width: 1000px; margin: 0 auto;
+      background: rgba(20, 17, 15, 0.82);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      color: #fff;
+      border-radius: var(--radius-pill);
+      padding: 10px 10px 10px 22px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.25);
+    }
+    .logo { font-weight: 800; letter-spacing: .18em; font-size: .95rem; }
+    .logo span { color: var(--orange); }
+    .nav-links { display: flex; gap: 26px; font-size: .9rem; opacity: .85; }
+    .nav-links a { transition: opacity .2s var(--ease), color .2s var(--ease); }
+    .nav-links a:hover { opacity: 1; color: var(--orange-2); }
+    .nav-cta { display: flex; align-items: center; gap: 10px; }
+    .btn-white {
+      background: #fff; color: var(--ink); font-weight: 600; font-size: .88rem;
+      padding: 10px 18px; border-radius: var(--radius-pill);
+      transition: transform .2s var(--ease), background .2s var(--ease);
+    }
+    .btn-white:hover { transform: translateY(-1px); background: var(--orange-2); }
+    .burger {
+      display: none; background: none; border: 0; color: #fff; cursor: pointer;
+      width: 42px; height: 42px; border-radius: 50%; font-size: 1.2rem;
+      background: rgba(255,255,255,.1);
+    }
+    .nav-mobile {
+      display: none; max-width: 1000px; margin: 8px auto 0;
+      background: var(--ink); color: #fff; border-radius: var(--radius-lg);
+      padding: 18px 22px; flex-direction: column; gap: 14px;
+    }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a { font-size: 1rem; padding: 6px 0; }
+
+    /* ============ Hero flou orangé ============ */
+    .hero-card {
+      position: relative; overflow: hidden;
+      margin: 22px auto 0; max-width: 1140px;
+      border-radius: 36px;
+      background:
+        radial-gradient(60% 70% at 78% 30%, #ff9a4d 0%, transparent 70%),
+        radial-gradient(50% 60% at 20% 20%, #2e5b5f 0%, transparent 70%),
+        radial-gradient(45% 55% at 55% 90%, #ffb27a 0%, transparent 70%),
+        linear-gradient(160deg, #0f1f22 0%, #1d3b3f 45%, #3a2418 100%);
+      color: #fff;
+      padding: 56px clamp(24px, 5vw, 64px) 56px;
+      min-height: 560px;
+      display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: center;
+    }
+    .hero-card::after { /* grain doux pour l'effet verre */
+      content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .12;
+      background-image: radial-gradient(rgba(255,255,255,.6) 1px, transparent 1px);
+      background-size: 4px 4px;
+    }
+    .eyebrow {
+      display: inline-block; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.18);
+      padding: 6px 12px; border-radius: var(--radius-pill); margin-bottom: 22px;
+    }
+    .hero h1 {
+      font-size: clamp(2.3rem, 5.4vw, 4rem); line-height: 1.02; letter-spacing: -.03em; font-weight: 700;
+      max-width: 14ch;
+    }
+    .hero h1 em { font-style: normal; color: var(--orange-2); }
+    .hero p.lead { margin-top: 18px; max-width: 46ch; opacity: .85; font-size: 1.02rem; }
+    .hero-actions { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .pill-cta {
+      display: inline-flex; align-items: center; gap: 0;
+      background: #fff; color: var(--ink); border-radius: var(--radius-pill); padding: 6px;
+      font-weight: 600; font-size: .92rem;
+    }
+    .pill-cta .price { padding: 10px 16px; color: var(--ink-soft); font-weight: 500; }
+    .pill-cta .go {
+      background: var(--ink); color: #fff; padding: 12px 20px; border-radius: var(--radius-pill);
+      transition: transform .2s var(--ease);
+    }
+    .pill-cta:hover .go { transform: translateX(3px); }
+    .ghost {
+      border: 1px solid rgba(255,255,255,.35); color: #fff; padding: 14px 22px; border-radius: var(--radius-pill);
+      font-weight: 600; font-size: .92rem; transition: background .2s var(--ease);
+    }
+    .ghost:hover { background: rgba(255,255,255,.1); }
+    .hero-foot { margin-top: 40px; font-size: .84rem; opacity: .75; }
+    .hero-foot strong { color: #fff; font-weight: 700; }
+
+    /* Carte "assistant" flottante (repère visuel : la carte de réservation) */
+    .float-card {
+      background: rgba(255,255,255,.96); color: var(--ink);
+      border-radius: var(--radius-lg); padding: 22px; max-width: 360px; justify-self: end; width: 100%;
+      box-shadow: 0 30px 60px rgba(0,0,0,.35);
+      animation: floaty 6s var(--ease) infinite;
+    }
+    @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .float-head { display: flex; justify-content: space-between; align-items: center; font-size: .8rem; color: var(--ink-soft); }
+    .avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--orange), var(--orange-2)); }
+    .float-title { font-size: 1.35rem; font-weight: 700; margin: 16px 0 6px; letter-spacing: -.02em; }
+    .float-sub { font-size: .88rem; color: var(--ink-soft); }
+    .code-box {
+      margin-top: 16px; background: var(--ink); color: #fff; border-radius: var(--radius-md); padding: 16px 18px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .code-box .code { font-size: 1.4rem; font-weight: 800; letter-spacing: .2em; }
+    .code-box .validity { font-size: .72rem; color: var(--orange-2); text-align: right; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .chip { font-size: .78rem; padding: 7px 12px; border-radius: var(--radius-pill); background: var(--bg); color: var(--ink); }
+    .float-foot { margin-top: 16px; display: flex; justify-content: space-between; font-size: .8rem; color: var(--ink-soft); }
+    .float-foot b { color: var(--ink); }
+
+    /* ============ Sections génériques ============ */
+    section { padding: clamp(64px, 9vw, 110px) 0; }
+    .kicker { font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+    .title { font-size: clamp(2rem, 4.4vw, 3.2rem); letter-spacing: -.03em; line-height: 1.05; font-weight: 700; margin-top: 12px; }
+    .title .muted { color: #a59c92; font-weight: 500; display: block; }
+    .intro { color: var(--ink-soft); max-width: 46ch; margin-top: 16px; }
+    .split-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; flex-wrap: wrap; margin-bottom: 44px; }
+    .split-head .intro { margin-top: 0; text-align: right; }
+
+    /* ============ Bento : confiance et catalogue ============ */
+    .bento { display: grid; grid-template-columns: 1fr 1fr 1fr; grid-auto-rows: minmax(150px, auto); gap: 16px; }
+    .tile { background: var(--surface); border-radius: var(--radius-lg); padding: 26px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+    .tile.dark { background: var(--ink); color: #fff; }
+    .tile.orange { background: linear-gradient(150deg, var(--orange), var(--orange-2)); color: var(--ink); }
+    .tile.big { grid-row: span 2; grid-column: span 1; background: radial-gradient(70% 60% at 60% 30%, #ff9a4d 0%, transparent 70%), linear-gradient(170deg, #1d3b3f, #0f1f22); color: #fff; display: flex; flex-direction: column; justify-content: flex-end; min-height: 380px; }
+    .tile .num { font-size: 2.6rem; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+    .tile .label { font-size: .85rem; opacity: .75; margin-top: 8px; }
+    .tile h3 { font-size: 1.15rem; letter-spacing: -.01em; margin-bottom: 6px; }
+    .tile p { font-size: .9rem; opacity: .75; }
+    .badge-float {
+      position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,.14); backdrop-filter: blur(6px);
+      border-radius: var(--radius-pill); padding: 8px 14px; font-size: .78rem; color: #fff;
+    }
+    .tile.wide { grid-column: span 2; }
+    .tile.cream { background: #fbfaf7; }
+    .check-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #f4f1ec; border-radius: 14px; padding: 12px 14px; margin-top: 10px; font-size: .88rem; }
+    .check-row .tick { width: 22px; height: 22px; border-radius: 50%; background: var(--ink); color: #fff; font-size: .7rem; display: grid; place-items: center; }
+    .progress { height: 6px; background: rgba(255,255,255,.15); border-radius: 99px; margin-top: 16px; overflow: hidden; }
+    .progress span { display: block; height: 100%; width: 62%; background: linear-gradient(90deg, var(--orange), var(--orange-2)); border-radius: 99px; }
+
+    /* Catalogue : rangée de produits */
+    .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin-top: 16px; }
+    .product { background: var(--surface); border-radius: var(--radius-lg); padding: 22px; box-shadow: var(--shadow); transition: transform .3s var(--ease), box-shadow .3s var(--ease); }
+    .product:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(20,17,15,.1); }
+    .product .thumb {
+      aspect-ratio: 4 / 3; border-radius: 18px; margin-bottom: 16px;
+      background: linear-gradient(135deg, #f5d6b8, #ffb27a);
+      display: grid; place-items: center; color: var(--ink); font-weight: 700; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
+    }
+    .product .cat { font-size: .72rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .1em; }
+    .product h4 { font-size: 1.05rem; margin: 6px 0 4px; }
+    .product .fmt { font-size: .84rem; color: var(--ink-soft); }
+    .product .row { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
+    .product .price { font-weight: 800; }
+    .add { width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--ink); color: #fff; cursor: pointer; font-size: 1.1rem; transition: transform .2s var(--ease), background .2s var(--ease); }
+    .add:hover { transform: rotate(90deg); background: var(--orange); }
+
+    /* ============ Timeline (façon programme) ============ */
+    .timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 10px; }
+    .phase { background: var(--surface); border-radius: var(--radius-lg); padding: 26px; box-shadow: var(--shadow); }
+    .phase.active { background: var(--ink); color: #fff; }
+    .phase .step { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; opacity: .6; }
+    .phase h3 { font-size: 1.3rem; margin: 10px 0 8px; letter-spacing: -.02em; }
+    .phase p { font-size: .9rem; opacity: .7; }
+    .phase ul { list-style: none; margin-top: 18px; display: grid; gap: 8px; }
+    .phase li { font-size: .86rem; background: rgba(20,17,15,.05); border-radius: 12px; padding: 10px 12px; display: flex; justify-content: space-between; }
+    .phase.active li { background: rgba(255,255,255,.08); }
+
+    /* ============ FAQ ============ */
+    .faq { display: grid; grid-template-columns: .9fr 1.1fr; gap: 40px; align-items: start; }
+    .faq-list { border-top: 1px solid var(--line); }
+    .faq-item { border-bottom: 1px solid var(--line); }
+    .faq-q {
+      width: 100%; background: none; border: 0; text-align: left; cursor: pointer;
+      padding: 22px 0; font: inherit; font-weight: 600; font-size: 1rem; color: var(--ink);
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    }
+    .faq-q .plus { width: 30px; height: 30px; border-radius: 50%; background: var(--surface); display: grid; place-items: center; transition: transform .3s var(--ease), background .3s var(--ease); flex-shrink: 0; box-shadow: var(--shadow); }
+    .faq-item.open .plus { transform: rotate(45deg); background: var(--orange); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height .4s var(--ease); }
+    .faq-a p { padding: 0 0 22px; color: var(--ink-soft); font-size: .94rem; max-width: 60ch; }
+    .ask {
+      margin-top: 28px; background: linear-gradient(150deg, var(--orange), var(--orange-2)); border-radius: var(--radius-lg);
+      padding: 22px; max-width: 320px; color: var(--ink);
+    }
+    .ask b { font-size: 1rem; }
+    .ask p { font-size: .86rem; margin: 6px 0 14px; opacity: .8; }
+    .ask a { display: inline-block; background: var(--ink); color: #fff; padding: 9px 16px; border-radius: var(--radius-pill); font-size: .84rem; font-weight: 600; }
+
+    /* ============ Bloc final sombre ============ */
+    .closing {
+      background: #0c0a09; color: #fff; border-radius: 36px; margin: 0 16px 16px; padding: clamp(60px, 9vw, 110px) 24px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .closing::before {
+      content: "BOKHISMANY"; position: absolute; left: 50%; bottom: -30px; transform: translateX(-50%);
+      font-size: clamp(3.5rem, 16vw, 13rem); font-weight: 800; letter-spacing: -.04em; color: rgba(255,255,255,.04); white-space: nowrap;
+    }
+    .closing .tag { display: inline-block; font-size: .78rem; border: 1px solid rgba(255,255,255,.2); padding: 6px 12px; border-radius: var(--radius-pill); margin-bottom: 20px; opacity: .85; }
+    .closing h2 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 700; letter-spacing: -.03em; line-height: 1.05; position: relative; }
+    .closing h2 span { color: #a59c92; font-weight: 500; display: block; }
+    .closing .btn-row { margin-top: 30px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
+    .btn-orange { background: var(--orange); color: var(--ink); font-weight: 700; padding: 14px 24px; border-radius: var(--radius-pill); transition: transform .2s var(--ease), background .2s var(--ease); }
+    .btn-orange:hover { transform: translateY(-2px); background: var(--orange-2); }
+
+    footer { padding: 36px 20px 40px; font-size: .84rem; color: var(--ink-soft); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; max-width: 1200px; margin: 0 auto; }
+    footer .logo { color: var(--ink); }
+    footer .logo span { color: var(--orange); }
+
+    /* ============ Apparition au défilement ============ */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ============ Responsive ============ */
+    @media (max-width: 960px) {
+      .hero-card { grid-template-columns: 1fr; min-height: 0; }
+      .float-card { justify-self: start; }
+      .bento { grid-template-columns: 1fr 1fr; }
+      .tile.big { grid-row: auto; grid-column: span 2; min-height: 280px; }
+      .faq { grid-template-columns: 1fr; }
+      .split-head .intro { text-align: left; }
+      .timeline { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
+      .nav-links, .nav-cta .btn-white { display: none; }
+      .burger { display: block; }
+      .hero-card { margin: 14px 12px 0; padding: 40px 22px; border-radius: 28px; }
+      .bento { grid-template-columns: 1fr; }
+      .tile.wide, .tile.big { grid-column: auto; }
+      .pill-cta { width: 100%; justify-content: space-between; }
+      .ghost { width: 100%; text-align: center; }
+      .closing { margin: 0 8px 8px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+    :focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <div class="nav-wrap">
+    <header class="nav" role="banner">
+      <a class="logo" href="#accueil" aria-label="Bokhismany, accueil">BOKHIS<span>MANY</span></a>
+      <nav aria-label="Principale">
+        <div class="nav-links">
+          <a href="#catalogue">Produits</a>
+          <a href="#comment">Comment réserver</a>
+          <a href="#adresses">Points de vente</a>
+          <a href="#faq">Questions</a>
+        </div>
+      </nav>
+      <div class="nav-cta">
+        <a class="btn-white" href="#reserver">Réserver</a>
+        <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu-mobile">&#9776;</button>
+      </div>
+    </header>
+    <div class="nav-mobile" id="menu-mobile">
+      <a href="#catalogue">Produits</a>
+      <a href="#comment">Comment réserver</a>
+      <a href="#adresses">Points de vente</a>
+      <a href="#faq">Questions</a>
+      <a href="#reserver"><strong>Réserver un panier</strong></a>
+    </div>
+  </div>
+
+  <main>
+    <!-- Hero -->
+    <section id="accueil" style="padding-top:0;">
+      <div class="wrap">
+        <div class="hero-card">
+          <div>
+            <span class="eyebrow">Commerce général · Kinshasa &amp; Brazzaville</span>
+            <h1>Vos produits du quotidien, <em>réservés en deux minutes.</em></h1>
+            <p class="lead">Riz, farine, semoule, sucre et huiles, en gros comme au détail. Composez votre panier, réservez, puis venez payer et retirer en boutique.</p>
+            <div class="hero-actions">
+              <a class="pill-cta" href="#catalogue">
+                <span class="price">À partir de 23 000 Fc</span>
+                <span class="go" aria-hidden="true">→</span>
+              </a>
+              <a class="ghost" href="#comment">Comment réserver</a>
+            </div>
+            <p class="hero-foot"><strong>3 points de vente</strong> · Promotion jusqu'à 5 % · Code de réservation valable 24 h</p>
+          </div>
+
+          <!-- Carte flottante : exemple de réservation -->
+          <aside class="float-card" aria-label="Exemple de réservation">
+            <div class="float-head">
+              <span style="display:flex;align-items:center;gap:8px;"><span class="avatar"></span> Daayake Food</span>
+              <span>Exemple</span>
+            </div>
+            <p class="float-title">Votre réservation est enregistrée.</p>
+            <p class="float-sub">Présentez ce code en boutique avant la date limite.</p>
+            <div class="code-box">
+              <span class="code">K7M4QX</span>
+              <span class="validity">Valable<br>24 h</span>
+            </div>
+            <div class="chips">
+              <span class="chip">Riz Lion 50 kg</span>
+              <span class="chip">Huile Simba 5 L</span>
+              <span class="chip">+2 produits</span>
+            </div>
+            <div class="float-foot">
+              <span>Montant estimé : <b>143 500 Fc</b></span>
+              <span>À confirmer en boutique</span>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Confiance (bento) -->
+    <section style="padding-top:40px;">
+      <div class="wrap">
+        <div class="split-head reveal">
+          <div>
+            <p class="kicker">Pourquoi nous choisir</p>
+            <h2 class="title">Des prix clairs. <span class="muted">Une boutique près de chez vous.</span></h2>
+          </div>
+          <p class="intro">Tous nos produits sont visibles en ligne, avec leur format et leur prix indicatif. Le prix définitif est confirmé en boutique.</p>
+        </div>
+
+        <div class="bento">
+          <div class="tile big reveal">
+            <span class="badge-float">Kinshasa · Brazzaville</span>
+            <h3 style="font-size:1.6rem;letter-spacing:-.02em;max-width:16ch;">Trois boutiques Daayake Food, prêtes à vous recevoir.</h3>
+            <p style="margin-top:8px;">Deux à Kinshasa, une à Brazzaville, pour retirer vos réservations au plus près.</p>
+          </div>
+          <div class="tile orange reveal">
+            <div class="num">−5 %</div>
+            <div class="label" style="opacity:.8;">Promotion en cours sur une sélection de produits</div>
+          </div>
+          <div class="tile cream reveal">
+            <div class="num">24 h</div>
+            <div class="label">Validité de chaque code de réservation</div>
+          </div>
+          <div class="tile wide dark reveal">
+            <h3>Votre panier, figé pour 24 heures.</h3>
+            <p>Passé ce délai, la réservation expire automatiquement et les produits sont libérés.</p>
+            <div class="progress" aria-hidden="true"><span></span></div>
+          </div>
+          <div class="tile reveal">
+            <h3>Catalogue complet</h3>
+            <p>Huiles, riz, semoules, farines, sucre, poisson salé et plus encore.</p>
+            <div class="check-row"><span>Huiles</span><span class="tick">✓</span></div>
+            <div class="check-row"><span>Riz</span><span class="tick">✓</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Catalogue -->
+    <section id="catalogue" style="padding-top:20px;">
+      <div class="wrap">
+        <div class="split-head reveal">
+          <div>
+            <p class="kicker">Nos produits</p>
+            <h2 class="title">Les produits de base, <span class="muted">au meilleur format.</span></h2>
+          </div>
+          <p class="intro">Prix indicatifs en Francs CFA, susceptibles de changer. Les images sont à ajouter depuis l'administration.</p>
+        </div>
+
+        <div class="products">
+          <article class="product reveal">
+            <div class="thumb">Image à venir</div>
+            <p class="cat">Riz</p>
+            <h4>Lion</h4>
+            <p class="fmt">Sac de 50 kg</p>
+            <div class="row"><span class="price">93 500 Fc</span><button class="add" aria-label="Ajouter Lion 50 kg au panier">+</button></div>
+          </article>
+          <article class="product reveal">
+            <div class="thumb">Image à venir</div>
+            <p class="cat">Huiles</p>
+            <h4>Simba</h4>
+            <p class="fmt">Bidon de 25 L</p>
+            <div class="row"><span class="price">102 000 Fc</span><button class="add" aria-label="Ajouter Simba 25 L au panier">+</button></div>
+          </article>
+          <article class="product reveal">
+            <div class="thumb">Image à venir</div>
+            <p class="cat">Semoules</p>
+            <h4>Master Plus</h4>
+            <p class="fmt">Sac de 25 kg</p>
+            <div class="row"><span class="price">47 500 Fc</span><button class="add" aria-label="Ajouter Master Plus au panier">+</button></div>
+          </article>
+          <article class="product reveal">
+            <div class="thumb">Image à venir</div>
+            <p class="cat">Farines</p>
+            <h4>Boulenger</h4>
+            <p class="fmt">Sac de 50 kg</p>
+            <div class="row"><span class="price">86 500 Fc</span><button class="add" aria-label="Ajouter Boulenger 50 kg au panier">+</button></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comment réserver -->
+    <section id="comment">
+      <div class="wrap">
+        <div class="split-head reveal">
+          <div>
+            <p class="kicker">Comment réserver</p>
+            <h2 class="title">Trois étapes, <span class="muted">un retrait en boutique.</span></h2>
+          </div>
+          <p class="intro">Pas de compte à créer et pas de paiement en ligne. Vous réservez, puis vous réglez sur place.</p>
+        </div>
+
+        <div class="timeline">
+          <div class="phase reveal">
+            <span class="step">Étape 1</span>
+            <h3>Composez votre panier</h3>
+            <p>Ajoutez vos produits et ajustez les quantités. Le montant estimé se met à jour instantanément.</p>
+            <ul>
+              <li>Produits sélectionnés <b>3</b></li>
+              <li>Total estimé <b>143 500 Fc</b></li>
+            </ul>
+          </div>
+          <div class="phase active reveal">
+            <span class="step">Étape 2</span>
+            <h3>Réservez votre code</h3>
+            <p>Renseignez votre nom et votre téléphone. Vous recevez un code à 6 caractères.</p>
+            <ul>
+              <li>Code <b>K7M4QX</b></li>
+              <li>Validité <b>24 h</b></li>
+            </ul>
+          </div>
+          <div class="phase reveal">
+            <span class="step">Étape 3</span>
+            <h3>Retirez en boutique</h3>
+            <p>Présentez votre code dans l'une de nos trois boutiques. Vous réglez et repartez avec vos produits.</p>
+            <ul>
+              <li>Paiement <b>sur place</b></li>
+              <li>Boutique <b>au choix</b></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Adresses -->
+    <section id="adresses" style="padding-top:20px;">
+      <div class="wrap">
+        <div class="split-head reveal">
+          <div>
+            <p class="kicker">Points de vente</p>
+            <h2 class="title">Trois boutiques, <span class="muted">Daayake Food.</span></h2>
+          </div>
+          <p class="intro">Horaires d'ouverture : TODO, à confirmer par Bokhismany.</p>
+        </div>
+        <div class="products">
+          <article class="product reveal">
+            <p class="cat">Kinshasa</p>
+            <h4>Daayake 1</h4>
+            <p class="fmt">45, avenue Busu Djanoa, commune de Kasavubu</p>
+            <div class="row"><a class="price" href="tel:+243817293796">+243 817 293 796</a></div>
+          </article>
+          <article class="product reveal">
+            <p class="cat">Kinshasa</p>
+            <h4>Daayake 2</h4>
+            <p class="fmt">39, avenue Busu Djanoa, commune de Kasavubu</p>
+            <div class="row"><a class="price" href="tel:+243818142449">+243 818 142 449</a></div>
+          </article>
+          <article class="product reveal">
+            <p class="cat">Brazzaville</p>
+            <h4>Daayake 3</h4>
+            <p class="fmt">45, rue Bangui, Ouenzé (5e arrondissement)</p>
+            <div class="row"><a class="price" href="tel:+242065793872">+242 06 579 3872</a></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="wrap">
+        <div class="faq">
+          <div class="reveal">
+            <p class="kicker">Questions</p>
+            <h2 class="title">Des réponses <span class="muted">simples.</span></h2>
+            <p class="intro">Une question sans réponse ici ? Écrivez-nous par email ou appelez l'une de nos boutiques.</p>
+            <div class="ask">
+              <b>Une question précise ?</b>
+              <p>Notre équipe vous répond par email ou par téléphone.</p>
+              <a href="mailto:tradingbokhismany@gmail.com">Nous écrire</a>
+            </div>
+          </div>
+          <div class="faq-list reveal" id="faq-list">
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">Comment fonctionne la réservation ?<span class="plus" aria-hidden="true">+</span></button>
+              <div class="faq-a"><p>Vous composez votre panier, renseignez votre nom et votre téléphone, puis recevez un code à 6 caractères valable 24 heures. Présentez-le en boutique pour régler et retirer vos produits.</p></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">Pourquoi le montant est-il estimé ?<span class="plus" aria-hidden="true">+</span></button>
+              <div class="faq-a"><p>Les prix peuvent évoluer. Le montant définitif est confirmé en boutique, au moment du paiement.</p></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">Que se passe-t-il après 24 heures ?<span class="plus" aria-hidden="true">+</span></button>
+              <div class="faq-a"><p>La réservation expire automatiquement. Les produits ne sont plus réservés, mais vous pouvez en faire une nouvelle depuis le catalogue.</p></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">Puis-je payer en ligne ?<span class="plus" aria-hidden="true">+</span></button>
+              <div class="faq-a"><p>Non. Le site sert à réserver. Le paiement se fait uniquement en boutique.</p></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false">Vendez-vous en gros ?<span class="plus" aria-hidden="true">+</span></button>
+              <div class="faq-a"><p>Oui, nous vendons en gros comme au détail. Contactez-nous pour les quantités importantes.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bloc final sombre -->
+    <div class="closing reveal" id="reserver">
+      <span class="tag">Prêt à réserver ?</span>
+      <h2>Votre panier, réservé.<span>Votre code, valable 24 heures.</span></h2>
+      <div class="btn-row">
+        <a class="btn-orange" href="#catalogue">Voir le catalogue</a>
+        <a class="ghost" href="#adresses">Trouver une boutique</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <span class="logo">BOKHIS<span>MANY</span></span>
+    <span>Bokhismany Trading SARL · Commerce général · Kinshasa &amp; Brazzaville</span>
+    <span>© 2026</span>
+  </footer>
+
+  <script>
+    // Menu mobile
+    const burger = document.getElementById('burger');
+    const menu = document.getElementById('menu-mobile');
+    burger.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      burger.setAttribute('aria-expanded', String(open));
+    });
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      menu.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    }));
+
+    // FAQ : un seul élément ouvert à la fois
+    const items = document.querySelectorAll('.faq-item');
+    items.forEach(item => {
+      const btn = item.querySelector('.faq-q');
+      const panel = item.querySelector('.faq-a');
+      btn.addEventListener('click', () => {
+        const willOpen = !item.classList.contains('open');
+        items.forEach(other => {
+          other.classList.remove('open');
+          other.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+          other.querySelector('.faq-a').style.maxHeight = '0';
+        });
+        if (willOpen) {
+          item.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+          panel.style.maxHeight = panel.scrollHeight + 'px';
+        }
+      });
+    });
+
+    // Apparition au défilement
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const els = document.querySelectorAll('.reveal');
+    if (reduce || !('IntersectionObserver' in window)) {
+      els.forEach(el => el.classList.add('in'));
+    } else {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(el => io.observe(el));
+    }
+  </script>
+</body>
+</html>
