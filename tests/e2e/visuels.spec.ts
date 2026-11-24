@@ -71,8 +71,13 @@ test('les visuels officiels sont chargés sur les pages publiques', async ({ pag
 test('l’accueil utilise des photographies locales sans répéter la bannière', async ({ page }) => {
   await aller(page, '/')
 
-  for (const nom of ['marche-grains.jpg', 'sacs-grains.jpg']) {
-    const image = page.locator(`main img[src*="${nom}"]`)
+  for (const nom of [
+    'marche-grains.jpg',
+    'etale-cereales.jpg',
+    'chargement-sacs.jpg',
+    'sacs-grains.jpg',
+  ]) {
+    const image = page.locator(`main img[src*="${nom}"]`).first()
     await expect(image).toBeVisible()
     await image.scrollIntoViewIfNeeded()
     await expect
@@ -86,6 +91,35 @@ test('l’accueil utilise des photographies locales sans répéter la bannière'
   }
 
   await expect(page.locator('main img[src*="banniere.png"]')).toHaveCount(0)
+})
+
+test('le hero occupe la hauteur visible et assemble une vitrine', async ({ page }) => {
+  await aller(page, '/')
+
+  const hero = page.locator('main > section').first()
+  const hauteur = (await hero.boundingBox())?.height ?? 0
+  expect(hauteur).toBeGreaterThanOrEqual((page.viewportSize()?.height ?? 0) - 100)
+
+  await expect(
+    hero.getByRole('heading', { level: 1, name: 'Bokhismany Trading SARL' }),
+  ).toBeVisible()
+  await expect(hero.locator('img')).toHaveCount(3)
+  await expect(hero.getByRole('link', { name: /Découvrir les produits/ })).toBeVisible()
+  await expect(hero.getByRole('link', { name: /Composer un panier/ })).toBeVisible()
+})
+
+test('l’accueil détaille l’entreprise, ses activités et sa portée', async ({ page }) => {
+  await aller(page, '/')
+
+  for (const titre of [
+    'Une maison de commerce ancrée à Kinshasa',
+    'Ce que nous faisons, au quotidien',
+    'Deux villes, trois points de vente',
+    'Acheminement entre Brazzaville et la RDC',
+    'Trois points de vente pour vous accueillir',
+  ]) {
+    await expect(page.getByRole('heading', { name: titre })).toBeVisible()
+  }
 })
 
 test('une catégorie de l’accueil ouvre le catalogue préfiltré', async ({ page }) => {
