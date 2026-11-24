@@ -19,6 +19,13 @@
   --color-alerte: #8c2f18;
   --color-succes: #2f6b52;
 
+  /* Palette du logo officiel, reprise dans le bandeau d’accueil. */
+  --color-marque-nuit: #202040;
+  --color-marque-bleu: #202040;
+  --color-marque-vert: #50c090;
+  --color-marque-fuchsia: #b02060;
+  --color-marque-orange: #f05030;
+
   --font-display: "Playfair Display", Georgia, serif;
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 }

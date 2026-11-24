@@ -65,7 +65,7 @@ function Accueil() {
   return (
     <main>
       <section
-        className="relative isolate overflow-hidden bg-[#111414] text-creme"
+        className="relative isolate overflow-hidden bg-marque-nuit text-creme"
         aria-label={`Présentation de ${RAISON_SOCIALE}`}
       >
         <img
@@ -75,7 +75,7 @@ function Accueil() {
           className="absolute inset-0 -z-30 h-full w-full object-cover object-center opacity-25"
         />
         <div
-          className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_18%_20%,rgba(179,71,31,0.28),transparent_38%),linear-gradient(90deg,rgba(12,14,14,0.97)_0%,rgba(12,14,14,0.88)_48%,rgba(12,14,14,0.55)_100%)]"
+          className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_18%_20%,rgba(80,192,144,0.2),transparent_36%),radial-gradient(circle_at_72%_78%,rgba(240,80,48,0.16),transparent_34%),linear-gradient(90deg,rgba(32,32,64,0.98)_0%,rgba(32,32,64,0.9)_48%,rgba(32,32,64,0.62)_100%)]"
           aria-hidden="true"
         />
         <div
@@ -84,7 +84,7 @@ function Accueil() {
         />
         <svg
           viewBox="0 0 600 600"
-          className="absolute -top-40 -right-40 -z-10 h-[42rem] w-[42rem] text-or-pale/10"
+          className="absolute -top-40 -right-40 -z-10 h-[42rem] w-[42rem] text-marque-vert/15"
           aria-hidden="true"
         >
           <circle cx="300" cy="300" r="220" fill="none" stroke="currentColor" strokeWidth="1" />
@@ -94,12 +94,29 @@ function Accueil() {
 
         <div className="conteneur-site relative grid min-h-[calc(100svh-4.5rem)] gap-12 py-12 sm:min-h-[calc(100svh-5rem)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center lg:gap-14 lg:py-14">
           <div className="hero-entre relative z-10">
-            <p className="inline-flex items-center gap-3 border border-creme/25 px-3 py-2 text-[0.62rem] font-semibold tracking-[0.22em] text-creme/80 uppercase">
-              <span className="h-1.5 w-1.5 rounded-full bg-or-pale" aria-hidden="true" />
+            <p className="inline-flex items-center gap-3 border border-creme/25 bg-creme/5 px-3 py-2 text-[0.62rem] font-semibold tracking-[0.22em] text-creme/80 uppercase">
+              <img
+                src="/images/marque/bokhismany-logo-officiel.png"
+                alt=""
+                aria-hidden="true"
+                className="h-8 w-8 rounded-[2px] object-cover ring-1 ring-creme/30"
+              />
+              <span className="h-1.5 w-1.5 rounded-full bg-marque-vert" aria-hidden="true" />
               Kinshasa · Brazzaville
             </p>
-            <h1 className="mt-7 font-display text-[clamp(2.7rem,6vw,5.5rem)] leading-[0.96] tracking-[-0.045em] text-creme">
-              {RAISON_SOCIALE}
+            <h1 className="mt-7 font-display text-[clamp(2.7rem,6vw,5.5rem)] font-bold leading-[0.91] tracking-[-0.06em]">
+              <span className="relative block">
+                <span className="inline-block bg-creme px-3 py-1 text-marque-bleu shadow-[0_12px_40px_rgba(0,0,0,0.28)]">
+                  Bokhismany
+                </span>
+                <span
+                  className="mt-2 block h-[3px] w-24 bg-gradient-to-r from-marque-vert via-marque-fuchsia to-marque-orange sm:w-32"
+                  aria-hidden="true"
+                />
+              </span>{' '}
+              <span className="mt-3 block text-creme">
+                Trading <span className="text-marque-orange">SARL</span>
+              </span>
             </h1>
             <p className="mt-6 max-w-xl border-l-2 border-or pl-5 text-base leading-relaxed text-creme/80 sm:text-lg">
               Riz, farines, huiles et produits de première nécessité, vendus en gros et au détail à
@@ -124,7 +141,7 @@ function Accueil() {
                 ['0', 'paiement en ligne'],
               ].map(([valeur, libelle]) => (
                 <div key={libelle}>
-                  <dt className="font-display text-xl text-or-pale sm:text-2xl">{valeur}</dt>
+                  <dt className="font-display text-xl text-marque-vert sm:text-2xl">{valeur}</dt>
                   <dd className="mt-1 leading-snug text-creme/65">{libelle}</dd>
                 </div>
               ))}
@@ -147,7 +164,7 @@ function Accueil() {
                 Distribution de produits alimentaires de première nécessité.
               </p>
             </div>
-            <div className="absolute -bottom-6 left-0 aspect-[4/3] w-[46%] overflow-hidden border-4 border-[#111414] bg-[#8b7c6b] shadow-xl">
+            <div className="absolute -bottom-6 left-0 aspect-[4/3] w-[46%] overflow-hidden border-4 border-marque-nuit bg-[#8b7c6b] shadow-xl">
               <img
                 src="/images/accueil/chargement-sacs.jpg"
                 alt="Chargement de sacs de marchandises"
@@ -156,7 +173,7 @@ function Accueil() {
               />
             </div>
             <div className="hero-flottant absolute -top-5 left-[4%] w-52 border border-encre/10 bg-creme p-4 text-marine shadow-2xl sm:w-56">
-              <p className="text-[0.6rem] font-semibold tracking-[0.2em] text-or uppercase">
+              <p className="text-[0.6rem] font-semibold tracking-[0.2em] text-marque-fuchsia uppercase">
                 Nos métiers
               </p>
               <p className="mt-2 font-display text-xl leading-tight">Gros & détail</p>
@@ -164,11 +181,11 @@ function Accueil() {
                 Pour les foyers comme pour les revendeurs.
               </p>
             </div>
-            <p className="absolute top-1/3 -right-2 bg-or px-3 py-4 text-[0.6rem] font-semibold tracking-[0.2em] text-creme uppercase [writing-mode:vertical-rl]">
+            <p className="absolute top-1/3 -right-2 bg-marque-orange px-3 py-4 text-[0.6rem] font-semibold tracking-[0.2em] text-creme uppercase [writing-mode:vertical-rl]">
               Commerce général
             </p>
             <div
-              className="absolute right-[9%] -bottom-10 h-24 w-24 rounded-full border border-or-pale/40"
+              className="absolute right-[9%] -bottom-10 h-24 w-24 rounded-full border border-marque-vert/50"
               aria-hidden="true"
             />
           </div>
@@ -190,7 +207,7 @@ function Accueil() {
                 ].map((libelle) => (
                   <span key={libelle} className="flex items-center gap-10">
                     {libelle}
-                    <span className="h-1 w-1 rounded-full bg-or-pale" />
+                    <span className="h-1 w-1 rounded-full bg-marque-orange" />
                   </span>
                 ))}
               </span>

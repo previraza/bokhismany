@@ -103,7 +103,21 @@ test('le hero occupe la hauteur visible et assemble une vitrine', async ({ page 
   await expect(
     hero.getByRole('heading', { level: 1, name: 'Bokhismany Trading SARL' }),
   ).toBeVisible()
-  await expect(hero.locator('img')).toHaveCount(3)
+  await expect(hero.locator('img')).toHaveCount(4)
+  await expect(
+    hero.locator('img[src*="bokhismany-logo-officiel.png"]'),
+  ).toBeVisible()
+
+  const marque = hero
+    .getByRole('heading', { level: 1 })
+    .getByText('Bokhismany', { exact: true })
+  expect(await marque.evaluate((element) => getComputedStyle(element).color)).toBe(
+    'rgb(32, 32, 64)',
+  )
+  expect(
+    await marque.evaluate((element) => getComputedStyle(element).backgroundColor),
+  ).toBe('rgb(250, 249, 246)')
+
   await expect(hero.getByRole('link', { name: /Découvrir les produits/ })).toBeVisible()
   await expect(hero.getByRole('link', { name: /Composer un panier/ })).toBeVisible()
 })
