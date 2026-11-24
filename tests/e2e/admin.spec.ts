@@ -23,7 +23,7 @@ async function connecter(page: import('@playwright/test').Page) {
 
 async function creerReservation(page: import('@playwright/test').Page): Promise<string> {
   await aller(page,'/produits')
-  await page.getByRole('button', { name: 'Ajouter au panier' }).first().click()
+  await page.getByRole('button', { name: /^Ajouter .+ au panier$/ }).first().click()
   await page.getByRole('link', { name: /Panier,/ }).click()
   await page.getByLabel('Nom *').fill('Admin Test')
   await page.getByLabel('Téléphone *').fill(numeroTelephoneTest())

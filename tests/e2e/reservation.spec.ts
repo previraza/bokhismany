@@ -4,7 +4,7 @@ import { aller, numeroTelephoneTest } from './aide'
 
 async function composerPanier(page: import('@playwright/test').Page) {
   await aller(page,'/produits')
-  await page.getByRole('button', { name: 'Ajouter au panier' }).first().click()
+  await page.getByRole('button', { name: /^Ajouter .+ au panier$/ }).first().click()
   await page.getByRole('link', { name: /Panier,/ }).click()
 }
 

@@ -4,13 +4,13 @@ import { aller, recharger } from './aide'
 
 test('ajouter un produit met à jour le badge du panier', async ({ page }) => {
   await aller(page,'/produits')
-  await page.getByRole('button', { name: 'Ajouter au panier' }).first().click()
+  await page.getByRole('button', { name: /^Ajouter .+ au panier$/ }).first().click()
   await expect(page.getByRole('link', { name: /Panier, 1 article/ })).toBeVisible()
 })
 
 test('le panier survit à un rechargement et les quantités mettent à jour le total', async ({ page }) => {
   await aller(page,'/produits')
-  await page.getByRole('button', { name: 'Ajouter au panier' }).first().click()
+  await page.getByRole('button', { name: /^Ajouter .+ au panier$/ }).first().click()
   await recharger(page)
   await page.getByRole('link', { name: /Panier, 1 article/ }).click()
   await expect(page.getByRole('heading', { level: 1, name: 'Panier' })).toBeVisible()
@@ -27,7 +27,7 @@ test('le panier survit à un rechargement et les quantités mettent à jour le t
 
 test('vider le panier remet le badge à zéro', async ({ page }) => {
   await aller(page,'/produits')
-  await page.getByRole('button', { name: 'Ajouter au panier' }).first().click()
+  await page.getByRole('button', { name: /^Ajouter .+ au panier$/ }).first().click()
   await page.getByRole('link', { name: /Panier, 1 article/ }).click()
   await page.getByRole('button', { name: 'Vider le panier' }).click()
   await expect(page.getByRole('link', { name: /Panier, 0 article/ })).toBeVisible()
@@ -36,7 +36,7 @@ test('vider le panier remet le badge à zéro', async ({ page }) => {
 
 test('le panier s’exporte en proforma PDF avec la bannière officielle', async ({ page }) => {
   await aller(page, '/produits')
-  await page.getByRole('button', { name: 'Ajouter au panier' }).first().click()
+  await page.getByRole('button', { name: /^Ajouter .+ au panier$/ }).first().click()
   await page.getByRole('link', { name: /Panier, 1 article/ }).click()
   await page.getByRole('link', { name: 'Exporter la proforma' }).click()
 
