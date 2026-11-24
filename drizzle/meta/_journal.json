@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1795518189403,
+      "tag": "0000_fixed_the_hand",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795519138831,
+      "tag": "0001_clear_thena",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795524896698,
+      "tag": "0002_demonic_marten_broadcloak",
+      "breakpoints": true
+    }
+  ]
+}

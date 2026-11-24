@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-label="Illustration d'un point de vente alimentaire">
+  <defs>
+    <linearGradient id="mur" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7ebd5"/>
+      <stop offset="1" stop-color="#e8d4ac"/>
+    </linearGradient>
+    <linearGradient id="sol" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7a5c3a"/>
+      <stop offset="1" stop-color="#3c2a1c"/>
+    </linearGradient>
+    <radialGradient id="lampe" cx="0.5" cy="0" r="1">
+      <stop offset="0" stop-color="#f6d78c" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#f6d78c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="760" fill="url(#mur)"/>
+  <rect x="0" y="540" width="1200" height="220" fill="url(#sol)"/>
+  <path d="M0 540h1200" stroke="#c99535" stroke-width="2" opacity="0.6"/>
+  <g stroke="#6e6255" stroke-width="1" opacity="0.16">
+    <path d="M180 760 470 540M1020 760 730 540M600 540v220"/>
+  </g>
+
+  <path d="M600 0v96" stroke="#4a3828" stroke-width="4"/>
+  <ellipse cx="600" cy="170" rx="190" ry="180" fill="url(#lampe)"/>
+  <path d="M540 96h120l26 52H514l26-52Z" fill="#c99535" stroke="#8a5f17" stroke-width="2"/>
+  <path d="M540 148c8 18 28 28 60 28s52-10 60-28" fill="none" stroke="#8a5f17" stroke-width="2"/>
+
+  <!-- Étagères -->
+  <g stroke="#5a4129" stroke-width="6" fill="#6b4d30">
+    <rect x="90" y="170" width="440" height="14"/>
+    <rect x="90" y="330" width="440" height="14"/>
+    <rect x="670" y="170" width="440" height="14"/>
+    <rect x="670" y="330" width="440" height="14"/>
+  </g>
+  <g stroke="#5a4129" stroke-width="6">
+    <path d="M90 184v160M530 184v160M670 184v160M1110 184v160"/>
+  </g>
+
+  <!-- Produits sur les étagères -->
+  <g stroke="#8a6f49" stroke-width="2">
+    <path d="M120 170v-48h68v48M198 170v-42h62v42M272 170v-54h72v54M358 170v-44h64v44M438 170v-56h68v56" fill="#f3e2bd"/>
+    <path d="M112 330v-56h76v56M202 330v-50h70v50M286 330v-58h74v58M376 330v-48h66v48M456 330v-54h60v54" fill="#ead3a3"/>
+    <path d="M700 170v-52h70v52M780 170v-44h64v44M856 170v-58h72v58M940 170v-46h66v46M1018 170v-54h70v54" fill="#f3e2bd"/>
+    <path d="M692 330v-50h72v50M776 330v-56h66v56M854 330v-48h74v48M940 330v-54h68v54M1020 330v-50h72v50" fill="#ead3a3"/>
+  </g>
+  <g fill="#c99535" opacity="0.65">
+    <rect x="136" y="136" width="34" height="14"/><rect x="290" y="132" width="34" height="14"/><rect x="454" y="130" width="34" height="14"/>
+    <rect x="872" y="132" width="34" height="14"/><rect x="1034" y="130" width="34" height="14"/>
+  </g>
+
+  <!-- Comptoir -->
+  <g>
+    <rect x="250" y="470" width="700" height="70" fill="#3b2719"/>
+    <rect x="250" y="462" width="700" height="12" fill="#c99535" opacity="0.8"/>
+    <path d="M290 540v-70M910 540v-70" stroke="#1f150e" stroke-width="10"/>
+    <rect x="520" y="424" width="70" height="38" fill="#f3e2bd" stroke="#8a6f49" stroke-width="2"/>
+    <rect x="606" y="416" width="54" height="46" fill="#e9c77b" stroke="#8a5f17" stroke-width="2"/>
+  </g>
+
+  <g fill="#c99535" opacity="0.35">
+    <circle cx="130" cy="620" r="4"/><circle cx="170" cy="650" r="3"/><circle cx="1050" cy="630" r="4"/>
+  </g>
+</svg>

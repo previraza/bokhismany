@@ -1,0 +1,47 @@
+{
+  "name": "bokhismany",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build && tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:check": "tsx scripts/check-db.ts",
+    "db:seed": "tsx scripts/seed.ts",
+    "visuels:generer": "node scripts/generer-visuels.mjs",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@fontsource/inter": "5.3.0",
+    "@fontsource/playfair-display": "5.3.0",
+    "@neondatabase/serverless": "1.2.1",
+    "@tanstack/react-router": "1.170.46",
+    "@tanstack/react-start": "1.169.7",
+    "bcryptjs": "^3.0.3",
+    "drizzle-orm": "0.45.4",
+    "jspdf": "^4.2.1",
+    "nitro": "3.0.261103-rc",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "@tailwindcss/vite": "4.3.5",
+    "@types/node": "24.10.9",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.4",
+    "@vitejs/plugin-react": "6.3.0",
+    "dotenv": "18.0.10",
+    "drizzle-kit": "0.31.11",
+    "tailwindcss": "4.3.5",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vite": "8.3.8"
+  },
+  "packageManager": "pnpm@12.16.1"
+}

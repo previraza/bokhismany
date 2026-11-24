@@ -1,0 +1,23 @@
+# Dépendances et artefacts de build
+node_modules/
+.output/
+.dist/
+dist/
+.vite/
+*.tsbuildinfo
+
+# Environnement local : jamais versionné
+.env
+.env.*
+!.env.example
+
+# Tests et captures
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+
+# Système
+.DS_Store
+npm-debug.log*
+pnpm-debug.log*
