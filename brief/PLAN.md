@@ -52,6 +52,7 @@ Chaque phase a un objectif, des livrables et des critères de validation. Ne pas
 - Accessibilité (contrastes, focus, libellés, textes alternatifs).
 - Référencement (titres, descriptions, Open Graph).
 - Gestion des erreurs et états vides partout.
+- TODO : revoir les animations et la view-transition (rendu actuel jugé insuffisant).
 - **Validation** : aucune erreur console, Lighthouse accessibilité et performance satisfaisants.
 
 ## Phase 8 : déploiement

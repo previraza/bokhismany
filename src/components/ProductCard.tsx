@@ -4,10 +4,18 @@ import { ProductVisual } from '@/components/ProductVisual'
 import { usePanier } from '@/context/CartContext'
 import { libelleCategorie } from '@/lib/categories'
 import { formaterPrix } from '@/lib/format'
-import type { Product } from '@/lib/db/schema'
 
+/** Accepte aussi les produits enrichis de leurs catégories dynamiques. */
 interface Props {
-  produit: Product
+  produit: {
+    slug: string
+    name: string
+    category: string
+    format: string | null
+    priceFc: number
+    imageUrl?: string | null
+    stockStatus: 'disponible' | 'rupture'
+  }
   prioritaire?: boolean
 }
 

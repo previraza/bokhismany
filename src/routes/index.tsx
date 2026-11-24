@@ -65,7 +65,7 @@ function Accueil() {
   return (
     <main>
       <section
-        className="relative isolate overflow-hidden bg-marque-nuit text-creme"
+        className="relative isolate flex min-h-[calc(100svh-4.5rem)] flex-col overflow-hidden bg-marque-nuit text-creme sm:min-h-[calc(100svh-5rem)]"
         aria-label={`Présentation de ${RAISON_SOCIALE}`}
       >
         <img
@@ -92,9 +92,9 @@ function Accueil() {
           <circle cx="300" cy="300" r="100" fill="none" stroke="currentColor" strokeWidth="1" />
         </svg>
 
-        <div className="conteneur-site relative grid min-h-[calc(100svh-4.5rem)] gap-12 py-12 sm:min-h-[calc(100svh-5rem)] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center lg:gap-14 lg:py-14">
+        <div className="hero-grille conteneur-site relative grid flex-1 gap-4 py-5 sm:gap-8 sm:py-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center lg:gap-14 lg:py-14">
           <div className="hero-entre relative z-10">
-            <p className="inline-flex items-center gap-3 border border-creme/25 bg-creme/5 px-3 py-2 text-[0.62rem] font-semibold tracking-[0.22em] text-creme/80 uppercase">
+            <p className="inline-flex items-center gap-3 border border-creme/25 bg-creme/5 px-2.5 py-1.5 text-[0.55rem] font-semibold tracking-[0.22em] text-creme/80 uppercase sm:px-3 sm:py-2 sm:text-[0.62rem]">
               <img
                 src="/images/marque/bokhismany-logo-officiel.png"
                 alt=""
@@ -104,9 +104,9 @@ function Accueil() {
               <span className="h-1.5 w-1.5 rounded-full bg-marque-vert" aria-hidden="true" />
               Kinshasa · Brazzaville
             </p>
-            <h1 className="mt-7 font-display text-[clamp(2.7rem,6vw,5.5rem)] font-bold leading-[0.91] tracking-[-0.06em]">
+            <h1 className="mt-4 font-display text-[2.15rem] font-bold leading-[0.95] tracking-[-0.05em] sm:mt-6 sm:text-[clamp(2.7rem,5vw,5.5rem)] sm:leading-[0.91] sm:tracking-[-0.06em]">
               <span className="relative block">
-                <span className="inline-block bg-creme px-3 py-1 text-marque-bleu shadow-[0_12px_40px_rgba(0,0,0,0.28)]">
+                <span className="inline-block bg-papier px-3.5 py-1.5 text-marque-bleu shadow-[0_12px_40px_rgba(0,0,0,0.28)]">
                   Bokhismany
                 </span>
                 <span
@@ -118,11 +118,11 @@ function Accueil() {
                 Trading <span className="text-marque-orange">SARL</span>
               </span>
             </h1>
-            <p className="mt-6 max-w-xl border-l-2 border-or pl-5 text-base leading-relaxed text-creme/80 sm:text-lg">
+            <p className="mt-3 max-w-xl border-l-2 border-or pl-5 text-sm leading-relaxed text-creme/80 sm:mt-5 sm:text-lg">
               Riz, farines, huiles et produits de première nécessité, vendus en gros et au détail à
               Kinshasa et à Brazzaville.
             </p>
-            <div className="mt-9 flex flex-wrap gap-3">
+            <div className="mt-5 flex flex-wrap gap-3 sm:mt-7">
               <Lien to="/produits" viewTransition className={CLASSE_BOUTON_OR}>
                 Découvrir les produits <span aria-hidden="true">→</span>
               </Lien>
@@ -134,7 +134,7 @@ function Accueil() {
                 Composer un panier
               </Lien>
             </div>
-            <dl className="mt-12 grid grid-cols-3 gap-4 border-t border-creme/20 pt-6 text-xs">
+            <dl className="hero-statistiques mt-8 hidden grid-cols-3 gap-4 border-t border-creme/20 pt-6 text-xs lg:grid">
               {[
                 ['03', 'points de vente'],
                 ['24 h', 'de réservation'],
@@ -149,7 +149,7 @@ function Accueil() {
           </div>
 
           <div className="hero-vitrine relative z-10 mx-auto w-full max-w-[30rem] lg:max-w-none">
-            <div className="relative ml-auto aspect-[4/5] w-[82%] overflow-hidden border border-creme/20 bg-[#8b7c6b] shadow-2xl">
+            <div className="hero-vitrine-image relative ml-auto aspect-[16/10] w-full overflow-hidden border border-creme/20 bg-[#8b7c6b] shadow-2xl lg:aspect-[4/5] lg:w-[82%]">
               <img
                 src="/images/accueil/etale-cereales.jpg"
                 alt="Étal de céréales sur un marché"
@@ -164,7 +164,7 @@ function Accueil() {
                 Distribution de produits alimentaires de première nécessité.
               </p>
             </div>
-            <div className="absolute -bottom-6 left-0 aspect-[4/3] w-[46%] overflow-hidden border-4 border-marque-nuit bg-[#8b7c6b] shadow-xl">
+            <div className="absolute -bottom-6 left-0 hidden aspect-[4/3] w-[46%] overflow-hidden border-4 border-marque-nuit bg-[#8b7c6b] shadow-xl lg:block">
               <img
                 src="/images/accueil/chargement-sacs.jpg"
                 alt="Chargement de sacs de marchandises"
@@ -172,7 +172,7 @@ function Accueil() {
                 className="h-full w-full object-cover object-center"
               />
             </div>
-            <div className="hero-flottant absolute -top-5 left-[4%] w-52 border border-encre/10 bg-creme p-4 text-marine shadow-2xl sm:w-56">
+            <div className="hero-flottant absolute -top-5 left-[4%] hidden w-52 border border-encre/10 bg-creme p-4 text-marine shadow-2xl lg:block lg:w-56">
               <p className="text-[0.6rem] font-semibold tracking-[0.2em] text-marque-fuchsia uppercase">
                 Nos métiers
               </p>
@@ -181,11 +181,11 @@ function Accueil() {
                 Pour les foyers comme pour les revendeurs.
               </p>
             </div>
-            <p className="absolute top-1/3 -right-2 bg-marque-orange px-3 py-4 text-[0.6rem] font-semibold tracking-[0.2em] text-creme uppercase [writing-mode:vertical-rl]">
+            <p className="absolute top-1/3 -right-2 hidden bg-marque-orange px-3 py-4 text-[0.6rem] font-semibold tracking-[0.2em] text-creme uppercase [writing-mode:vertical-rl] lg:block">
               Commerce général
             </p>
             <div
-              className="absolute right-[9%] -bottom-10 h-24 w-24 rounded-full border border-marque-vert/50"
+              className="absolute right-[9%] -bottom-10 hidden h-24 w-24 rounded-full border border-marque-vert/50 lg:block"
               aria-hidden="true"
             />
           </div>
@@ -193,7 +193,7 @@ function Accueil() {
 
         <div className="relative z-10 overflow-hidden border-t border-creme/15 bg-black/25">
           <div
-            className="hero-marquee flex w-max gap-10 py-3 text-[0.62rem] font-semibold tracking-[0.28em] text-creme/60 uppercase"
+            className="hero-marquee flex w-max gap-10 py-2 text-[0.62rem] font-semibold tracking-[0.28em] text-creme/60 uppercase"
             aria-hidden="true"
           >
             {[0, 1].map((copie) => (
@@ -214,22 +214,22 @@ function Accueil() {
             ))}
           </div>
         </div>
-      </section>
 
-      {promotion.active ? (
-        <section className="border-y border-or/30 bg-or-pale/40" aria-label="Promotion en cours">
-          <div className="conteneur-site flex flex-col gap-3 py-4 text-sm sm:flex-row sm:items-center sm:justify-between">
-            <p className="font-semibold text-marine">{promotion.message}</p>
-            <Lien
-              to="/produits"
-              viewTransition
-              className="lien-editorial self-start text-sm sm:self-auto"
-            >
-              Voir la sélection →
-            </Lien>
+        {promotion.active ? (
+          <div className="relative z-10 border-t border-or/40 bg-or-pale text-marine" aria-label="Promotion en cours">
+            <div className="conteneur-site flex flex-col gap-1.5 py-2 text-xs sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:py-3 sm:text-sm">
+              <p className="font-semibold">{promotion.message}</p>
+              <Lien
+                to="/produits"
+                viewTransition
+                className="lien-editorial self-start text-xs sm:self-auto sm:text-sm"
+              >
+                Voir la sélection →
+              </Lien>
+            </div>
           </div>
-        </section>
-      ) : null}
+        ) : null}
+      </section>
 
       <section className="conteneur-site py-14 lg:py-20" aria-labelledby="maison-titre">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center">

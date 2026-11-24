@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { aller, attendreHydratation, numeroTelephoneTest } from './aide'
+import { aller, attendreHydratation, numeroTelephoneTest, recharger } from './aide'
 
 function identifiants() {
   const email = process.env.ADMIN_EMAIL
@@ -73,25 +73,31 @@ test('la déconnexion invalide la session côté serveur', async ({ page }) => {
 })
 
 test('un membre d’équipe ajouté apparaît sur À propos puis peut être retiré', async ({ page }) => {
-  const nom = `Membre Test ${Date.now()}`
+  const horodatage = Date.now()
+  const nom = `Membre Test ${horodatage}`
+  const fonction = `Fonction test ${horodatage}`
   await connecter(page)
   await page.getByRole('link', { name: 'Équipe dirigeante' }).click()
 
-  await page.getByLabel('Nom et prénom *').fill(nom)
-  await page.getByLabel('Fonction *').fill('Fonction test')
-  await page.getByRole('button', { name: 'Ajouter le membre' }).click()
-  await expect(page.getByText('Membre ajouté.')).toBeVisible()
-
   try {
+    await page.getByLabel('Nom et prénom *').fill(nom)
+    await page.getByLabel('Fonction *').fill(fonction)
+    await page.getByRole('button', { name: 'Ajouter le membre' }).click()
+    await expect(page.getByText('Membre ajouté.')).toBeVisible()
+
     await aller(page, '/a-propos')
     await expect(page.getByRole('heading', { name: nom })).toBeVisible()
-    await expect(page.getByText('Fonction test')).toBeVisible()
+    await expect(page.getByText(fonction)).toBeVisible()
   } finally {
     await connecter(page)
     await page.getByRole('link', { name: 'Équipe dirigeante' }).click()
+    // La navigation client peut servir un loader en cache : on force une relecture complète.
+    await recharger(page)
     const ligne = page.locator('li').filter({ hasText: nom })
-    await ligne.getByRole('button', { name: 'Supprimer' }).click()
-    await expect(page.getByText('Membre retiré de l’équipe.')).toBeVisible()
+    if ((await ligne.count()) > 0) {
+      await ligne.getByRole('button', { name: 'Supprimer' }).click()
+      await expect(page.getByText('Membre retiré de l’équipe.')).toBeVisible()
+    }
   }
 
   await aller(page, '/a-propos')

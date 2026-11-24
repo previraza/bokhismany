@@ -78,6 +78,9 @@ test('l’accueil utilise des photographies locales sans répéter la bannière'
     'sacs-grains.jpg',
   ]) {
     const image = page.locator(`main img[src*="${nom}"]`).first()
+    await expect(image).toHaveCount(1)
+    // L’image flottante de la vitrine est masquée sur les petits écrans.
+    if ((page.viewportSize()?.width ?? 0) < 1024 && nom === 'chargement-sacs.jpg') continue
     await expect(image).toBeVisible()
     await image.scrollIntoViewIfNeeded()
     await expect
@@ -112,14 +115,35 @@ test('le hero occupe la hauteur visible et assemble une vitrine', async ({ page 
     .getByRole('heading', { level: 1 })
     .getByText('Bokhismany', { exact: true })
   expect(await marque.evaluate((element) => getComputedStyle(element).color)).toBe(
-    'rgb(32, 32, 64)',
+    'rgb(30, 64, 175)',
   )
   expect(
     await marque.evaluate((element) => getComputedStyle(element).backgroundColor),
-  ).toBe('rgb(250, 249, 246)')
+  ).toBe('rgb(255, 255, 255)')
+  const padding = await marque.evaluate((element) => {
+    const styles = getComputedStyle(element)
+    return {
+      horizontal: parseFloat(styles.paddingLeft),
+      vertical: parseFloat(styles.paddingTop),
+    }
+  })
+  expect(padding.horizontal).toBeGreaterThanOrEqual(14)
+  expect(padding.vertical).toBeGreaterThanOrEqual(6)
 
   await expect(hero.getByRole('link', { name: /Découvrir les produits/ })).toBeVisible()
   await expect(hero.getByRole('link', { name: /Composer un panier/ })).toBeVisible()
+
+  const defilement = hero.locator('.hero-marquee')
+  const promotion = hero.getByLabel('Promotion en cours')
+  await expect(defilement).toBeVisible()
+  await expect(promotion).toBeVisible()
+  await expect(promotion).toContainText(
+    "Promotion en cours : jusqu'à 5 % de réduction sur une sélection de produits.",
+  )
+  const basPromotion = await promotion.evaluate(
+    (element) => element.getBoundingClientRect().bottom,
+  )
+  expect(basPromotion).toBeLessThanOrEqual((page.viewportSize()?.height ?? 0) + 2)
 })
 
 test('l’accueil détaille l’entreprise, ses activités et sa portée', async ({ page }) => {

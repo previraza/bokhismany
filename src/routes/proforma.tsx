@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { BoutonPartager } from '@/components/BoutonPartager'
 import { Champ } from '@/components/Champ'
 import { EmptyState } from '@/components/EmptyState'
 import { Lien } from '@/components/Lien'
@@ -11,12 +12,16 @@ import { metaPage } from '@/lib/seo'
 import {
   CLIENT_PROFORMA_VIDE,
   CLE_CLIENT_PROFORMA,
+  ecrireDocumentProforma,
   formaterDateProforma,
   genererReference,
+  lireDocumentsProforma,
+  signatureProforma,
   type ClientProforma,
   type DocumentProforma,
 } from '@/lib/proforma'
-import { genererPdfProforma } from '@/lib/pdf'
+import { creerBlobProforma, genererPdfProforma } from '@/lib/pdf'
+import { createOrderFromCartFn } from '@/lib/server/orders.functions'
 import { schemaProformaClient } from '@/lib/validation'
 import { usePanier } from '@/context/CartContext'
 
@@ -31,12 +36,14 @@ export const Route = createFileRoute('/proforma')({
 })
 
 function Proforma() {
-  const { lignes, total, pret } = usePanier()
+  const { lignes, subtotal, discountFc, total, couponCodes, appliedCoupons, pret } = usePanier()
   const [client, setClient] = useState<ClientProforma>(CLIENT_PROFORMA_VIDE)
   const [erreurs, setErreurs] = useState<Partial<Record<keyof ClientProforma, string>>>({})
   const [documentProforma, setDocumentProforma] = useState<DocumentProforma | null>(null)
+  const [notice, setNotice] = useState('')
   const [message, setMessage] = useState('')
   const [envoi, setEnvoi] = useState(false)
+  const [referenceCommande, setReferenceCommande] = useState('')
 
   useEffect(() => {
     try {
@@ -62,11 +69,10 @@ function Proforma() {
     setClient((etat) => ({ ...etat, [champ]: valeur }))
     setErreurs((etat) => ({ ...etat, [champ]: undefined }))
     setDocumentProforma(null)
+    setNotice('')
   }
 
-  const generer = (evenement: FormEvent<HTMLFormElement>) => {
-    evenement.preventDefault()
-    setMessage('')
+  const creerDocument = (): DocumentProforma | null => {
     const analyse = schemaProformaClient.safeParse(client)
 
     if (!analyse.success) {
@@ -76,7 +82,7 @@ function Proforma() {
         if (!nouvelles[champ]) nouvelles[champ] = probleme.message
       }
       setErreurs(nouvelles)
-      return
+      return null
     }
 
     try {
@@ -84,7 +90,7 @@ function Proforma() {
     } catch {
       // Le document reste générable sans mémorisation des coordonnées.
     }
-    setDocumentProforma({
+    return {
       reference: genererReference(),
       date: new Date(),
       client: {
@@ -94,8 +100,69 @@ function Proforma() {
         email: analyse.data.email ?? '',
       },
       lignes,
+      subtotalFc: subtotal,
+      discountFc,
+      coupons: appliedCoupons,
       total,
-    })
+    }
+  }
+
+  const generer = (evenement: FormEvent<HTMLFormElement>) => {
+    evenement.preventDefault()
+    setMessage('')
+    setNotice('')
+    const nouveau = creerDocument()
+    if (!nouveau) return
+
+    const signature = signatureProforma(client, lignes, couponCodes)
+    const existant = lireDocumentsProforma()[signature]
+    if (existant) {
+      setDocumentProforma(existant)
+      setNotice('Un proforma identique a déjà été généré. Nous l’avons rechargé.')
+      setReferenceCommande('')
+      return
+    }
+
+    ecrireDocumentProforma(signature, nouveau)
+    setDocumentProforma(nouveau)
+    setReferenceCommande('')
+  }
+
+  const genererNouveau = () => {
+    setMessage('')
+    setNotice('')
+    const nouveau = creerDocument()
+    if (!nouveau) return
+
+    ecrireDocumentProforma(signatureProforma(client, lignes, couponCodes), nouveau)
+    setDocumentProforma(nouveau)
+    setReferenceCommande('')
+    setNotice('Un nouveau proforma a été généré.')
+  }
+
+  const envoyerBonDeCommande = async () => {
+    if (!documentProforma) return
+    setEnvoi(true)
+    setMessage('')
+    try {
+      const resultat = await createOrderFromCartFn({
+        data: {
+          client: documentProforma.client,
+          articles: lignes.map((ligne) => ({ slug: ligne.slug, quantity: ligne.quantite })),
+          coupons: couponCodes,
+        },
+      })
+      setReferenceCommande(resultat.reference)
+      setMessage(`Bon de commande ${resultat.reference} enregistré.`)
+    } catch (error) {
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : 'Le bon de commande n’a pas pu être envoyé. Réessayez dans un instant.',
+      )
+    } finally {
+      setEnvoi(false)
+    }
   }
 
   const telechargerPdf = async () => {
@@ -136,8 +203,8 @@ function Proforma() {
           />
         </section>
       ) : (
-        <section className="conteneur-site grid gap-10 py-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-14 lg:py-20">
-          <div>
+        <section className="conteneur-site grid min-w-0 gap-10 py-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-14 lg:py-20">
+          <div className="min-w-0">
             <h2 className="text-2xl text-marine">Vos coordonnées</h2>
             <p className="mt-3 text-sm leading-relaxed text-encre-douce">
               Elles apparaîtront uniquement sur votre proforma. Les champs marqués d’un astérisque
@@ -218,10 +285,11 @@ function Proforma() {
             </Lien>
           </div>
 
-          <div>
+          <div className="min-w-0">
             {documentProforma ? (
               <>
-                <article className="proforma-document border border-encre/15 bg-papier">
+                <div className="proforma-surface -mx-4 overflow-x-auto border-y border-encre/10 bg-creme px-4 py-5 sm:mx-0 sm:rounded-sm sm:border sm:px-5 sm:py-6 lg:overflow-visible lg:border-0 lg:bg-transparent lg:p-0">
+                <article className="proforma-document mx-auto min-w-[46rem] max-w-[46rem] border border-encre/15 bg-papier lg:min-w-0 lg:max-w-none">
                   <img
                     src="/images/marque/banniere.png"
                     alt={`Bannière ${RAISON_SOCIALE}`}
@@ -294,10 +362,26 @@ function Proforma() {
 
                     <div className="mt-6 flex justify-end">
                       <div className="w-full max-w-xs border border-encre/15 bg-creme p-4">
-                        <p className="text-xs text-encre-douce">Total estimé</p>
-                        <p className="mt-1 text-2xl font-semibold tabular-nums text-marine">
-                          {formaterPrix(documentProforma.total)}
-                        </p>
+                        <div className="flex justify-between gap-4 text-xs">
+                          <span className="text-encre-douce">Sous-total</span>
+                          <span className="tabular-nums text-marine">
+                            {formaterPrix(documentProforma.subtotalFc)}
+                          </span>
+                        </div>
+                        {documentProforma.discountFc > 0 ? (
+                          <div className="mt-1 flex justify-between gap-4 text-xs text-[#2f6b52]">
+                            <span>Remise coupons</span>
+                            <span className="tabular-nums">
+                              −{formaterPrix(documentProforma.discountFc)}
+                            </span>
+                          </div>
+                        ) : null}
+                        <div className="mt-3 border-t border-encre/10 pt-3">
+                          <p className="text-xs text-encre-douce">Total estimé</p>
+                          <p className="mt-1 text-2xl font-semibold tabular-nums text-marine">
+                            {formaterPrix(documentProforma.total)}
+                          </p>
+                        </div>
                       </div>
                     </div>
 
@@ -310,6 +394,13 @@ function Proforma() {
                     </div>
                   </div>
                 </article>
+                </div>
+
+                {notice ? (
+                  <p role="status" className="mt-4 border border-marine/20 bg-creme p-4 text-sm text-marine">
+                    {notice}
+                  </p>
+                ) : null}
 
                 <div className="mt-6 flex flex-wrap gap-3 proforma-actions">
                   <button
@@ -320,6 +411,16 @@ function Proforma() {
                   >
                     {envoi ? 'Génération du PDF…' : 'Télécharger le PDF'}
                   </button>
+                  <BoutonPartager
+                    titre={`Proforma ${documentProforma.reference}`}
+                    texte={`Proforma ${documentProforma.reference} — total estimé ${formaterPrix(documentProforma.total)}.`}
+                    fichier={async () => {
+                      const { blob, nomFichier } = await creerBlobProforma(documentProforma!)
+                      return { blob, nom: nomFichier }
+                    }}
+                    libelle="Partager la proforma"
+                    className={CLASSE_BOUTON_SECONDAIRE}
+                  />
                   <button
                     type="button"
                     onClick={() => window.print()}
@@ -327,7 +428,38 @@ function Proforma() {
                   >
                     Imprimer / enregistrer en PDF
                   </button>
+                  <button
+                    type="button"
+                    onClick={genererNouveau}
+                    className={CLASSE_BOUTON_SECONDAIRE}
+                  >
+                    Générer un nouveau proforma
+                  </button>
+                  <button
+                    type="button"
+                    onClick={envoyerBonDeCommande}
+                    disabled={envoi || Boolean(referenceCommande)}
+                    className={CLASSE_BOUTON_SECONDAIRE}
+                  >
+                    {referenceCommande
+                      ? 'Bon de commande envoyé'
+                      : 'Envoyer le bon de commande'}
+                  </button>
                 </div>
+                {referenceCommande ? (
+                  <p className="mt-4 border border-[#2f6b52]/30 bg-[#2f6b52]/10 p-4 text-sm text-[#245341]">
+                    Votre bon de commande porte la référence{' '}
+                    <strong className="tabular-nums">{referenceCommande}</strong>.{' '}
+                    <Link
+                      to="/bon/$reference"
+                      params={{ reference: referenceCommande }}
+                      viewTransition
+                      className="font-semibold underline underline-offset-4"
+                    >
+                      Suivre ce bon de commande
+                    </Link>
+                  </p>
+                ) : null}
               </>
             ) : (
               <div className="border border-dashed border-encre/20 p-10 text-center text-sm text-encre-douce">

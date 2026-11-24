@@ -1,19 +1,23 @@
 import { useEffect, type ReactNode } from 'react'
 import { createRootRoute, HeadContent, Outlet, Scripts } from '@tanstack/react-router'
 import '../styles/theme.css'
+import { BarrePanierMobile } from '@/components/BarrePanierMobile'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { CartProvider } from '@/context/CartContext'
+import { CartProvider, usePanier } from '@/context/CartContext'
 import { PageIntrouvable } from '@/components/PageIntrouvable'
 import { metaRacine } from '@/lib/seo'
 
 export const Route = createRootRoute({
   // Paramètre de recherche global optionnel : le filtre du catalogue peut être partagé par URL.
-  validateSearch: (recherche: Record<string, unknown>): { categorie?: string } => ({
+  validateSearch: (
+    recherche: Record<string, unknown>,
+  ): { categorie?: string; panier?: string } => ({
     categorie:
       typeof recherche.categorie === 'string' && recherche.categorie.length > 0
         ? recherche.categorie
         : undefined,
+    panier: typeof recherche.panier === 'string' ? recherche.panier : undefined,
   }),
   head: () => ({
     ...metaRacine(),
@@ -32,6 +36,20 @@ function RootComponent() {
   }, [])
 
   return <RootDocument><Outlet /></RootDocument>
+}
+
+function Structure({ children }: Readonly<{ children: ReactNode }>) {
+  const { lignes, pret } = usePanier()
+  const avecBarre = pret && lignes.length > 0
+
+  return (
+    <div className={avecBarre ? 'pb-24 lg:pb-0' : undefined}>
+      <Header />
+      <div id="contenu">{children}</div>
+      <Footer />
+      <BarrePanierMobile />
+    </div>
+  )
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
@@ -58,9 +76,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           >
             Aller au contenu
           </a>
-          <Header />
-          <div id="contenu">{children}</div>
-          <Footer />
+          <Structure>{children}</Structure>
         </CartProvider>
         <Scripts />
       </body>

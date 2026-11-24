@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { db } from '@/lib/db/client'
 import { products, reservationItems, reservations } from '@/lib/db/schema'
 import { schemaReservation } from '@/lib/validation'
+import { calculateCartAmounts, consumeCoupons } from './coupons.server'
 
 const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
 const DUREE_RESERVATION_MS = 24 * 60 * 60 * 1000
@@ -92,10 +93,22 @@ export const creerReservationFn = createServerFn({ method: 'POST' })
       }
     }
 
-    const totalFc = data.articles.reduce((total, article) => {
-      const produit = parSlug.get(article.slug)!
-      return total + produit.priceFc * article.quantite
-    }, 0)
+    const articles = data.articles.map((article) => ({
+      slug: article.slug,
+      quantity: article.quantite,
+    }))
+    const montants = await calculateCartAmounts(articles, data.coupons ?? [])
+    if (montants.messages.length > 0) {
+      return {
+        succes: false as const,
+        message: montants.messages[0],
+        slugs: [] as string[],
+      }
+    }
+
+    const subtotalFc = montants.subtotalFc
+    const discountFc = montants.discountFc
+    const totalFc = montants.totalFc
 
     const creeLe = new Date()
     const expireLe = new Date(creeLe.getTime() + DUREE_RESERVATION_MS)
@@ -111,7 +124,10 @@ export const creerReservationFn = createServerFn({ method: 'POST' })
               customerName: data.nom,
               customerPhone: telephone,
               comment: data.commentaire || null,
+              subtotalFc,
+              discountFc,
               totalFc,
+              coupons: data.coupons ?? [],
               status: 'en_attente',
               createdAt: creeLe,
               expiresAt: expireLe,
@@ -134,6 +150,7 @@ export const creerReservationFn = createServerFn({ method: 'POST' })
           )
         })
 
+        await consumeCoupons(data.coupons ?? [])
         return { succes: true as const, code, expiresAt: expireLe }
       } catch (error) {
         if (estViolationUnique(error)) continue

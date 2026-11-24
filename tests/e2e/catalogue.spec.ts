@@ -10,6 +10,15 @@ test('le catalogue affiche tous les produits actifs', async ({ page }) => {
   await expect(cartes(page)).toHaveCount(27)
 })
 
+test('la première carte occupe deux colonnes sur petit écran', async ({ page }) => {
+  test.skip((page.viewportSize()?.width ?? 0) >= 1024, 'Disposition en deux colonnes réservée aux petits écrans')
+  await aller(page, '/produits')
+  const premiereCarte = page.locator('.reveal:has(article)').first()
+  expect(
+    await premiereCarte.evaluate((element) => getComputedStyle(element).gridColumnEnd),
+  ).toBe('span 2')
+})
+
 test('la carte ajoute au panier et « Voir plus » ouvre la fiche', async ({ page }) => {
   await aller(page, '/produits')
   await page.getByRole('button', { name: /^Ajouter .+ au panier$/ }).first().click()

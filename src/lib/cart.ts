@@ -8,6 +8,15 @@ export interface LignePanier {
 }
 
 export const CLE_PANIER = 'bokhismany-panier-v1'
+export const CLE_COUPONS_PANIER = 'bokhismany-coupons-panier-v1'
+
+export interface AppliedCoupon {
+  code: string
+  type: 'percentage' | 'amount'
+  value: number
+  scope: 'all' | 'categories' | 'products'
+  label: string
+}
 
 export function nombreArticles(lignes: readonly LignePanier[]): number {
   return lignes.reduce((total, ligne) => total + ligne.quantite, 0)

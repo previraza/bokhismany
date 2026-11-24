@@ -58,6 +58,9 @@ function SuiviReservation() {
           quantite: article.quantity,
           prixUnitaire: article.unitPriceFc,
         })),
+        subtotalFc: reservation.subtotalFc,
+        discountFc: reservation.discountFc,
+        coupons: reservation.coupons,
         total: reservation.totalFc,
       })
     } catch (cause) {
@@ -159,11 +162,30 @@ function SuiviReservation() {
             ) : (
               <p className="mt-4 text-sm text-encre-douce">Aucun article enregistré.</p>
             )}
-            <div className="mt-5 flex items-center justify-between gap-4 border-t border-encre/15 pt-5">
-              <p className="font-semibold text-marine">Total estimé</p>
-              <p className="text-xl font-semibold tabular-nums text-marine">
-                {formaterPrix(reservation.totalFc)}
-              </p>
+            <div className="mt-5 space-y-2 border-t border-encre/15 pt-5 text-sm">
+              <div className="flex items-center justify-between gap-4">
+                <p className="text-encre-douce">Sous-total</p>
+                <p className="font-semibold tabular-nums text-marine">
+                  {formaterPrix(reservation.subtotalFc)}
+                </p>
+              </div>
+              {reservation.discountFc > 0 ? (
+                <div className="flex items-center justify-between gap-4 text-[#2f6b52]">
+                  <p>Remise coupons</p>
+                  <p className="font-semibold tabular-nums">−{formaterPrix(reservation.discountFc)}</p>
+                </div>
+              ) : null}
+              {reservation.coupons.length > 0 ? (
+                <p className="text-xs text-encre-douce">
+                  Coupons appliqués : {reservation.coupons.join(', ')}
+                </p>
+              ) : null}
+              <div className="flex items-center justify-between gap-4 border-t border-encre/10 pt-3">
+                <p className="font-semibold text-marine">Total estimé</p>
+                <p className="text-xl font-semibold tabular-nums text-marine">
+                  {formaterPrix(reservation.totalFc)}
+                </p>
+              </div>
             </div>
             <p className="mt-3 bg-or-pale/30 px-4 py-3 text-xs font-medium text-marine">
               {MENTION_ESTIMATION}

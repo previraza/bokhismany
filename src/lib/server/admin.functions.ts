@@ -1,16 +1,21 @@
 import { createServerFn } from '@tanstack/react-start'
 import { setResponseHeaders } from '@tanstack/react-start/server'
-import { and, asc, desc, eq, gte, ilike, lt, or, sql } from 'drizzle-orm'
+import { and, asc, desc, eq, gte, ilike, inArray, lt, or, sql } from 'drizzle-orm'
 import { z } from 'zod'
 import { db } from '@/lib/db/client'
 import {
+  categories,
   contactMessages,
+  invoices,
+  orders,
+  productCategories,
   products,
   reservationItems,
   reservations,
+  type ProductCategory,
   type ReservationStatus,
 } from '@/lib/db/schema'
-import { schemaPromotion, schemaProduit, schemaStatut } from '@/lib/validation'
+import { schemaPromotion, schemaProduitAdmin, schemaStatut } from '@/lib/validation'
 import { obtenirPromotionFn, mettreAJourPromotionFn } from './promotion.functions'
 import { exigerSession } from './session.server'
 
@@ -51,19 +56,34 @@ export const obtenirTableauDeBordFn = createServerFn({ method: 'GET' }).handler(
   prive()
   await appliquerExpirations()
 
-  const [duJour, enAttente, retirees, expirees, messagesNonLus] = await Promise.all([
-    compter(gte(reservations.createdAt, debutJourKinshasa())),
-    compter(eq(reservations.status, 'en_attente')),
-    compter(eq(reservations.status, 'retiree')),
-    compter(eq(reservations.status, 'expiree')),
-    (async () => {
-      const [resultat] = await db
-        .select({ total: sql<number>`count(*)::int` })
-        .from(contactMessages)
-        .where(eq(contactMessages.isRead, false))
-      return resultat?.total ?? 0
-    })(),
-  ])
+  const [duJour, enAttente, retirees, expirees, messagesNonLus, bonsAttente, facturesNonPayees] =
+    await Promise.all([
+      compter(gte(reservations.createdAt, debutJourKinshasa())),
+      compter(eq(reservations.status, 'en_attente')),
+      compter(eq(reservations.status, 'retiree')),
+      compter(eq(reservations.status, 'expiree')),
+      (async () => {
+        const [resultat] = await db
+          .select({ total: sql<number>`count(*)::int` })
+          .from(contactMessages)
+          .where(eq(contactMessages.isRead, false))
+        return resultat?.total ?? 0
+      })(),
+      (async () => {
+        const [resultat] = await db
+          .select({ total: sql<number>`count(*)::int` })
+          .from(orders)
+          .where(eq(orders.status, 'pending'))
+        return resultat?.total ?? 0
+      })(),
+      (async () => {
+        const [resultat] = await db
+          .select({ total: sql<number>`count(*)::int` })
+          .from(invoices)
+          .where(eq(invoices.status, 'issued'))
+        return resultat?.total ?? 0
+      })(),
+    ])
 
   const recentes = await db
     .select()
@@ -71,7 +91,16 @@ export const obtenirTableauDeBordFn = createServerFn({ method: 'GET' }).handler(
     .orderBy(desc(reservations.createdAt))
     .limit(8)
 
-  return { duJour, enAttente, retirees, expirees, messagesNonLus, recentes }
+  return {
+    duJour,
+    enAttente,
+    retirees,
+    expirees,
+    messagesNonLus,
+    bonsAttente,
+    facturesNonPayees,
+    recentes,
+  }
 })
 
 const schemaFiltresReservations = z
@@ -170,11 +199,21 @@ export const changerStatutReservationFn = createServerFn({ method: 'POST' })
 export const obtenirProduitsAdminFn = createServerFn({ method: 'GET' }).handler(async () => {
   await exigerSession()
   prive()
-  return db.select().from(products).orderBy(asc(products.name))
-})
 
-const schemaProduitAdmin = schemaProduit.extend({
-  id: z.number().int().positive().optional(),
+  const [produits, toutesCategories, liens] = await Promise.all([
+    db.select().from(products).orderBy(asc(products.name)),
+    db.select({ id: categories.id, slug: categories.slug }).from(categories),
+    db.select().from(productCategories),
+  ])
+  const slugParId = new Map(toutesCategories.map((categorie) => [categorie.id, categorie.slug]))
+
+  return produits.map((produit) => ({
+    ...produit,
+    categorySlugs: liens
+      .filter((lien) => lien.productId === produit.id)
+      .map((lien) => slugParId.get(lien.categoryId))
+      .filter((slug): slug is string => Boolean(slug)),
+  }))
 })
 
 export const enregistrerProduitFn = createServerFn({ method: 'POST' })
@@ -183,10 +222,19 @@ export const enregistrerProduitFn = createServerFn({ method: 'POST' })
     await exigerSession()
     prive()
 
+    const slugs = [...new Set(data.categorySlugs)]
+    const categoriesTrouvees = await db
+      .select()
+      .from(categories)
+      .where(inArray(categories.slug, slugs))
+    if (categoriesTrouvees.length !== slugs.length) {
+      throw new Error('Une catégorie sélectionnée est introuvable.')
+    }
+
     const valeurs = {
       slug: data.slug,
       name: data.nom,
-      category: data.categorie,
+      category: slugs[0] as ProductCategory,
       format: data.format || null,
       priceFc: data.prixFc,
       description: data.description || null,
@@ -203,6 +251,22 @@ export const enregistrerProduitFn = createServerFn({ method: 'POST' })
         set: valeurs,
       })
     }
+
+    const [produit] = await db
+      .select({ id: products.id })
+      .from(products)
+      .where(eq(products.slug, data.slug))
+      .limit(1)
+    if (!produit) throw new Error('Le produit n’a pas pu être enregistré.')
+
+    await db.delete(productCategories).where(eq(productCategories.productId, produit.id))
+    await db.insert(productCategories).values(
+      categoriesTrouvees.map((categorie) => ({
+        productId: produit.id,
+        categoryId: categorie.id,
+      })),
+    )
+
     return { succes: true }
   })
 
@@ -270,7 +334,10 @@ export const exporterReservationsFn = createServerFn({ method: 'GET' }).handler(
     'Nom',
     'Téléphone',
     'Statut',
-    'Montant estimé (Fc)',
+    'Sous-total (Fc)',
+    'Remise (Fc)',
+    'Coupons',
+    'Total estimé (Fc)',
     'Produits',
   ]
     .map(celluleCsv)
@@ -287,6 +354,9 @@ export const exporterReservationsFn = createServerFn({ method: 'GET' }).handler(
       reservation.customerName,
       reservation.customerPhone,
       reservation.status satisfies ReservationStatus,
+      reservation.subtotalFc,
+      reservation.discountFc,
+      reservation.coupons.join(', '),
       reservation.totalFc,
       produits,
     ]

@@ -4,6 +4,7 @@ import {
   check,
   integer,
   pgTable,
+  primaryKey,
   serial,
   text,
   timestamp,
@@ -21,6 +22,12 @@ export type ProductCategory =
 export type StockStatus = 'disponible' | 'rupture';
 
 export type ReservationStatus = 'en_attente' | 'retiree' | 'expiree' | 'annulee';
+
+export type CouponType = 'percentage' | 'amount';
+export type CouponScope = 'all' | 'categories' | 'products';
+export type OrderStatus = 'pending' | 'invoiced' | 'paid';
+export type OrderSource = 'reservation' | 'proforma';
+export type InvoiceStatus = 'issued' | 'paid';
 
 export type SettingsKey = 'promotion_active' | 'promotion_message';
 
@@ -46,8 +53,14 @@ export const reservations = pgTable('reservations', {
   customerName: text('customer_name').notNull(),
   customerPhone: text('customer_phone').notNull(),
   comment: text('comment'),
-  // Montant estimé au moment de la réservation.
+  // amounts are frozen when the reservation is created, after coupon discounts.
+  subtotalFc: integer('subtotal_fc').notNull().default(0),
+  discountFc: integer('discount_fc').notNull().default(0),
   totalFc: integer('total_fc').notNull(),
+  coupons: text('coupons')
+    .array()
+    .notNull()
+    .default(sql`'{}'::text[]`),
   status: text('status').$type<ReservationStatus>().notNull().default('en_attente'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
@@ -70,6 +83,94 @@ export const reservationItems = pgTable(
     check('reservation_items_quantity_positive', sql`${table.quantity} > 0`),
   ],
 );
+
+// Categories created from the admin; a product can belong to several.
+export const categories = pgTable('categories', {
+  id: serial('id').primaryKey(),
+  slug: text('slug').notNull().unique(),
+  label: text('label').notNull().unique(),
+  isActive: boolean('is_active').notNull().default(true),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+})
+
+export const productCategories = pgTable(
+  'product_categories',
+  {
+    productId: integer('product_id')
+      .notNull()
+      .references(() => products.id, { onDelete: 'cascade' }),
+    categoryId: integer('category_id')
+      .notNull()
+      .references(() => categories.id, { onDelete: 'cascade' }),
+  },
+  (table) => [primaryKey({ columns: [table.productId, table.categoryId] })],
+)
+
+// Discount codes defined by the admin and applied in the cart.
+export const coupons = pgTable('coupons', {
+  id: serial('id').primaryKey(),
+  code: text('code').notNull().unique(),
+  type: text('type').$type<CouponType>().notNull(),
+  value: integer('value').notNull(),
+  scope: text('scope').$type<CouponScope>().notNull().default('all'),
+  targets: text('targets')
+    .array()
+    .notNull()
+    .default(sql`'{}'::text[]`),
+  isActive: boolean('is_active').notNull().default(true),
+  maxUsages: integer('max_usages'),
+  usages: integer('usages').notNull().default(0),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+})
+
+// Sales orders are distinct from reservations; the admin can adjust their prices.
+export const orders = pgTable('orders', {
+  id: serial('id').primaryKey(),
+  reference: text('reference').notNull().unique(),
+  reservationId: integer('reservation_id').references(() => reservations.id),
+  customerName: text('customer_name').notNull(),
+  customerPhone: text('customer_phone').notNull(),
+  customerEmail: text('customer_email'),
+  customerCompany: text('customer_company'),
+  source: text('source').$type<OrderSource>().notNull().default('reservation'),
+  status: text('status').$type<OrderStatus>().notNull().default('pending'),
+  subtotalFc: integer('subtotal_fc').notNull(),
+  discountFc: integer('discount_fc').notNull().default(0),
+  totalFc: integer('total_fc').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
+})
+
+export const orderItems = pgTable('order_items', {
+  id: serial('id').primaryKey(),
+  orderId: integer('order_id')
+    .notNull()
+    .references(() => orders.id, { onDelete: 'cascade' }),
+  productId: integer('product_id').references(() => products.id),
+  productName: text('product_name').notNull(),
+  unitPriceFc: integer('unit_price_fc').notNull(),
+  quantity: integer('quantity').notNull(),
+})
+
+// An invoice is only considered paid after an admin validates the payment.
+export const invoices = pgTable('invoices', {
+  id: serial('id').primaryKey(),
+  number: text('number').notNull().unique(),
+  orderId: integer('order_id')
+    .notNull()
+    .references(() => orders.id)
+    .unique(),
+  customerName: text('customer_name').notNull(),
+  customerPhone: text('customer_phone').notNull(),
+  customerEmail: text('customer_email'),
+  customerCompany: text('customer_company'),
+  subtotalFc: integer('subtotal_fc').notNull(),
+  discountFc: integer('discount_fc').notNull().default(0),
+  totalFc: integer('total_fc').notNull(),
+  status: text('status').$type<InvoiceStatus>().notNull().default('issued'),
+  issuedAt: timestamp('issued_at', { withTimezone: true }).defaultNow(),
+  paidAt: timestamp('paid_at', { withTimezone: true }),
+})
 
 export const admins = pgTable('admins', {
   id: serial('id').primaryKey(),
@@ -141,3 +242,10 @@ export type SiteSetting = typeof siteSettings.$inferSelect;
 export type LoginAttempt = typeof loginAttempts.$inferSelect
 export type EquipeMembre = typeof equipeMembres.$inferSelect
 export type NouvelEquipeMembre = typeof equipeMembres.$inferInsert;
+export type Category = typeof categories.$inferSelect;
+export type NewCategory = typeof categories.$inferInsert;
+export type Coupon = typeof coupons.$inferSelect;
+export type NewCoupon = typeof coupons.$inferInsert;
+export type Order = typeof orders.$inferSelect;
+export type OrderItem = typeof orderItems.$inferSelect;
+export type Invoice = typeof invoices.$inferSelect;

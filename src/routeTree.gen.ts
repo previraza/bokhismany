@@ -19,14 +19,18 @@ import { Route as PanierRouteImport } from './routes/panier'
 import { Route as ProduitsRouteImport } from './routes/produits'
 import { Route as ProformaRouteImport } from './routes/proforma'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminCommandesRouteImport } from './routes/admin.commandes'
 import { Route as AdminConnexionRouteImport } from './routes/admin.connexion'
+import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminEquipeRouteImport } from './routes/admin.equipe'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminProduitsRouteImport } from './routes/admin.produits'
 import { Route as AdminPromotionRouteImport } from './routes/admin.promotion'
 import { Route as AdminReservationsRouteImport } from './routes/admin.reservations'
+import { Route as BonReferenceRouteImport } from './routes/bon.$reference'
 import { Route as ProduitsSlugRouteImport } from './routes/produits.$slug'
 import { Route as ReservationCodeRouteImport } from './routes/reservation.$code'
+import { Route as AdminCommandesIdRouteImport } from './routes/admin.commandes.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -78,9 +82,19 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCommandesRoute = AdminCommandesRouteImport.update({
+  id: '/commandes',
+  path: '/commandes',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminConnexionRoute = AdminConnexionRouteImport.update({
   id: '/connexion',
   path: '/connexion',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCouponsRoute = AdminCouponsRouteImport.update({
+  id: '/coupons',
+  path: '/coupons',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminEquipeRoute = AdminEquipeRouteImport.update({
@@ -108,6 +122,11 @@ const AdminReservationsRoute = AdminReservationsRouteImport.update({
   path: '/reservations',
   getParentRoute: () => AdminRoute,
 } as any)
+const BonReferenceRoute = BonReferenceRouteImport.update({
+  id: '/bon/$reference',
+  path: '/bon/$reference',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProduitsSlugRoute = ProduitsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -117,6 +136,11 @@ const ReservationCodeRoute = ReservationCodeRouteImport.update({
   id: '/reservation/$code',
   path: '/reservation/$code',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminCommandesIdRoute = AdminCommandesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminCommandesRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -129,15 +153,19 @@ export interface FileRoutesByFullPath {
   '/panier': typeof PanierRoute
   '/produits': typeof ProduitsRouteWithChildren
   '/proforma': typeof ProformaRoute
+  '/admin/commandes': typeof AdminCommandesRouteWithChildren
   '/admin/connexion': typeof AdminConnexionRoute
+  '/admin/coupons': typeof AdminCouponsRoute
   '/admin/equipe': typeof AdminEquipeRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/produits': typeof AdminProduitsRoute
   '/admin/promotion': typeof AdminPromotionRoute
   '/admin/reservations': typeof AdminReservationsRoute
+  '/bon/$reference': typeof BonReferenceRoute
   '/produits/$slug': typeof ProduitsSlugRoute
   '/reservation/$code': typeof ReservationCodeRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/commandes/$id': typeof AdminCommandesIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -148,15 +176,19 @@ export interface FileRoutesByTo {
   '/panier': typeof PanierRoute
   '/produits': typeof ProduitsRouteWithChildren
   '/proforma': typeof ProformaRoute
+  '/admin/commandes': typeof AdminCommandesRouteWithChildren
   '/admin/connexion': typeof AdminConnexionRoute
+  '/admin/coupons': typeof AdminCouponsRoute
   '/admin/equipe': typeof AdminEquipeRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/produits': typeof AdminProduitsRoute
   '/admin/promotion': typeof AdminPromotionRoute
   '/admin/reservations': typeof AdminReservationsRoute
+  '/bon/$reference': typeof BonReferenceRoute
   '/produits/$slug': typeof ProduitsSlugRoute
   '/reservation/$code': typeof ReservationCodeRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/commandes/$id': typeof AdminCommandesIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -169,15 +201,19 @@ export interface FileRoutesById {
   '/panier': typeof PanierRoute
   '/produits': typeof ProduitsRouteWithChildren
   '/proforma': typeof ProformaRoute
+  '/admin/commandes': typeof AdminCommandesRouteWithChildren
   '/admin/connexion': typeof AdminConnexionRoute
+  '/admin/coupons': typeof AdminCouponsRoute
   '/admin/equipe': typeof AdminEquipeRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/produits': typeof AdminProduitsRoute
   '/admin/promotion': typeof AdminPromotionRoute
   '/admin/reservations': typeof AdminReservationsRoute
+  '/bon/$reference': typeof BonReferenceRoute
   '/produits/$slug': typeof ProduitsSlugRoute
   '/reservation/$code': typeof ReservationCodeRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/commandes/$id': typeof AdminCommandesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -191,15 +227,19 @@ export interface FileRouteTypes {
     | '/panier'
     | '/produits'
     | '/proforma'
+    | '/admin/commandes'
     | '/admin/connexion'
+    | '/admin/coupons'
     | '/admin/equipe'
     | '/admin/messages'
     | '/admin/produits'
     | '/admin/promotion'
     | '/admin/reservations'
+    | '/bon/$reference'
     | '/produits/$slug'
     | '/reservation/$code'
     | '/admin/'
+    | '/admin/commandes/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -210,15 +250,19 @@ export interface FileRouteTypes {
     | '/panier'
     | '/produits'
     | '/proforma'
+    | '/admin/commandes'
     | '/admin/connexion'
+    | '/admin/coupons'
     | '/admin/equipe'
     | '/admin/messages'
     | '/admin/produits'
     | '/admin/promotion'
     | '/admin/reservations'
+    | '/bon/$reference'
     | '/produits/$slug'
     | '/reservation/$code'
     | '/admin'
+    | '/admin/commandes/$id'
   id:
     | '__root__'
     | '/'
@@ -230,15 +274,19 @@ export interface FileRouteTypes {
     | '/panier'
     | '/produits'
     | '/proforma'
+    | '/admin/commandes'
     | '/admin/connexion'
+    | '/admin/coupons'
     | '/admin/equipe'
     | '/admin/messages'
     | '/admin/produits'
     | '/admin/promotion'
     | '/admin/reservations'
+    | '/bon/$reference'
     | '/produits/$slug'
     | '/reservation/$code'
     | '/admin/'
+    | '/admin/commandes/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -251,6 +299,7 @@ export interface RootRouteChildren {
   PanierRoute: typeof PanierRoute
   ProduitsRoute: typeof ProduitsRouteWithChildren
   ProformaRoute: typeof ProformaRoute
+  BonReferenceRoute: typeof BonReferenceRoute
   ReservationCodeRoute: typeof ReservationCodeRoute
 }
 
@@ -326,11 +375,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/commandes': {
+      id: '/admin/commandes'
+      path: '/commandes'
+      fullPath: '/admin/commandes'
+      preLoaderRoute: typeof AdminCommandesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/connexion': {
       id: '/admin/connexion'
       path: '/connexion'
       fullPath: '/admin/connexion'
       preLoaderRoute: typeof AdminConnexionRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/coupons': {
+      id: '/admin/coupons'
+      path: '/coupons'
+      fullPath: '/admin/coupons'
+      preLoaderRoute: typeof AdminCouponsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/equipe': {
@@ -368,6 +431,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminReservationsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/bon/$reference': {
+      id: '/bon/$reference'
+      path: '/bon/$reference'
+      fullPath: '/bon/$reference'
+      preLoaderRoute: typeof BonReferenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/produits/$slug': {
       id: '/produits/$slug'
       path: '/$slug'
@@ -382,11 +452,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReservationCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/commandes/$id': {
+      id: '/admin/commandes/$id'
+      path: '/$id'
+      fullPath: '/admin/commandes/$id'
+      preLoaderRoute: typeof AdminCommandesIdRouteImport
+      parentRoute: typeof AdminCommandesRoute
+    }
   }
 }
 
+interface AdminCommandesRouteChildren {
+  AdminCommandesIdRoute: typeof AdminCommandesIdRoute
+}
+
+const AdminCommandesRouteChildren: AdminCommandesRouteChildren = {
+  AdminCommandesIdRoute: AdminCommandesIdRoute,
+}
+
+const AdminCommandesRouteWithChildren = AdminCommandesRoute._addFileChildren(
+  AdminCommandesRouteChildren,
+)
+
 interface AdminRouteChildren {
+  AdminCommandesRoute: typeof AdminCommandesRouteWithChildren
   AdminConnexionRoute: typeof AdminConnexionRoute
+  AdminCouponsRoute: typeof AdminCouponsRoute
   AdminEquipeRoute: typeof AdminEquipeRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
   AdminProduitsRoute: typeof AdminProduitsRoute
@@ -396,7 +487,9 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminCommandesRoute: AdminCommandesRouteWithChildren,
   AdminConnexionRoute: AdminConnexionRoute,
+  AdminCouponsRoute: AdminCouponsRoute,
   AdminEquipeRoute: AdminEquipeRoute,
   AdminMessagesRoute: AdminMessagesRoute,
   AdminProduitsRoute: AdminProduitsRoute,
@@ -429,6 +522,7 @@ const rootRouteChildren: RootRouteChildren = {
   PanierRoute: PanierRoute,
   ProduitsRoute: ProduitsRouteWithChildren,
   ProformaRoute: ProformaRoute,
+  BonReferenceRoute: BonReferenceRoute,
   ReservationCodeRoute: ReservationCodeRoute,
 }
 export const routeTree = rootRouteImport

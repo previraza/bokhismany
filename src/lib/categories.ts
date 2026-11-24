@@ -22,8 +22,29 @@ export function estCategorie(valeur: string): valeur is Categorie {
   return (CATEGORIES as readonly string[]).includes(valeur)
 }
 
+/** Human-readable label, including categories created at runtime by the admin. */
+export function prettyCategoryLabel(slug: string): string {
+  if (estCategorie(slug)) return LIBELLES_CATEGORIES[slug]
+  return slug
+    .split('-')
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ')
+}
+
 export function libelleCategorie(valeur: string): string {
-  return estCategorie(valeur) ? LIBELLES_CATEGORIES[valeur] : 'Autres produits'
+  return prettyCategoryLabel(valeur)
+}
+
+export function slugifyCategory(label: string): string {
+  const slug = label
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 100)
+  return slug || 'autres'
 }
 
 /** Illustration vectorielle locale associée à une catégorie. */

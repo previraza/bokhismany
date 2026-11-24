@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { BoutonPartager } from '@/components/BoutonPartager'
 import { Champ } from '@/components/Champ'
 import { EmptyState } from '@/components/EmptyState'
 import { Lien } from '@/components/Lien'
@@ -7,9 +8,18 @@ import { PageHero } from '@/components/PageHero'
 import { ProductVisual } from '@/components/ProductVisual'
 import { usePanier } from '@/context/CartContext'
 import { libelleCategorie } from '@/lib/categories'
-import { CLASSE_BOUTON_OR, CLASSE_BOUTON_PRIMAIRE, CLASSE_CHAMP } from '@/lib/classes'
+import { CLASSE_BOUTON_PRIMAIRE, CLASSE_CHAMP } from '@/lib/classes'
+import {
+  clearStoredCustomer,
+  readStoredCustomer,
+  setRememberCustomer,
+  shouldRememberCustomer,
+  writeStoredCustomer,
+} from '@/lib/customer'
 import { formaterPrix, MENTION_ESTIMATION } from '@/lib/format'
+import { decoderPanier, lienPartagePanier } from '@/lib/partagePanier'
 import { metaPage } from '@/lib/seo'
+import { obtenirProduitsParSlugsFn } from '@/lib/server/produits.functions'
 import { creerReservationFn, verifierArticlesFn } from '@/lib/server/reservations.functions'
 import { schemaReservation } from '@/lib/validation'
 
@@ -32,14 +42,68 @@ interface Coordonnees {
 const VIDE: Coordonnees = { nom: '', telephone: '', commentaire: '' }
 
 function Panier() {
-  const { lignes, nombre, total, pret, modifierQuantite, retirer, vider } = usePanier()
+  const {
+    lignes,
+    nombre,
+    subtotal,
+    discountFc,
+    total,
+    couponCodes,
+    appliedCoupons,
+    couponMessages,
+    pret,
+    ajouter,
+    modifierQuantite,
+    retirer,
+    vider,
+    ajouterCoupon,
+    retirerCoupon,
+  } = usePanier()
   const naviguer = useNavigate()
   const [coordonnees, setCoordonnees] = useState<Coordonnees>(VIDE)
   const [erreurs, setErreurs] = useState<Partial<Record<keyof Coordonnees, string>>>({})
   const [indisponibles, setIndisponibles] = useState<string[]>([])
   const [etat, setEtat] = useState<'repos' | 'envoi' | 'erreur'>('repos')
   const [messageErreur, setMessageErreur] = useState('')
+  const [codeCoupon, setCodeCoupon] = useState('')
+  const [messageCoupon, setMessageCoupon] = useState('')
+  const [couponEnvoi, setCouponEnvoi] = useState(false)
+  const [enregistrerInfos, setEnregistrerInfos] = useState(false)
+  const [infosEnregistrees, setInfosEnregistrees] = useState(false)
   const cleSlugs = lignes.map((ligne) => ligne.slug).join('|')
+
+  useEffect(() => {
+    const enregistre = readStoredCustomer()
+    if (enregistre) {
+      setCoordonnees({ nom: enregistre.name, telephone: enregistre.phone, commentaire: '' })
+      setInfosEnregistrees(true)
+    }
+    setEnregistrerInfos(shouldRememberCustomer())
+  }, [])
+
+  const partageImporte = useRef<string | null>(null)
+  useEffect(() => {
+    if (!pret) return
+    const valeur = new URLSearchParams(window.location.search).get('panier')
+    if (!valeur || partageImporte.current === valeur) return
+    partageImporte.current = valeur
+
+    const lignesPartagees = decoderPanier(valeur)
+    if (!lignesPartagees || lignesPartagees.length === 0) return
+
+    obtenirProduitsParSlugsFn({ data: lignesPartagees.map((ligne) => ligne.slug) })
+      .then((produits) => {
+        const parSlug = new Map(produits.map((produit) => [produit.slug, produit]))
+        for (const ligne of lignesPartagees) {
+          const produit = parSlug.get(ligne.slug)
+          if (produit) ajouter({ ...produit, quantite: ligne.quantite })
+        }
+        window.history.replaceState(window.history.state, '', window.location.pathname)
+      })
+      .catch(() => {
+        partageImporte.current = null
+      })
+  }, [pret, ajouter])
 
   useEffect(() => {
     if (!pret || lignes.length === 0) {
@@ -71,6 +135,22 @@ function Panier() {
     setErreurs((etatActuel) => ({ ...etatActuel, [champ]: undefined }))
   }
 
+  const appliquerCoupon = async (evenement: FormEvent<HTMLFormElement>) => {
+    evenement.preventDefault()
+    setCouponEnvoi(true)
+    setMessageCoupon('')
+    const resultat = await ajouterCoupon(codeCoupon)
+    setMessageCoupon(resultat.message)
+    if (resultat.success) setCodeCoupon('')
+    setCouponEnvoi(false)
+  }
+
+  const basculerEnregistrement = (valeur: boolean) => {
+    setEnregistrerInfos(valeur)
+    setRememberCustomer(valeur)
+    if (!valeur) setInfosEnregistrees(false)
+  }
+
   const reserver = async (evenement: FormEvent<HTMLFormElement>) => {
     evenement.preventDefault()
     setMessageErreur('')
@@ -79,6 +159,7 @@ function Panier() {
       telephone: coordonnees.telephone,
       commentaire: coordonnees.commentaire || undefined,
       articles: lignes.map((ligne) => ({ slug: ligne.slug, quantite: ligne.quantite })),
+      coupons: couponCodes,
     })
 
     if (!analyse.success) {
@@ -102,6 +183,13 @@ function Panier() {
         setMessageErreur(resultat.message)
         setEtat('erreur')
         return
+      }
+      if (enregistrerInfos) {
+        writeStoredCustomer({
+          name: analyse.data.nom,
+          phone: analyse.data.telephone,
+        })
+        setInfosEnregistrees(true)
       }
       await naviguer({
         to: '/reservation/$code',
@@ -257,6 +345,18 @@ function Panier() {
                   <dt className="text-encre-douce">Articles</dt>
                   <dd className="font-semibold tabular-nums text-marine">{nombre}</dd>
                 </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-encre-douce">Sous-total</dt>
+                  <dd className="font-semibold tabular-nums text-marine">
+                    {formaterPrix(subtotal)}
+                  </dd>
+                </div>
+                {discountFc > 0 ? (
+                  <div className="flex justify-between gap-4 text-[#2f6b52]">
+                    <dt>Remise coupons</dt>
+                    <dd className="font-semibold tabular-nums">−{formaterPrix(discountFc)}</dd>
+                  </div>
+                ) : null}
                 <div className="flex justify-between gap-4 border-t border-encre/10 pt-4">
                   <dt className="font-semibold text-marine">Total estimé</dt>
                   <dd className="text-xl font-semibold tabular-nums text-marine">
@@ -267,7 +367,63 @@ function Panier() {
               <p className="mt-4 bg-or-pale/30 px-4 py-3 text-xs font-medium text-marine">
                 {MENTION_ESTIMATION}
               </p>
-              <p className="mt-4 text-xs leading-relaxed text-encre-douce">
+
+              <div className="mt-6 border-t border-encre/10 pt-6">
+                <h3 className="text-lg text-marine">Coupons de réduction</h3>
+                <p className="mt-2 text-xs leading-relaxed text-encre-douce">
+                  Vous pouvez appliquer jusqu’à 5 coupons sur ce panier.
+                </p>
+                <form className="mt-4 flex gap-3" onSubmit={appliquerCoupon}>
+                  <label htmlFor="code-coupon" className="sr-only">
+                    Code de réduction
+                  </label>
+                  <input
+                    id="code-coupon"
+                    type="text"
+                    value={codeCoupon}
+                    onChange={(evenement) => setCodeCoupon(evenement.target.value)}
+                    placeholder="Ex. BIENVENUE10"
+                    className={CLASSE_CHAMP}
+                    maxLength={30}
+                  />
+                  <button
+                    type="submit"
+                    disabled={couponEnvoi}
+                    className="shrink-0 border border-marine px-4 text-sm font-semibold text-marine hover:bg-marine hover:text-creme disabled:opacity-50"
+                  >
+                    Appliquer
+                  </button>
+                </form>
+                {messageCoupon ? (
+                  <p role="status" className="mt-3 text-xs font-medium text-marine">
+                    {messageCoupon}
+                  </p>
+                ) : null}
+                {appliedCoupons.length > 0 ? (
+                  <ul className="mt-4 flex flex-wrap gap-2" aria-label="Coupons appliqués">
+                    {appliedCoupons.map((coupon) => (
+                      <li key={coupon.code}>
+                        <button
+                          type="button"
+                          onClick={() => retirerCoupon(coupon.code)}
+                          className="flex min-h-11 items-center gap-2 border border-[#2f6b52]/30 bg-[#2f6b52]/10 px-3 text-xs font-semibold text-[#245341]"
+                          aria-label={`Retirer le coupon ${coupon.code}`}
+                        >
+                          {coupon.code}
+                          <span aria-hidden="true">×</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                {couponMessages.map((message) => (
+                  <p key={message} role="status" className="mt-2 text-xs text-alerte">
+                    {message}
+                  </p>
+                ))}
+              </div>
+
+              <p className="mt-6 text-xs leading-relaxed text-encre-douce">
                 Une réservation vous permet de figer votre sélection pendant 24 heures. Le prix
                 définitif est confirmé en boutique, au moment du paiement. Passé ce délai, la
                 réservation expire et les produits ne sont plus réservés.
@@ -279,6 +435,13 @@ function Panier() {
               >
                 Exporter la proforma
               </Lien>
+              <BoutonPartager
+                titre="Mon panier Bokhismany"
+                texte={`${nombre} ${nombre > 1 ? 'articles sélectionnés' : 'article sélectionné'} chez Bokhismany.`}
+                url={() => lienPartagePanier(lignes.map(({ slug, quantite }) => ({ slug, quantite })))}
+                libelle="Partager ce panier"
+                className="mt-3 flex min-h-11 w-full items-center justify-center border border-encre/25 px-4 text-sm font-semibold text-marine transition-colors hover:bg-creme"
+              />
 
               <div className="mt-8 border-t border-encre/10 pt-7">
                 <h3 className="text-lg text-marine">Réserver ce panier</h3>
@@ -337,6 +500,38 @@ function Panier() {
                       />
                     )}
                   </Champ>
+                  <div className="border border-encre/10 bg-creme/60 p-4">
+                    <label
+                      htmlFor="enregistrer-informations"
+                      className="flex min-h-11 cursor-pointer items-start gap-3 text-sm text-marine"
+                    >
+                      <input
+                        id="enregistrer-informations"
+                        type="checkbox"
+                        checked={enregistrerInfos}
+                        onChange={(evenement) => basculerEnregistrement(evenement.target.checked)}
+                        className="mt-1 h-5 w-5 shrink-0 accent-[#2f6b52]"
+                      />
+                      <span>
+                        Enregistrer mes informations sur cet appareil
+                        <span className="mt-1 block text-xs text-encre-douce">
+                          Sans compte : vos coordonnées restent dans ce navigateur uniquement.
+                        </span>
+                      </span>
+                    </label>
+                    {infosEnregistrees ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          clearStoredCustomer()
+                          setInfosEnregistrees(false)
+                        }}
+                        className="mt-2 min-h-11 text-xs font-semibold text-alerte underline underline-offset-4"
+                      >
+                        Effacer mes informations enregistrées
+                      </button>
+                    ) : null}
+                  </div>
                   {messageErreur ? (
                     <p role="alert" className="text-sm font-medium text-alerte">
                       {messageErreur}
@@ -359,19 +554,6 @@ function Panier() {
         </section>
       )}
 
-      {lignes.length > 0 ? (
-        <div className="sticky bottom-0 z-30 border-t border-or/30 bg-creme py-3 lg:hidden">
-          <div className="conteneur-site flex items-center justify-between gap-4">
-            <div>
-              <p className="text-xs text-encre-douce">Total estimé</p>
-              <p className="text-lg font-semibold tabular-nums text-marine">{formaterPrix(total)}</p>
-            </div>
-            <a href="#reservation-nom" className={CLASSE_BOUTON_OR}>
-              Réserver
-            </a>
-          </div>
-        </div>
-      ) : null}
     </main>
   )
 }

@@ -4,19 +4,14 @@ import { EmptyState } from '@/components/EmptyState'
 import { PageHero } from '@/components/PageHero'
 import { ProductCard } from '@/components/ProductCard'
 import { Reveal } from '@/components/Reveal'
-import {
-  CATEGORIES,
-  LIBELLES_CATEGORIES,
-  estCategorie,
-  type Categorie,
-} from '@/lib/categories'
 import { CLASSE_CHAMP } from '@/lib/classes'
 import { MENTION_ESTIMATION } from '@/lib/format'
 import { metaPage } from '@/lib/seo'
+import { listCategoriesFn } from '@/lib/server/categories.functions'
 import { obtenirProduitsFn } from '@/lib/server/produits.functions'
 
 type Tri = 'nom' | 'prix-asc' | 'prix-desc'
-type FiltreCategorie = 'tous' | Categorie
+type FiltreCategorie = 'tous' | string
 
 export const Route = createFileRoute('/produits')({
   head: () =>
@@ -25,15 +20,19 @@ export const Route = createFileRoute('/produits')({
       description:
         'Catalogue Bokhismany : riz, farines, semoules, huiles, sucre et autres produits du quotidien. Réservez en ligne et retirez en boutique.',
     }),
-  loader: () => obtenirProduitsFn(),
+  loader: async () => {
+    const [Produits, categories] = await Promise.all([obtenirProduitsFn(), listCategoriesFn()])
+    return { produits: Produits, categories }
+  },
   component: Catalogue,
 })
 
 function Catalogue() {
-  const produits = Route.useLoaderData()
+  const { produits, categories } = Route.useLoaderData()
   const rechercheInitiale = Route.useSearch()
-  const categorieInitiale = estCategorie(rechercheInitiale.categorie ?? '')
-    ? (rechercheInitiale.categorie as Categorie)
+  const slugInitial = rechercheInitiale.categorie ?? ''
+  const categorieInitiale = categories.some((categorie) => categorie.slug === slugInitial)
+    ? slugInitial
     : 'tous'
   const [categorie, setCategorie] = useState<FiltreCategorie>(categorieInitiale)
   const [recherche, setRecherche] = useState('')
@@ -42,7 +41,7 @@ function Catalogue() {
   const visibles = useMemo(() => {
     const terme = recherche.trim().toLocaleLowerCase('fr-FR')
     const resultat = produits.filter((produit) => {
-      const dansCategorie = categorie === 'tous' || produit.category === categorie
+      const dansCategorie = categorie === 'tous' || produit.categorySlugs.includes(categorie)
       const dansRecherche =
         terme.length === 0 ||
         produit.name.toLocaleLowerCase('fr-FR').includes(terme) ||
@@ -119,12 +118,12 @@ function Catalogue() {
                 onClick={() => setCategorie('tous')}
                 libelle="Tous les produits"
               />
-              {CATEGORIES.map((element) => (
+              {categories.map((element) => (
                 <BoutonCategorie
-                  key={element}
-                  active={categorie === element}
-                  onClick={() => setCategorie(element)}
-                  libelle={LIBELLES_CATEGORIES[element]}
+                  key={element.slug}
+                  active={categorie === element.slug}
+                  onClick={() => setCategorie(element.slug)}
+                  libelle={element.label}
                 />
               ))}
             </div>
@@ -151,9 +150,13 @@ function Catalogue() {
         </div>
 
         {visibles.length > 0 ? (
-          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="mt-6 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
             {visibles.map((produit, index) => (
-              <Reveal key={produit.slug} delai={(index % 4) * 60}>
+              <Reveal
+                key={produit.slug}
+                delai={(index % 4) * 60}
+                className={index === 0 ? 'col-span-2 lg:col-span-1' : undefined}
+              >
                 <ProductCard produit={produit} />
               </Reveal>
             ))}

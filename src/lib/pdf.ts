@@ -87,7 +87,7 @@ function ligneTableau(
 }
 
 /** Document de proforma : la bannière officielle sert d'en-tête. */
-export async function genererPdfProforma(donnees: DocumentProforma): Promise<void> {
+async function construirePdfProforma(donnees: DocumentProforma): Promise<jsPDF> {
   const banniere = await chargerImage('/images/marque/banniere.png')
   const document = new jsPDF({ unit: 'mm', format: 'a4' })
   entete(document, banniere)
@@ -164,6 +164,15 @@ export async function genererPdfProforma(donnees: DocumentProforma): Promise<voi
   }
 
   y += 6
+  document.setFont('helvetica', 'normal')
+  document.setFontSize(9)
+  document.setTextColor(...ENCRE_DOCE)
+  document.text(`Sous-total : ${prixPdf(donnees.subtotalFc)}`, 120, y)
+  if (donnees.discountFc > 0) {
+    document.setTextColor(...ROUGE)
+    document.text(`Remise coupons : -${prixPdf(donnees.discountFc)}`, 120, y + 6)
+    y += 6
+  }
   document.setFillColor(...CREME)
   document.rect(120, y - 6, LARGEUR - MARGE - 120, 14, 'F')
   document.setFont('helvetica', 'bold')
@@ -192,7 +201,157 @@ export async function genererPdfProforma(donnees: DocumentProforma): Promise<voi
   )
 
   piedDePage(document)
+  return document
+}
+
+export async function genererPdfProforma(donnees: DocumentProforma): Promise<void> {
+  const document = await construirePdfProforma(donnees)
   document.save(`proforma-${donnees.reference}.pdf`)
+}
+
+export async function creerBlobProforma(
+  donnees: DocumentProforma,
+): Promise<{ blob: Blob; nomFichier: string }> {
+  const document = await construirePdfProforma(donnees)
+  return { blob: document.output('blob'), nomFichier: `proforma-${donnees.reference}.pdf` }
+}
+
+export interface InvoiceDocument {
+  number: string
+  issuedAt: Date | string
+  paidAt: Date | string | null
+  customer: {
+    name: string
+    phone: string
+    email: string | null
+    company: string | null
+  }
+  items: { name: string; unitPriceFc: number; quantity: number }[]
+  subtotalFc: number
+  discountFc: number
+  totalFc: number
+  status: 'issued' | 'paid'
+}
+
+/** Official invoice. Payment status is set by an admin, never by the website. */
+export async function genererPdfFacture(donnees: InvoiceDocument): Promise<void> {
+  const banniere = await chargerImage('/images/marque/banniere.png')
+  const document = new jsPDF({ unit: 'mm', format: 'a4' })
+  entete(document, banniere)
+
+  document.setFont('helvetica', 'bold')
+  document.setFontSize(20)
+  document.setTextColor(...MARINE)
+  document.text('FACTURE', MARGE, 46)
+  document.setFont('helvetica', 'normal')
+  document.setFontSize(9)
+  document.setTextColor(...ENCRE_DOCE)
+  document.text(`${donnees.number}`, LARGEUR - MARGE, 42, { align: 'right' })
+  document.text(`Émise le ${formaterDateProforma(new Date(donnees.issuedAt))}`, LARGEUR - MARGE, 47, {
+    align: 'right',
+  })
+
+  document.setFillColor(...(donnees.status === 'paid' ? MARINE : OR))
+  document.rect(MARGE, 56, LARGEUR_UTILE, 12, 'F')
+  document.setFont('helvetica', 'bold')
+  document.setFontSize(9)
+  document.setTextColor(...CREME)
+  document.text(
+    donnees.status === 'paid' ? 'FACTURE PAYÉE' : 'FACTURE ÉMISE — PAIEMENT À VALIDER EN BOUTIQUE',
+    MARGE + 4,
+    64,
+  )
+
+  bloc(
+    document,
+    'Fournisseur',
+    [RAISON_SOCIALE, SIEGE_SOCIAL, EMAIL_CONTACT, POINTS_DE_VENTE[0]?.telephone ?? ''],
+    MARGE,
+    80,
+    80,
+  )
+  bloc(
+    document,
+    'Client',
+    [
+      donnees.customer.name,
+      donnees.customer.company ?? '',
+      donnees.customer.phone,
+      donnees.customer.email ?? '',
+    ],
+    108,
+    80,
+    LARGEUR - MARGE - 108,
+  )
+
+  let y = 114
+  document.setFillColor(...MARINE)
+  document.rect(MARGE, y - 6, LARGEUR_UTILE, 10, 'F')
+  document.setTextColor(...CREME)
+  document.setFont('helvetica', 'bold')
+  document.setFontSize(8.5)
+  document.text('Article', MARGE + 2, y)
+  document.text('Prix unitaire', 106, y)
+  document.text('Qté', 140, y)
+  document.text('Total', 156, y)
+  y += 10
+
+  for (const item of donnees.items) {
+    if (y > 245) {
+      piedDePage(document)
+      document.addPage()
+      y = 24
+      entete(document, banniere)
+    }
+    ligneTableau(
+      document,
+      [
+        { texte: item.name, x: MARGE + 2, largeur: 82 },
+        { texte: prixPdf(item.unitPriceFc), x: 106, largeur: 28 },
+        { texte: String(item.quantity), x: 140, largeur: 12 },
+        { texte: prixPdf(item.unitPriceFc * item.quantity), x: 156, largeur: 38 },
+      ],
+      y,
+    )
+    y += 9
+  }
+
+  y += 8
+  document.setFont('helvetica', 'normal')
+  document.setFontSize(9)
+  document.setTextColor(...ENCRE_DOCE)
+  document.text(`Sous-total : ${prixPdf(donnees.subtotalFc)}`, 120, y)
+  if (donnees.discountFc > 0) {
+    document.setTextColor(...ROUGE)
+    document.text(`Remise coupons : -${prixPdf(donnees.discountFc)}`, 120, y + 6)
+    y += 6
+  }
+  document.setFillColor(...CREME)
+  document.rect(120, y + 2, LARGEUR - MARGE - 120, 14, 'F')
+  document.setFont('helvetica', 'bold')
+  document.setFontSize(11)
+  document.setTextColor(...MARINE)
+  document.text('Total à régler', 124, y + 11)
+  document.text(prixPdf(donnees.totalFc), LARGEUR - MARGE - 4, y + 11, { align: 'right' })
+
+  y += 30
+  document.setDrawColor(...OR)
+  document.setLineWidth(0.5)
+  document.rect(MARGE, y, LARGEUR_UTILE, 20)
+  document.setFont('helvetica', 'normal')
+  document.setFontSize(8.5)
+  document.setTextColor(...ENCRE_DOCE)
+  document.text(
+    document.splitTextToSize(
+      'Aucun paiement en ligne. Le règlement se fait en boutique ; la validation du paiement est effectuée par l’administration.',
+      LARGEUR_UTILE - 8,
+    ),
+    MARGE + 4,
+    y + 7,
+  )
+
+  piedDePage(document)
+  document.save(`facture-${donnees.number}.pdf`)
 }
 
 export interface DonneesReservationPdf {
@@ -202,6 +361,9 @@ export interface DonneesReservationPdf {
   statut: string
   client: string
   articles: { nom: string; quantite: number; prixUnitaire: number }[]
+  subtotalFc?: number
+  discountFc?: number
+  coupons?: string[]
   total: number
 }
 
@@ -289,10 +451,26 @@ export async function genererPdfReservation(donnees: DonneesReservationPdf): Pro
   }
 
   y += 6
+  document.setFont('helvetica', 'normal')
+  document.setFontSize(9)
+  document.setTextColor(...ENCRE_DOCE)
+  if (donnees.subtotalFc !== undefined) {
+    document.text(`Sous-total : ${prixPdf(donnees.subtotalFc)}`, MARGE, y)
+  }
+  if (donnees.discountFc && donnees.discountFc > 0) {
+    document.setTextColor(...ROUGE)
+    document.text(`Remise coupons : -${prixPdf(donnees.discountFc)}`, MARGE, y + 6)
+    y += 6
+  }
+  if (donnees.coupons && donnees.coupons.length > 0) {
+    document.setTextColor(...ENCRE_DOCE)
+    document.text(`Coupons : ${donnees.coupons.join(', ')}`, MARGE, y + 6)
+    y += 6
+  }
   document.setFont('helvetica', 'bold')
   document.setFontSize(11)
   document.setTextColor(...MARINE)
-  document.text(`Total estimé : ${prixPdf(donnees.total)}`, MARGE, y)
+  document.text(`Total estimé : ${prixPdf(donnees.total)}`, MARGE, y + 6)
 
   y += 10
   document.setDrawColor(...OR)
