@@ -32,9 +32,14 @@ test('la carte ajoute au panier et « Voir plus » ouvre la fiche', async ({ pag
 })
 
 test('le filtre par catégorie limite les produits affichés', async ({ page }) => {
+  const contenu = await readFile(new URL('../../brief/produits.csv', import.meta.url), 'utf8')
+  const attendu = contenu
+    .split(/\r?\n/)
+    .slice(1)
+    .filter((ligne) => ligne.trim().length > 0 && ligne.split(',')[2]?.trim() === 'huiles').length
   await aller(page,'/produits')
   await page.getByRole('button', { name: 'Huiles', exact: true }).click()
-  await expect(cartes(page)).toHaveCount(5)
+  await expect(cartes(page)).toHaveCount(attendu)
   await expect(cartes(page).first()).toContainText('Huiles')
 })
 

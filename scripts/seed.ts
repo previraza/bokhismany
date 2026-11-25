@@ -111,6 +111,17 @@ async function main(): Promise<void> {
       })
   }
 
+  // Les catégories par défaut sont créées par la migration 0003. On réconcilie
+  // les liaisons ici : la migration précède le seed sur une base vide, donc elle
+  // ne peut pas rattacher les produits qui n'existent pas encore.
+  await db.execute(sql`
+    INSERT INTO "product_categories" ("product_id", "category_id")
+    SELECT "products"."id", "categories"."id"
+    FROM "products"
+    INNER JOIN "categories" ON "categories"."slug" = "products"."category"
+    ON CONFLICT DO NOTHING
+  `)
+
   await db
     .insert(siteSettings)
     .values([
