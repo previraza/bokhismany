@@ -23,6 +23,7 @@ import { Route as AdminCommandesRouteImport } from './routes/admin.commandes'
 import { Route as AdminConnexionRouteImport } from './routes/admin.connexion'
 import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminEquipeRouteImport } from './routes/admin.equipe'
+import { Route as AdminFacturesRouteImport } from './routes/admin.factures'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminProduitsRouteImport } from './routes/admin.produits'
 import { Route as AdminPromotionRouteImport } from './routes/admin.promotion'
@@ -30,6 +31,7 @@ import { Route as AdminReservationsRouteImport } from './routes/admin.reservatio
 import { Route as BonReferenceRouteImport } from './routes/bon.$reference'
 import { Route as ProduitsSlugRouteImport } from './routes/produits.$slug'
 import { Route as ReservationCodeRouteImport } from './routes/reservation.$code'
+import { Route as AdminCommandesIndexRouteImport } from './routes/admin.commandes.index'
 import { Route as AdminCommandesIdRouteImport } from './routes/admin.commandes.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -102,6 +104,11 @@ const AdminEquipeRoute = AdminEquipeRouteImport.update({
   path: '/equipe',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminFacturesRoute = AdminFacturesRouteImport.update({
+  id: '/factures',
+  path: '/factures',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminMessagesRoute = AdminMessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
@@ -137,6 +144,11 @@ const ReservationCodeRoute = ReservationCodeRouteImport.update({
   path: '/reservation/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCommandesIndexRoute = AdminCommandesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminCommandesRoute,
+} as any)
 const AdminCommandesIdRoute = AdminCommandesIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -157,6 +169,7 @@ export interface FileRoutesByFullPath {
   '/admin/connexion': typeof AdminConnexionRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/equipe': typeof AdminEquipeRoute
+  '/admin/factures': typeof AdminFacturesRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/produits': typeof AdminProduitsRoute
   '/admin/promotion': typeof AdminPromotionRoute
@@ -166,6 +179,7 @@ export interface FileRoutesByFullPath {
   '/reservation/$code': typeof ReservationCodeRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/commandes/$id': typeof AdminCommandesIdRoute
+  '/admin/commandes/': typeof AdminCommandesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -176,10 +190,10 @@ export interface FileRoutesByTo {
   '/panier': typeof PanierRoute
   '/produits': typeof ProduitsRouteWithChildren
   '/proforma': typeof ProformaRoute
-  '/admin/commandes': typeof AdminCommandesRouteWithChildren
   '/admin/connexion': typeof AdminConnexionRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/equipe': typeof AdminEquipeRoute
+  '/admin/factures': typeof AdminFacturesRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/produits': typeof AdminProduitsRoute
   '/admin/promotion': typeof AdminPromotionRoute
@@ -189,6 +203,7 @@ export interface FileRoutesByTo {
   '/reservation/$code': typeof ReservationCodeRoute
   '/admin': typeof AdminIndexRoute
   '/admin/commandes/$id': typeof AdminCommandesIdRoute
+  '/admin/commandes': typeof AdminCommandesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -205,6 +220,7 @@ export interface FileRoutesById {
   '/admin/connexion': typeof AdminConnexionRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/equipe': typeof AdminEquipeRoute
+  '/admin/factures': typeof AdminFacturesRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/produits': typeof AdminProduitsRoute
   '/admin/promotion': typeof AdminPromotionRoute
@@ -214,6 +230,7 @@ export interface FileRoutesById {
   '/reservation/$code': typeof ReservationCodeRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/commandes/$id': typeof AdminCommandesIdRoute
+  '/admin/commandes/': typeof AdminCommandesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -231,6 +248,7 @@ export interface FileRouteTypes {
     | '/admin/connexion'
     | '/admin/coupons'
     | '/admin/equipe'
+    | '/admin/factures'
     | '/admin/messages'
     | '/admin/produits'
     | '/admin/promotion'
@@ -240,6 +258,7 @@ export interface FileRouteTypes {
     | '/reservation/$code'
     | '/admin/'
     | '/admin/commandes/$id'
+    | '/admin/commandes/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -250,10 +269,10 @@ export interface FileRouteTypes {
     | '/panier'
     | '/produits'
     | '/proforma'
-    | '/admin/commandes'
     | '/admin/connexion'
     | '/admin/coupons'
     | '/admin/equipe'
+    | '/admin/factures'
     | '/admin/messages'
     | '/admin/produits'
     | '/admin/promotion'
@@ -263,6 +282,7 @@ export interface FileRouteTypes {
     | '/reservation/$code'
     | '/admin'
     | '/admin/commandes/$id'
+    | '/admin/commandes'
   id:
     | '__root__'
     | '/'
@@ -278,6 +298,7 @@ export interface FileRouteTypes {
     | '/admin/connexion'
     | '/admin/coupons'
     | '/admin/equipe'
+    | '/admin/factures'
     | '/admin/messages'
     | '/admin/produits'
     | '/admin/promotion'
@@ -287,6 +308,7 @@ export interface FileRouteTypes {
     | '/reservation/$code'
     | '/admin/'
     | '/admin/commandes/$id'
+    | '/admin/commandes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -403,6 +425,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminEquipeRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/factures': {
+      id: '/admin/factures'
+      path: '/factures'
+      fullPath: '/admin/factures'
+      preLoaderRoute: typeof AdminFacturesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/messages': {
       id: '/admin/messages'
       path: '/messages'
@@ -452,6 +481,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReservationCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/commandes/': {
+      id: '/admin/commandes/'
+      path: '/'
+      fullPath: '/admin/commandes/'
+      preLoaderRoute: typeof AdminCommandesIndexRouteImport
+      parentRoute: typeof AdminCommandesRoute
+    }
     '/admin/commandes/$id': {
       id: '/admin/commandes/$id'
       path: '/$id'
@@ -464,10 +500,12 @@ declare module '@tanstack/react-router' {
 
 interface AdminCommandesRouteChildren {
   AdminCommandesIdRoute: typeof AdminCommandesIdRoute
+  AdminCommandesIndexRoute: typeof AdminCommandesIndexRoute
 }
 
 const AdminCommandesRouteChildren: AdminCommandesRouteChildren = {
   AdminCommandesIdRoute: AdminCommandesIdRoute,
+  AdminCommandesIndexRoute: AdminCommandesIndexRoute,
 }
 
 const AdminCommandesRouteWithChildren = AdminCommandesRoute._addFileChildren(
@@ -479,6 +517,7 @@ interface AdminRouteChildren {
   AdminConnexionRoute: typeof AdminConnexionRoute
   AdminCouponsRoute: typeof AdminCouponsRoute
   AdminEquipeRoute: typeof AdminEquipeRoute
+  AdminFacturesRoute: typeof AdminFacturesRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
   AdminProduitsRoute: typeof AdminProduitsRoute
   AdminPromotionRoute: typeof AdminPromotionRoute
@@ -491,6 +530,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminConnexionRoute: AdminConnexionRoute,
   AdminCouponsRoute: AdminCouponsRoute,
   AdminEquipeRoute: AdminEquipeRoute,
+  AdminFacturesRoute: AdminFacturesRoute,
   AdminMessagesRoute: AdminMessagesRoute,
   AdminProduitsRoute: AdminProduitsRoute,
   AdminPromotionRoute: AdminPromotionRoute,

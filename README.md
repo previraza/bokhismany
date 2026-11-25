@@ -18,7 +18,7 @@ Application TanStack Start pour Bokhismany Trading SARL et sa marque de points d
 - Panier conservé dans le navigateur et récapitulatif du montant estimé.
 - Réservation en ligne : code à 6 caractères, valable 24 heures, calculé à la lecture.
 - Suivi de réservation par code et retrait en boutique, sans paiement en ligne.
-- Administration protégée : tableau de bord, réservations, commandes, coupons, facturation, export CSV, produits, messages, promotion et équipe dirigeante.
+- Administration protégée : tableau de bord, réservations, bons de commande, registre des factures avec validation manuelle du paiement, coupons, export CSV, produits, messages, promotion et équipe dirigeante.
 - Formulaires de contact et de réservation validés côté client et côté serveur.
 - Visuels officiels dérivés de `brief/images` : bannière, logos, favicon et image de partage.
 - Métadonnées de partage complètes, avec le nom complet de l'entreprise.

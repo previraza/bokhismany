@@ -11,7 +11,7 @@ export const Route = createFileRoute('/admin')({ beforeLoad: async ({ location }
         throw redirect({ to: '/admin/connexion' });
     } return { authentifie }; }, head: () => metaPage({ titre: 'Administration' }), component: Administration,
 });
-const LIENS_ADMIN = [{ libelle: 'Tableau de bord', to: '/admin' as const }, { libelle: 'Réservations', to: '/admin/reservations' as const }, { libelle: 'Bons de commande', to: '/admin/commandes' as const }, { libelle: 'Coupons', to: '/admin/coupons' as const }, { libelle: 'Produits', to: '/admin/produits' as const }, { libelle: 'Messages', to: '/admin/messages' as const }, { libelle: 'Équipe dirigeante', to: '/admin/equipe' as const }, { libelle: 'Promotion', to: '/admin/promotion' as const },
+const LIENS_ADMIN = [{ libelle: 'Tableau de bord', to: '/admin' as const }, { libelle: 'Réservations', to: '/admin/reservations' as const }, { libelle: 'Bons de commande', to: '/admin/commandes' as const }, { libelle: 'Factures', to: '/admin/factures' as const }, { libelle: 'Coupons', to: '/admin/coupons' as const }, { libelle: 'Produits', to: '/admin/produits' as const }, { libelle: 'Messages', to: '/admin/messages' as const }, { libelle: 'Équipe dirigeante', to: '/admin/equipe' as const }, { libelle: 'Promotion', to: '/admin/promotion' as const },
 ];
 function Administration() {
     const chemin = useRouterState({ select: (etat) => etat.location.pathname });

@@ -255,6 +255,57 @@ export const listOrdersAdminFn = createServerFn({ method: 'GET' })
       .limit(200)
   })
 
+const schemaFiltresFactures = z
+  .object({
+    statut: z.enum(['issued', 'paid']).optional(),
+    recherche: z.string().max(120).optional(),
+  })
+  .optional()
+
+export const listInvoicesAdminFn = createServerFn({ method: 'GET' })
+  .validator(schemaFiltresFactures)
+  .handler(async ({ data }) => {
+    await exigerSession()
+    setPrivateHeaders()
+
+    const conditions = []
+    if (data?.statut) conditions.push(eq(invoices.status, data.statut))
+    const recherche = data?.recherche?.trim()
+    if (recherche) {
+      const motif = `%${recherche}%`
+      const condition = or(
+        ilike(invoices.number, motif),
+        ilike(invoices.customerName, motif),
+        ilike(orders.reference, motif),
+      )
+      if (condition) conditions.push(condition)
+    }
+
+    const lignes = await db
+      .select({ invoice: invoices, order: orders })
+      .from(invoices)
+      .innerJoin(orders, eq(orders.id, invoices.orderId))
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
+      .orderBy(desc(invoices.issuedAt))
+      .limit(200)
+
+    const identifiants = [...new Set(lignes.map(({ order }) => order.id))]
+    const articles =
+      identifiants.length > 0
+        ? await db
+            .select()
+            .from(orderItems)
+            .where(inArray(orderItems.orderId, identifiants))
+            .orderBy(asc(orderItems.id))
+        : []
+
+    return lignes.map(({ invoice, order }) => ({
+      invoice,
+      order,
+      items: articles.filter((article) => article.orderId === order.id),
+    }))
+  })
+
 export const getOrderAdminFn = createServerFn({ method: 'GET' })
   .validator(z.number().int().positive())
   .handler(async ({ data }) => {
