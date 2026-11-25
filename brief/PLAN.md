@@ -4,16 +4,16 @@ Chaque phase a un objectif, des livrables et des critères de validation. Ne pas
 
 ## Phase 0 : préparation
 - Lire tout le dossier `brief/`.
-- Vérifier la version actuelle de TanStack Start et du preset Vercel dans leur documentation officielle.
-- Créer le projet Neon et récupérer l'URL de connexion (à mettre dans `.env` local, jamais dans git).
+- Vérifier la version actuelle de TanStack Start et de Docker Compose dans leur documentation officielle.
+- Préparer le `.env` local avec les identifiants PostgreSQL (jamais dans git).
 - **Validation** : projet vide qui se lance en local.
 
 ## Phase 1 : socle technique
-- Initialiser TanStack Start avec TypeScript et le preset Vercel.
+- Initialiser TanStack Start avec TypeScript et le serveur Nitro.
 - Mettre en place Tailwind ou le système de styles choisi, les variables de couleurs et de typographie de `DESIGN.md`.
-- Configurer Drizzle, la connexion à Neon, et la première migration.
+- Configurer Drizzle, la connexion PostgreSQL, et la première migration.
 - Créer la structure de dossiers et le fichier `ENV.example`.
-- Supprimer l'ancien site statique (`index.html`, `vercel.json` à la racine) et adapter le `README.md`.
+- Supprimer l'ancien site statique (`index.html`) et adapter le `README.md`.
 - **Validation** : `build` sans erreur, `dev` fonctionnel, base connectée, migration appliquée.
 
 ## Phase 2 : layout et header
@@ -57,8 +57,8 @@ Chaque phase a un objectif, des livrables et des critères de validation. Ne pas
 - **Validation** : aucune erreur console, Lighthouse accessibilité et performance satisfaisants.
 
 ## Phase 8 : déploiement
-- Connecter le dépôt à Vercel, configurer les variables d'environnement (`DATABASE_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, secret de session).
-- Lancer les migrations et le seed en production.
+- Configurer le `.env` du serveur (`POSTGRES_*`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SESSION_SECRET`).
+- Lancer la pile avec `docker compose up -d --build` ; le service `migrate` applique migrations et seed.
 - Vérifier le parcours complet en production : catalogue, panier, réservation, expiration, connexion admin.
 - **Validation** : site en ligne, parcours complet fonctionnel.
 

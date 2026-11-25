@@ -1,4 +1,4 @@
-import { migrate } from 'drizzle-orm/neon-serverless/migrator';
+import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { db, pool } from '../src/lib/db/client';
 
 async function main(): Promise<void> {

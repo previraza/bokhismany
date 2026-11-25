@@ -18,7 +18,7 @@ function secretSession(): string {
   const secret = process.env.SESSION_SECRET
   if (!secret || secret.length < 32) {
     throw new Error(
-      'SESSION_SECRET doit être défini avec au moins 32 caractères dans le fichier .env local ou sur Vercel.',
+      'SESSION_SECRET doit être défini avec au moins 32 caractères dans le fichier .env local ou dans l’environnement du conteneur.',
     )
   }
   return secret

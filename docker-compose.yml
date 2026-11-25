@@ -1,0 +1,53 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-bokhismany}
+      POSTGRES_USER: ${POSTGRES_USER:-bokhismany}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est requis}
+    ports:
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-bokhismany} -d ${POSTGRES_DB:-bokhismany}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  migrate:
+    build:
+      context: .
+      target: migrate
+    restart: "no"
+    environment:
+      DATABASE_URL: "postgres://${POSTGRES_USER:-bokhismany}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est requis}@db:5432/${POSTGRES_DB:-bokhismany}"
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?ADMIN_EMAIL est requis}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?ADMIN_PASSWORD est requis}
+      SESSION_SECRET: ${SESSION_SECRET:?SESSION_SECRET est requis}
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "./node_modules/.bin/tsx scripts/migrate.ts && ./node_modules/.bin/tsx scripts/seed.ts"
+
+  app:
+    build: .
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: "postgres://${POSTGRES_USER:-bokhismany}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est requis}@db:5432/${POSTGRES_DB:-bokhismany}"
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?ADMIN_EMAIL est requis}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?ADMIN_PASSWORD est requis}
+      SESSION_SECRET: ${SESSION_SECRET:?SESSION_SECRET est requis}
+      NODE_ENV: production
+      PORT: "3000"
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    ports:
+      - "${APP_PORT:-3000}:3000"
+
+volumes:
+  db-data:

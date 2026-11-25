@@ -5,7 +5,7 @@ Ce fichier est lu automatiquement à chaque session. Il résume les règles du p
 ## Projet
 
 Site complet de **Bokhismany Trading SARL** (commerce général, Kinshasa et Brazzaville), marque de points de vente Daayake Food.
-Stack : TanStack Start, React, TypeScript, Drizzle ORM, Neon (PostgreSQL), déploiement Vercel.
+Stack : TanStack Start, React, TypeScript, Drizzle ORM, PostgreSQL (pilote `pg`), déploiement Docker Compose.
 
 ## Où trouver quoi
 
@@ -20,7 +20,7 @@ Stack : TanStack Start, React, TypeScript, Drizzle ORM, Neon (PostgreSQL), dépl
 
 ## Règles non négociables
 
-1. **Dépôt public** : aucun secret (mot de passe, URL de base, token) dans le code, les commits ou les fichiers versionnés. Utiliser `.env` local (ignoré par git) et les variables Vercel.
+1. **Dépôt public** : aucun secret (mot de passe, URL de base, token) dans le code, les commits ou les fichiers versionnés. Utiliser `.env` local (ignoré par git) et les variables d’environnement du conteneur.
 2. **Confidentialité** : ne jamais faire apparaître les termes de contrats, prix d'achat ou de cession, volumes, ristournes, noms de fournisseurs, numéros d'immatriculation. Seul le contenu de `brief/ENTREPRISE.md` est publiable.
 3. **Design soigné** : pas de rendu générique. Vérifier chaque page sur 375, 768 et 1440 px, et avec `prefers-reduced-motion`.
 4. **Français** : interface, messages d'erreur et commits en français.
@@ -33,7 +33,7 @@ Stack : TanStack Start, React, TypeScript, Drizzle ORM, Neon (PostgreSQL), dépl
 - Suivre `brief/PLAN.md` phase par phase. Ne pas passer à la phase suivante sans validation.
 - Un commit par étape logique.
 - Avant de finir une phase : build, tests et vérification visuelle.
-- Ne jamais pousser directement une migration de base sur la production sans l'avoir testée sur une branche Neon.
+- Ne jamais appliquer une migration sur la production sans l'avoir testée sur une copie de la base (autre volume ou base de test).
 
 ## Commits
 

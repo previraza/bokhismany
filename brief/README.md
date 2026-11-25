@@ -21,4 +21,4 @@ Ce dossier contient tout ce qu'il faut pour réaliser le site complet de Bokhism
 
 **Ordre de lecture pour l'IA :** `PROMPT.md`, puis `DECISIONS.md`, `SPEC.md`, `DESIGN.md`, `ENTREPRISE.md`, `CONTENU.md`, `SCENARIOS.md`, `EXPLOITATION.md`, `PLAN.md`, puis `TOOLS.md`.
 
-**Règle absolue :** ce dépôt est public. Ne jamais y commiter de secret (mot de passe, URL de base de données, token). Les secrets vont uniquement dans les variables d'environnement Vercel et dans un fichier `.env` local ignoré par git.
+**Règle absolue :** ce dépôt est public. Ne jamais y commiter de secret (mot de passe, URL de base de données, token). Les secrets vont uniquement dans le `.env` local ignoré par git et dans l'environnement du conteneur.

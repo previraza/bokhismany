@@ -7,8 +7,8 @@ Ce fichier liste les choix déjà faits, pour que l'IA ne les remette pas en cau
 | Sujet | Décision | Raison |
 |---|---|---|
 | Framework | TanStack Start | Rendu serveur, routes typées, bon support de View Transitions. |
-| Base de données | Neon PostgreSQL + Drizzle | Gratuit, serverless, migrations simples. |
-| Hébergement | Vercel | Déploiement automatique depuis GitHub. |
+| Base de données | PostgreSQL + Drizzle | Contrôle total, compatible docker-compose. |
+| Hébergement | Docker Compose | Base, migrations et application dans une seule pile, déployable sur un serveur Docker. |
 | Paiement | Aucun paiement en ligne | Le client paie en boutique. Évite les frais et la gestion de litiges. |
 | Panier | Stocké dans le navigateur | Pas de compte client à gérer. |
 | Réservation | Code de 6 caractères, valide 24 h | Demande du client. |
@@ -37,6 +37,6 @@ Ce fichier liste les choix déjà faits, pour que l'IA ne les remette pas en cau
 
 - Pas de quantité maximale ni de montant minimum.
 - Pas d'envoi de notification automatique : l'admin consulte le tableau de bord.
-- Domaine fourni par Vercel (`*.vercel.app`) pour commencer.
+- Domaine personnalisé et certificat HTTPS à prévoir derrière le proxy inverse (`TODO`).
 - Un seul compte administrateur.
 - Promotion affichée sans date de fin, modifiable depuis l'admin.

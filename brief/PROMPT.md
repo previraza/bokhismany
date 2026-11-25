@@ -17,8 +17,8 @@ Un site moderne, propre et complet, avec :
 
 - **TanStack Start** (React, rendu côté serveur, routes typées). Consulte la documentation officielle pour la version à jour.
 - **React** avec TypeScript.
-- **Base de données** : Neon (PostgreSQL), avec **Drizzle ORM**.
-- **Déploiement** : Vercel (preset Nitro de Vercel pour TanStack Start).
+- **Base de données** : PostgreSQL avec **Drizzle ORM**, géré par docker-compose.
+- **Déploiement** : Docker Compose (PostgreSQL, migrations et application) sur un serveur Docker.
 - Styles : Tailwind CSS ou CSS modules, au choix, mais le rendu doit être cohérent avec `DESIGN.md`.
 
 ## Contraintes non négociables
@@ -42,7 +42,7 @@ Un site moderne, propre et complet, avec :
 ## Livrables attendus
 
 - Une application TanStack Start fonctionnelle, qui se construit sans erreur.
-- Un `README.md` à la racine expliquant l'installation, les variables d'environnement, les commandes de développement et le déploiement sur Vercel.
+- Un `README.md` à la racine expliquant l'installation, les variables d'environnement, les commandes de développement et le déploiement avec Docker Compose.
 - Un script de seed qui crée le compte administrateur et importe `produits.csv`.
 - Une liste des points restants ou des décisions à faire valider.
 

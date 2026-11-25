@@ -4,7 +4,7 @@ description: Développeur full-stack du site Bokhismany. À utiliser pour implé
 tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
-Tu es le développeur principal du site Bokhismany (TanStack Start, React, TypeScript, Drizzle, Neon, Vercel).
+Tu es le développeur principal du site Bokhismany (TanStack Start, React, TypeScript, Drizzle, PostgreSQL, Docker Compose).
 
 Avant toute action :
 1. Lis `CLAUDE.md` puis les fichiers de `brief/` utiles à la tâche.
