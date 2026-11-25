@@ -53,6 +53,7 @@ Chaque phase a un objectif, des livrables et des critères de validation. Ne pas
 - Référencement (titres, descriptions, Open Graph).
 - Gestion des erreurs et états vides partout.
 - TODO : revoir les animations et la view-transition (rendu actuel jugé insuffisant).
+- TODO : prix non fournis et donc absents du catalogue public : riz 5 kg, riz 10 kg, lait en poudre en sac, lait Bom-dia, lait bel hollandaise, lait Nido.
 - **Validation** : aucune erreur console, Lighthouse accessibilité et performance satisfaisants.
 
 ## Phase 8 : déploiement

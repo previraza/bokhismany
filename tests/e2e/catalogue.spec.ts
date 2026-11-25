@@ -1,13 +1,16 @@
 import { expect, test } from '@playwright/test'
+import { readFile } from 'node:fs/promises'
 import { aller } from './aide'
 
 const cartes = (page: import('@playwright/test').Page) =>
   page.locator('article:has(a[aria-label^="Voir la fiche"])')
 
 test('le catalogue affiche tous les produits actifs', async ({ page }) => {
+  const contenu = await readFile(new URL('../../brief/produits.csv', import.meta.url), 'utf8')
+  const attendu = contenu.split(/\r?\n/).filter((ligne) => ligne.trim().length > 0).length - 1
   await aller(page,'/produits')
   await expect(page.getByRole('heading', { level: 1, name: 'Nos produits' })).toBeVisible()
-  await expect(cartes(page)).toHaveCount(27)
+  await expect(cartes(page)).toHaveCount(attendu)
 })
 
 test('la première carte occupe deux colonnes sur petit écran', async ({ page }) => {

@@ -1,28 +1,39 @@
 slug,nom,categorie,format,prix_fc,description
-huile-yes-25l,Yes,huiles,25 L,91000,Huile végétale 25 litres
-huile-regina-25l,Regina,huiles,25 L,103000,Huile végétale 25 litres
-huile-simba-25l,Simba,huiles,25 L,102000,Huile végétale 25 litres
-huile-simba-5l,Simba,huiles,5 L,27000,Huile végétale 5 litres
+huile-yes-25l,Yes,huiles,25 L,125820,Huile végétale 25 litres
+huile-regina-25l,Regina,huiles,25 L,125820,Huile végétale 25 litres
+huile-simba-25l,Simba,huiles,25 L,125820,Huile végétale 25 litres
+huile-simba-5l,Simba,huiles,5 L,104850,Huile végétale 5 litres
+huile-vegetale-10l,Huile végétale,huiles,10 L,109510,Huile végétale 10 litres
 huile-palme-5l,Huile de palme,huiles,5 L,23000,Huile de palme 5 litres
-riz-butter-brand-50kg,Butter Brand,riz,50 kg,98000,Riz blanc 50 kg
-riz-butter-brand-25kg,Butter Brand,riz,25 kg,49500,Riz blanc 25 kg
-riz-super-tigre-25kg,Super Tigre (blanc),riz,25 kg,47000,Riz blanc 25 kg
-riz-lion-50kg,Lion,riz,50 kg,93500,Riz 50 kg
-riz-lion-25kg,Lion,riz,25 kg,47000,Riz 25 kg
-riz-sokin-50kg,Sokin,riz,50 kg,93500,Riz long grain 50 kg
-riz-sokin-25kg,Sokin,riz,25 kg,47000,Riz long grain 25 kg
-riz-sante-25kg,Santé,riz,25 kg,46000,Riz 25 kg
+riz-butter-brand-50kg,Butter Brand,riz,50 kg,107180,Riz blanc 50 kg
+riz-butter-brand-25kg,Butter Brand,riz,25 kg,53590,Riz blanc 25 kg
+riz-super-tigre-25kg,Super Tigre (blanc),riz,25 kg,53590,Riz blanc 25 kg
+riz-lion-50kg,Lion,riz,50 kg,107180,Riz 50 kg
+riz-lion-25kg,Lion,riz,25 kg,53590,Riz 25 kg
+riz-sokin-50kg,Sokin,riz,50 kg,107180,Riz long grain 50 kg
+riz-sokin-25kg,Sokin,riz,25 kg,53590,Riz long grain 25 kg
+riz-sante-25kg,Santé,riz,25 kg,53590,Riz 25 kg
 semoule-res-bien-25kg,Res Bien,semoules,25 kg,35500,Semoule 25 kg
 semoule-amiga-25kg,Amiga,semoules,25 kg,51500,Semoule 25 kg
 semoule-master-plus-25kg,Master Plus,semoules,25 kg,47500,Semoule 25 kg
 semoule-master-simple-25kg,Master Simple,semoules,25 kg,44500,Semoule 25 kg
 semoule-fuba-25kg,Fuba,semoules,25 kg,32000,Farine de maïs 25 kg
+semoule-jaune-25kg,Semoule jaune,semoules,25 kg,41940,Semoule jaune 25 kg
+semoule-blanche-25kg,Semoule blanche,semoules,25 kg,53590,Semoule blanche 25 kg
 farine-boulenger-50kg,Boulenger,farines,50 kg,86500,Farine boulangère 50 kg
 farine-midema-45kg,Midema,farines,45 kg,77000,Farine 45 kg
 farine-midema-beignet-25kg,Midema Beignet,farines,25 kg,44500,Farine à beignets 25 kg
 farine-congo-invest-50kg,Congo Invest,farines,50 kg,85000,Farine 50 kg
 farine-aurovert-manioc-10kg,AuroVert (manioc),farines,10 kg,32000,Farine de manioc 10 kg
-sucre-roux-50kg,Sucre roux,sucre,50 kg,122000,Sucre roux 50 kg - prix indicatif, plusieurs marques entre 122000 et 133000 Fc
-poisson-sale-carton,Poisson salé,autres,Carton,174000,Poisson salé en carton
+farine-format,Farine de Format,farines,,93200,Farine de Format
+sucre-roux-50kg,Sucre roux,sucre,50 kg,135140,Sucre 50 kg
+haricot-50kg,Haricots,autres,50 kg,209700,Haricots 50 kg
+haricot-100kg,Haricots,autres,100 kg,419400,Haricots 100 kg
+poulet-nu,Poulet nu,autres,,100190,Poulet nu
+cuisse-poulet,Cuisse de poulet,autres,,83880,Cuisse de poulet
+poisson-18-plus-20kg,Poisson 18+,autres,20 kg,207370,Poisson 18+ 20 kg
+poisson-20-plus-20kg,Poisson 20+,autres,20 kg,209700,Poisson 20+ 20 kg
+poisson-sale-carton,Poisson salé,autres,Carton,256300,Poisson salé en carton
 oignons-sac,Oignons,autres,Sac,33000,Sac d'oignons
-sel-sac,Sel,autres,Sac,103000,Sac de sel
+sel-sac,Sel,autres,Sac,18640,Sac de sel
+tomate,Tomate,autres,,41940,Tomate
